@@ -1,0 +1,6 @@
+AllCops:
+  TargetRubyVersion: 2.6
+Metrics/BlockLength:
+  Exclude:
+    - 'fastlane/Fastfile'
+    - 'ios/Podfile'

@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  },
+  "rules": {
+    "no-unnecessary-type-assertion": false,
+    "no-use-before-declare": false,
+    "jsx-boolean-value": ["never"],
+    "jsx-no-lambda": ["none"],
+    "prettier": true
+  },
+  "rulesDirectory": ["tslint-plugin-prettier"]
+}

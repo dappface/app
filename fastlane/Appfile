@@ -1,0 +1,15 @@
+for_lane :dev do
+  app_identifier 'com.dappface.app.dev'
+end
+
+for_lane :beta do
+  app_identifier 'com.dappface.app.beta'
+end
+
+for_lane :release do
+  app_identifier 'com.dappface.app'
+end
+
+for_lane :register do
+  app_identifier 'com.dappface.app.dev'
+end

@@ -1,0 +1,180 @@
+# frozen_string_literal: true
+
+PROJECT_NAME = 'DappFace'
+
+platform :ios do
+  XCODEPROJ_PATH = "ios/#{PROJECT_NAME}.xcodeproj"
+  WORKSPACE_PATH = "ios/#{PROJECT_NAME}.xcworkspace"
+  DEFAULT_SIMULATOR = 'iPhone XR'
+  SHIELD_SCALE = '0.7'
+
+  desc 'Build debug on simulator or device'
+  lane :dev do |options|
+    APP_ENV = 'dev'
+    APP_IDENTIFIER = CredentialsManager::AppfileConfig.try_fetch_value(
+      :app_identifier
+    )
+
+    version_number = get_version_number(
+      xcodeproj: XCODEPROJ_PATH,
+      target: PROJECT_NAME
+    )
+    add_badge_with_shield(
+      app_env: APP_ENV,
+      version_number: version_number
+    )
+    copy_env_files(app_env: APP_ENV)
+    unless options[:skip_build]
+      if options[:device]
+        run_on_device(
+          app_identifier: APP_IDENTIFIER,
+          release: options[:release]
+        )
+      else
+        run_on_simulator(
+          simulator: options[:simulator],
+          release: options[:release]
+        )
+      end
+    end
+  end
+
+  desc 'Upload to TestFlight'
+  lane :beta do |options|
+    APP_ENV = 'beta'
+    APP_IDENTIFIER = CredentialsManager::AppfileConfig.try_fetch_value(
+      :app_identifier
+    )
+
+    # Validate
+    # ensure_git_branch(
+    #   branch: "beta/\\S+"
+    # )
+    ensure_git_status_clean
+    if options[:version_number].nil?
+      raise 'Missing version number: use version_number parameter'
+    end
+
+    increment_version_number(
+      version_number: options[:version_number],
+      xcodeproj: XCODEPROJ_PATH
+    )
+    increment_build_number(
+      build_number: Time.now.getutc.strftime('%Y%m%d%H%M'),
+      xcodeproj: XCODEPROJ_PATH
+    )
+    add_badge_with_shield(
+      app_env: APP_ENV,
+      version_number: options[:version_number]
+    )
+    copy_env_files(app_env: APP_ENV)
+    archive(app_identifier: APP_IDENTIFIER)
+    pilot(skip_waiting_for_build_processing: true)
+  end
+
+  # desc 'Upload to AppStore'
+  # lane :prd do
+  # end
+
+  desc 'Register new devices'
+  lane :register do
+    APP_IDENTIFIER = CredentialsManager::AppfileConfig.try_fetch_value(
+      :app_identifier
+    )
+
+    device_name = prompt(text: 'Enter the device name: ')
+    device_udid = prompt(text: 'Enter the device UDID: ')
+    device_hash = {}
+    device_hash[device_name] = device_udid
+    register_devices(devices: device_hash)
+    match(
+      app_identifier: APP_IDENTIFIER,
+      force: true
+    )
+  end
+
+  desc 'Create certificates'
+  lane :certificates do
+    match(app_identifier: 'com.dappface.app.dev')
+    match(
+      type: 'appstore',
+      app_identifier: ['com.dappface.app.beta', 'com.dappface.app']
+    )
+  end
+
+  after_all do |_, options|
+    reset unless options[:skip_build]
+  end
+
+  error do |_, _, options|
+    reset unless options[:skip_build]
+  end
+
+  private_lane :add_badge_with_shield do |options|
+    add_badge(
+      shield: "#{options[:app_env]}-#{options[:version_number]}-blue",
+      shield_scale: SHIELD_SCALE,
+      no_badge: true
+    )
+  end
+
+  private_lane :copy_env_files do |options|
+    sh "(cd .. && APP_ENV=#{options[:app_env]} bin/prepare-env.sh)"
+  end
+
+  private_lane :run_on_device do |options|
+    gym(
+      scheme: PROJECT_NAME,
+      configuration: options[:release] ? 'Release' : 'Debug',
+      workspace: WORKSPACE_PATH,
+      output_name: 'app',
+      output_directory: "ios/build/#{PROJECT_NAME}",
+      xcargs: "PRODUCT_BUNDLE_IDENTIFIER=#{options[:app_identifier]}",
+      export_method: 'development',
+      export_options: {
+        provisioningProfiles: {
+          "#{options[:app_identifier]}":
+            "match Development #{options[:app_identifier]}"
+        }
+      }
+    )
+    install_on_device(
+      ipa: "ios/build/#{PROJECT_NAME}/app.ipa"
+    )
+  end
+
+  private_lane :run_on_simulator do |options|
+    simulator = options[:simulator] || DEFAULT_SIMULATOR
+    configuration = options[:release] ? 'Release' : 'Debug'
+    sh "(
+      cd .. && \
+        react-native run-ios \
+          --simulator='#{simulator} \
+          --configuration=#{configuration}'
+    )"
+  end
+
+  private_lane :archive do |options|
+    gym(
+      clean: true,
+      scheme: PROJECT_NAME,
+      configuration: 'Release',
+      workspace: WORKSPACE_PATH,
+      export_method: 'app-store',
+      xcargs: "PRODUCT_BUNDLE_IDENTIFIER=#{options[:app_identifier]}",
+      export_options: {
+        provisioningProfile: {
+          "#{options[:app_ideintifier]}":
+            "match AppStore #{options[:app_ideintifier]}"
+        }
+      }
+    )
+  end
+
+  private_lane :reset do
+    sh "(cd .. && \
+      git checkout -- \
+      ios/#{PROJECT_NAME}/Images.xcassets/ \
+      ios/#{PROJECT_NAME}/Info.plist)"
+  end
+end

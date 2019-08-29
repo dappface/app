@@ -1,0 +1,180 @@
+import { useCallback, useState } from 'react'
+import { useDispatch, useMappedState } from 'redux-react-hook'
+import { IBrowserManager, useDimensions } from 'src/hooks'
+import { IState as IAllState } from 'src/redux/module'
+import { browserAction, browserSelector } from 'src/redux/module/browser'
+import {
+  entityAction,
+  entitySelector,
+  entityUtil
+} from 'src/redux/module/entity'
+import { ITabListManager, ITabManager } from 'src/redux/module/tab/type'
+
+export const useTabListManager = (
+  scrollTo: IBrowserManager['scrollTo']
+): ITabListManager => {
+  const [haltScrollCB, setHaltScrollCB] = useState(false)
+  const {
+    window: { width }
+  } = useDimensions()
+  const dispatch = useDispatch()
+  const mapState = useCallback(
+    (state: IAllState) => ({
+      activeTabIndex: browserSelector.getActiveTabIndex(state),
+      tabIds: browserSelector.getTabIds(state),
+      tabs: browserSelector.getTabs(state)
+    }),
+    []
+  )
+  const { activeTabIndex, tabIds, tabs } = useMappedState(mapState)
+
+  const addTab = useCallback<ITabListManager['addTab']>(() => {
+    const t = entityUtil.createTab()
+    const i = activeTabIndex + 1
+    const newTabIds = [...tabIds.slice(0, i), t.id, ...tabIds.slice(i)]
+
+    dispatch(entityAction.setTab(t))
+    dispatch(browserAction.setTabIds(newTabIds))
+    setTimeout(() => {
+      scrollTo(i)
+      setTimeout(() => {
+        dispatch(browserAction.setActiveTabId(t.id))
+      }, 300)
+    }, 100)
+
+    return t
+  }, [activeTabIndex, tabIds])
+
+  const onMomentumScrollEnd = useCallback<
+    ITabListManager['onMomentumScrollEnd']
+  >(
+    e => {
+      if (haltScrollCB) {
+        setHaltScrollCB(false)
+        return
+      }
+      const offsetX = e.nativeEvent.contentOffset.x
+      const newIndex = offsetX / width
+      if (newIndex % 1 !== 0) {
+        return
+      }
+      dispatch(browserAction.setActiveTabId(tabs[newIndex].id))
+    },
+    [tabs, haltScrollCB]
+  )
+
+  const removeFactory = useCallback<ITabListManager['removeFactory']>(
+    tabId => () => {
+      setHaltScrollCB(true)
+
+      // When there are some tabs on the right
+      if (activeTabIndex < tabIds.length - 1) {
+        const newIndex = activeTabIndex + 1
+        scrollTo(newIndex)
+        setTimeout(() => {
+          dispatch(browserAction.setActiveTabId(tabIds[newIndex]))
+          setTimeout(() => {
+            dispatch(
+              browserAction.setTabIds(tabIds.filter(item => item !== tabId))
+            )
+            dispatch(entityAction.removeTab(tabId))
+          }, 100)
+        }, 300)
+        return
+      }
+
+      // When there are no tabs on the right but on the left
+      if (activeTabIndex !== 0) {
+        const newIndex = activeTabIndex - 1
+        scrollTo(newIndex)
+        setTimeout(() => {
+          dispatch(browserAction.setActiveTabId(tabIds[newIndex]))
+          dispatch(
+            browserAction.setTabIds(tabIds.filter(item => item !== tabId))
+          )
+          dispatch(entityAction.removeTab(tabId))
+        }, 400)
+        return
+      }
+
+      // When there are tabs neither on the right or left
+      dispatch(browserAction.setActiveTabId())
+      dispatch(browserAction.setTabIds(tabIds.filter(item => item !== tabId)))
+      dispatch(entityAction.removeTab(tabId))
+    },
+    [activeTabIndex, tabIds]
+  )
+
+  const selectFactory = useCallback<ITabListManager['selectFactory']>(
+    tabId => () => {
+      dispatch(browserAction.setActiveTabId(tabId))
+      const i = tabIds.indexOf(tabId)
+      scrollTo(i)
+    },
+    [tabIds]
+  )
+
+  return {
+    addTab,
+    onMomentumScrollEnd,
+    removeFactory,
+    selectFactory
+  }
+}
+
+export const useTabManager = (): ITabManager => {
+  const mapState = useCallback(
+    (state: IAllState) => ({
+      tabs: entitySelector.getTabs(state)
+    }),
+    []
+  )
+  const { tabs } = useMappedState(mapState)
+  const dispatch = useDispatch()
+
+  const setNavigatables = useCallback<ITabManager['setNavigatables']>(
+    (tabId, params) => {
+      const t = tabs[tabId]
+      dispatch(
+        entityAction.setTab({
+          ...t,
+          canGoBack: params.canGoBack,
+          canGoForward: params.canGoForward
+        })
+      )
+    },
+    [tabs]
+  )
+
+  const setLatestHistoryId = useCallback<ITabManager['setLatestHistoryId']>(
+    (tabId, latestHistoryId) => {
+      const t = tabs[tabId]
+      dispatch(
+        entityAction.setTab({
+          ...t,
+          latestHistoryId
+        })
+      )
+    },
+    [tabs]
+  )
+
+  const setLoadingProgress = useCallback<ITabManager['setLoadingProgress']>(
+    (tabId, loadingProgress) => {
+      const t = tabs[tabId]
+      dispatch(
+        entityAction.setTab({
+          ...t,
+          loadingProgress
+        })
+      )
+    },
+    [tabs]
+  )
+
+  return {
+    setLatestHistoryId,
+    setLoadingProgress,
+    setNavigatables
+  }
+}

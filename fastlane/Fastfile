@@ -5,7 +5,7 @@ PROJECT_NAME = 'DappFace'
 platform :ios do
   XCODEPROJ_PATH = "ios/#{PROJECT_NAME}.xcodeproj"
   WORKSPACE_PATH = "ios/#{PROJECT_NAME}.xcworkspace"
-  DEFAULT_SIMULATOR = 'iPhone XR'
+  DEFAULT_SIMULATOR = 'iPhone Xʀ'
   SHIELD_SCALE = '0.7'
 
   desc 'Build debug on simulator or device'
@@ -149,8 +149,8 @@ platform :ios do
     sh "(
       cd .. && \
         react-native run-ios \
-          --simulator='#{simulator} \
-          --configuration=#{configuration}'
+          --simulator='#{simulator}' \
+          --configuration='#{configuration}'
     )"
   end
 

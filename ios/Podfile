@@ -7,9 +7,12 @@ target 'DappFace' do
   pod 'React', path: '../node_modules/react-native', subspecs: [
     'RCTImage'
   ]
+
   pod 'yoga', path: '../node_modules/react-native/ReactCommon/yoga'
-  pod 'Firebase/Core'
-  pod 'Firebase/Auth'
+
+  pod 'Firebase/Core', '~> 6.3.0'
+
+  pod 'GoogleIDFASupport', '~> 3.14.0'
 
   pod 'RNGestureHandler', path: '../node_modules/react-native-gesture-handler'
 

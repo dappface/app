@@ -67,11 +67,13 @@ export const useInitializedWeb3 = (): Web3 | undefined => {
   const connect = useCallback((): void => {
     const w = new Web3(remoteNodeUrl)
     setWeb3(w)
-    w.currentProvider
-      // @ts-ignore
-      .on('connect', onConnect)
-      .on('error', onError)
-      .on('end', onEnd)
+
+    // @ts-ignore
+    w.currentProvider.on('connect', onConnect)
+    // @ts-ignore
+    w.currentProvider.on('error', onError)
+    // @ts-ignore
+    w.currentProvider.on('end', onEnd)
   }, [remoteNodeUrl])
 
   useEffect(() => {

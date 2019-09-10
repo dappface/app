@@ -1,6 +1,0 @@
-{
-  "hooks": {
-    "pre-commit": "npm run lint:fix & npm run lint:ruby:fix",
-    "pre-push": "npm run tsc & npm run test"
-  }
-}

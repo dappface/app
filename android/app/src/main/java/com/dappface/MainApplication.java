@@ -1,8 +1,14 @@
 package com.dappface;
+
+import android.app.Application;
+import android.util.Log;
+
+import com.facebook.react.PackageList;
+import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
+import com.facebook.react.bridge.JavaScriptExecutorFactory;
+import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
-import com.facebook.react.ReactInstanceManager;
-import com.microsoft.codepush.react.ReactInstanceHolder;
 
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
@@ -30,25 +36,28 @@ public class MainApplication extends NavigationApplication {
   }
 
   protected List<ReactPackage> getPackages() {
-    return Arrays.<ReactPackage>asList(
-      new MainReactPackage(),
-            new RNCWebViewPackage(),
-            new Interactable(),
-            new SplashScreenReactPackage(),
-            new VectorIconsPackage(),
-            new FingerprintAuthPackage(),
-            new RandomBytesPackage(),
-            new OrientationPackage(),
-            new KeychainPackage(),
-            new RNFSPackage(),
-            new RNDeviceInfo(),
-            new RNCameraPackage(),
-            new RNGestureHandlerPackage(),
-            new RNSecureRandomPackage(),
-            new RNFirebasePackage(),
-            new RNCameraPackage(),
-      new NavigationReactPackage(),
-    );
+    @SuppressWarnings("UnnecessaryLocalVariable")
+      List<ReactPackage> packages = new PackageList(this).getPackages();
+      // Packages that cannot be autolinked yet can be added manually here, for example:
+      // packages.add(new MyReactNativePackage());
+      packages.add(new RNCWebViewPackage());
+      packages.add(new Interactable());
+      packages.add(new SplashScreenReactPackage());
+      packages.add(new VectorIconsPackage());
+      packages.add(new FingerprintAuthPackage());
+      packages.add(new RandomBytesPackage());
+      packages.add(new OrientationPackage());
+      packages.add(new KeychainPackage());
+      packages.add(new RNFSPackage());
+      packages.add(new RNDeviceInfo());
+      packages.add(new RNCameraPackage());
+      packages.add(new RNGestureHandlerPackage());
+      packages.add(new RNSecureRandomPackage());
+      packages.add(new RNFirebasePackage());
+      packages.add(new RNCameraPackage());
+      packages.add(new NavigationReactPackage());
+      return packages;
+    }
   }
 
   @Override

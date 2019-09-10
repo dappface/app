@@ -67,8 +67,8 @@ coverage/
 # Bundle artifact
 *.jsbundle
 
-# Pods
-/ios/Pods
+# CocoaPods
+/ios/Pods/
 
 # Env
 .env

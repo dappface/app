@@ -23,6 +23,12 @@ platform :ios do
       app_env: APP_ENV,
       version_number: version_number
     )
+    update_info_plist(
+      xcodeproj: XCODEPROJ_PATH,
+      plist_path: 'DappFace/Info.plist',
+      app_identifier: APP_IDENTIFIER
+    )
+
     copy_env_files(app_env: APP_ENV)
     unless options[:skip_build]
       if options[:device]

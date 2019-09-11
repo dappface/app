@@ -151,7 +151,7 @@ PODS:
     - React-Core (= 0.60.5)
   - React-RCTWebSocket (0.60.5):
     - React-Core (= 0.60.5)
-  - ReactNativeNavigation (2.27.1):
+  - ReactNativeNavigation (2.27.5):
     - React
   - RNDeviceInfo (1.8.0):
     - React
@@ -344,7 +344,7 @@ SPEC CHECKSUMS:
   React-RCTText: b074d89033583d4f2eb5faf7ea2db3a13c7553a2
   React-RCTVibration: 2105b2e0e2b66a6408fc69a46c8a7fb5b2fdade0
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
-  ReactNativeNavigation: e72b336efdb7c2a903c966d33525a1f771a3ef22
+  ReactNativeNavigation: 540a206da83c47c51d4dc86d89faafa543ac001f
   RNDeviceInfo: 17bd6ed6c8c230f5da87d53f6275a520005f0914
   RNFirebase: ac0de8b24c6f91ae9459575491ed6a77327619c6
   RNFS: a8fbe7060fa49157d819466404794ad9c58e58cf

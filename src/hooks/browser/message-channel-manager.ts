@@ -3,7 +3,7 @@ import {
   PostMessageActionType
 } from 'dappface-inpage-provider'
 import sigUtil from 'eth-sig-util'
-import Tx from 'ethereumjs-tx'
+import { Wallet } from 'ethers'
 import { useCallback } from 'react'
 import { Alert } from 'react-native'
 import { WebViewSharedProps } from 'react-native-webview/lib/WebViewTypes'
@@ -109,11 +109,9 @@ export const useMessageChannelManager = (
           to: data.payload.txParams.to,
           value: data.payload.txParams.value
         }
-        const tx = new Tx(rawTx)
-        const privateKey = Buffer.from(a.privKey, 'hex')
-        tx.sign(privateKey)
-        const sign = '0x' + tx.serialize().toString('hex')
-        respondData(tabId, data.payload.callbackId, sign)
+        const wallet = new Wallet(a.privKey)
+        const signedTx = await wallet.sign(rawTx)
+        respondData(tabId, data.payload.callbackId, signedTx)
         break
       }
       default:

@@ -71,13 +71,6 @@ Install from [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?m
 ```sh
 $ brew install cocoapods
 $ pod repo update
-```
-
-### Fastlane
-
-```sh
-$ brew cask install fastlane
-```
 
 ### ImageMagic
 

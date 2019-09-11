@@ -1,8 +1,7 @@
 import BN from 'bignumber.js'
-import { entropyToMnemonic, mnemonicToSeed } from 'bip39'
+import { entropyToMnemonic } from 'bip39'
 import wordlist from 'bip39/src/wordlists/english.json'
-import Tx from 'ethereumjs-tx'
-import hdkey from 'ethereumjs-wallet/hdkey'
+import { Wallet } from 'ethers'
 import moment from 'moment'
 import { useCallback } from 'react'
 import { randomBytes } from 'react-native-randombytes'
@@ -107,25 +106,22 @@ export const useSignAndSendTransaction = () => {
         to: txParams.to,
         value: web3.utils.toHex(txParams.value)
       }
-      const tx = new Tx(rawTx)
-      const privateKey = Buffer.from(a.privKey, 'hex')
-      tx.sign(privateKey)
+      const wallet = new Wallet(a.privKey)
+      const signedTx = await wallet.sign(rawTx)
 
-      web3.eth
-        .sendSignedTransaction('0x' + tx.serialize().toString('hex'))
-        .on('error', error => {
-          const failedTransaction: accountType.ITransaction = {
-            ...txParams,
-            address: a.address,
-            chainId: network,
-            errorMessage: error.message,
-            from: a.address,
-            hash: `0x${tx.hash().toString('hex')}`,
-            nonce: 0,
-            timeStamp: moment().unix()
-          }
-          dispatch(accountAction.addFailedTransaction(failedTransaction))
-        })
+      web3.eth.sendSignedTransaction(signedTx).on('error', error => {
+        const failedTransaction: accountType.ITransaction = {
+          ...txParams,
+          address: a.address,
+          chainId: network,
+          errorMessage: error.message,
+          from: a.address,
+          hash: signedTx,
+          nonce: 0,
+          timeStamp: moment().unix()
+        }
+        dispatch(accountAction.addFailedTransaction(failedTransaction))
+      })
     },
     [network, web3.currentProvider]
   )
@@ -156,15 +152,12 @@ export function useAccountManager(): IAccountManager {
   const createAccount: IAccountManager['createAccount'] = useCallback(async () => {
     const entropy = await randomBytes(128 / 8)
     const mnemonic = entropyToMnemonic(entropy, wordlist)
-    const seed = mnemonicToSeed(mnemonic)
-    const rootNode = hdkey.fromMasterSeed(seed)
     const path = `${AccountPath[0]}/0`
-    const derivedWallet = rootNode.derivePath(path).getWallet()
+    const wallet = Wallet.fromMnemonic(mnemonic, path)
     const a = entityUtil.createAccount({
-      address: derivedWallet.getChecksumAddressString(),
-      path,
-      privKey: derivedWallet.getPrivateKeyString().slice(2),
-      pubKey: derivedWallet.getPublicKeyString().slice(2)
+      address: wallet.address,
+      path: wallet.path,
+      privKey: wallet.privateKey
     })
     dispatch(entityAction.setAccount(a))
     dispatch(accountAction.setMnemonic(mnemonic))
@@ -187,8 +180,7 @@ export function useAccountManager(): IAccountManager {
           const a = entityUtil.createAccount({
             address: item.address,
             path: item.path,
-            privKey: item.privKey,
-            pubKey: item.pubKey
+            privKey: item.privKey
           })
           dispatch(entityAction.setAccount(a))
           return a

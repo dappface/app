@@ -93,7 +93,6 @@ export interface IAccount {
   tokenAddresses: string[]
   path: string
   privKey: string
-  pubKey: string
 }
 
 export interface IBookmark {
@@ -139,7 +138,6 @@ export interface ICreateAccountParams {
   address: string
   path: string
   privKey: string
-  pubKey: string
 }
 
 export interface ICreateBookmarkParams {

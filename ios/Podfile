@@ -31,6 +31,7 @@ target 'DappFace' do
 
   # Third Party Pods
   pod 'Firebase/Core', '~> 6.3.0'
+  pod 'Firebase/Auth'
   pod 'GoogleIDFASupport', '~> 3.14.0'
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   pod 'react-native-camera', :path => '../node_modules/react-native-camera'

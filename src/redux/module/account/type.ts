@@ -60,7 +60,6 @@ export interface IAccountCandidate {
   isSelected: boolean
   path: string
   privKey: string
-  pubKey: string
 }
 
 export interface ITransactions {

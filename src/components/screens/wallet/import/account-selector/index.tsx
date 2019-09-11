@@ -1,5 +1,4 @@
-import { mnemonicToSeedSync } from 'bip39'
-import hdkey from 'ethereumjs-wallet/hdkey'
+import { Wallet } from 'ethers'
 import * as React from 'react'
 import { FlatList, ScrollView, View } from 'react-native'
 import Ripple from 'react-native-material-ripple'
@@ -19,10 +18,6 @@ interface IProps {
 
 export const AccountSelector = ({ componentId, mnemonic }: IProps) => {
   const [basePath, setBasePath] = React.useState(AccountPath[0])
-  const root = React.useMemo(() => {
-    const seed = mnemonicToSeedSync(mnemonic)
-    return hdkey.fromMasterSeed(seed).derivePath(basePath)
-  }, [basePath])
   const [candidates, setCandidates] = React.useState<
     accountType.IAccountCandidate[]
   >([])
@@ -59,16 +54,16 @@ export const AccountSelector = ({ componentId, mnemonic }: IProps) => {
   const deriveAccountByIndex = React.useCallback(
     (i: number) => {
       const path = `${basePath}/${i}`
-      const wallet = root.deriveChild(i).getWallet()
+      const wallet = Wallet.fromMnemonic(mnemonic, path)
+
       return {
-        address: wallet.getAddressString(),
+        address: wallet.address,
         isSelected: false,
-        path,
-        privKey: wallet.getPrivateKeyString().slice(2),
-        pubKey: wallet.getPublicKeyString().slice(2)
+        path: wallet.path,
+        privKey: wallet.privateKey
       }
     },
-    [root]
+    [basePath]
   )
 
   const onPressMore = React.useCallback(() => {

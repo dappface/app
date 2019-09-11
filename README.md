@@ -31,7 +31,6 @@ $ npm run setup
 
 ```sh
 $ npm run ios
-// OR
 $ npm run android
 ```
 

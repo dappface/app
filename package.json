@@ -16,11 +16,11 @@
     "lint:fix": "tslint --fix --project .",
     "lint:ruby": "bundle exec rubocop",
     "lint:ruby:fix": "bundle exec rubocop -x",
-    "hack": "rn-nodeify --install crypto,http,https,os,process,stream,vm --hack",
-    "postinstall": "bin/post.sh",
+    "postinstall": "bin/postinstall.sh",
     "reinstall": "bin/reinstall.sh",
     "start": "react-native start",
     "start:fresh": "npm run reinstall && npm start -- --reset-cache",
+    "setup": "bin/setup.sh",
     "test": "jest",
     "test:watch": "jest --watchAll"
   },

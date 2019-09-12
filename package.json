@@ -21,7 +21,8 @@
     "start:fresh": "npm run reinstall && npm start -- --reset-cache",
     "setup": "bin/setup.sh",
     "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@tradle/react-native-http": "^2.0.0",

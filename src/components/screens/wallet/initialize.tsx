@@ -1,15 +1,15 @@
 import * as React from 'react'
-import { Alert } from 'react-native'
-import { Button, Headline } from 'react-native-paper'
+import {Alert} from 'react-native'
+import {Button, Headline} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
-import { CenteredColumn, HorizontalPadding } from 'src/components/atoms'
-import { BiometryType, Size } from 'src/const'
-import { showImportAccounts } from 'src/navigation'
-import { accountHook } from 'src/redux/module/account'
+import {CenteredColumn, HorizontalPadding} from 'src/components/atoms'
+import {BiometryType, Size} from 'src/const'
+import {showImportAccounts} from 'src/navigation'
+import {accountHook} from 'src/redux/module/account'
 import styled from 'styled-components/native'
 
 export const Initialize = () => {
-  const { createAccount } = accountHook.useAccountManager()
+  const {createAccount} = accountHook.useAccountManager()
 
   const onPressCreate = React.useCallback(async () => {
     try {
@@ -35,7 +35,7 @@ export const Initialize = () => {
           break
       }
     }
-  }, [])
+  }, [createAccount])
 
   const onPressImport = React.useCallback(() => {
     showImportAccounts()

@@ -1,13 +1,13 @@
-import { combineReducers } from 'redux'
-import { persistReducer, Transform } from 'redux-persist'
+import {combineReducers} from 'redux'
+import {persistReducer, Transform} from 'redux-persist'
 import FSStorage from 'redux-persist-fs-storage'
-import { IState } from 'src/redux/module'
-import { accountInitialState, accountReducer } from 'src/redux/module/account'
-import { browserInitialState, browserReducer } from 'src/redux/module/browser'
-import { entityInitialState, entityReducer } from 'src/redux/module/entity'
-import { settingInitialState, settingReducer } from 'src/redux/module/setting'
-import { uiInitialState, uiReducer } from 'src/redux/module/ui'
-import { web3InitialState, web3Reducer } from 'src/redux/module/web3'
+import {IState} from 'src/redux/module'
+import {accountInitialState, accountReducer} from 'src/redux/module/account'
+import {browserInitialState, browserReducer} from 'src/redux/module/browser'
+import {entityInitialState, entityReducer} from 'src/redux/module/entity'
+import {settingInitialState, settingReducer} from 'src/redux/module/setting'
+import {uiInitialState, uiReducer} from 'src/redux/module/ui'
+import {web3InitialState, web3Reducer} from 'src/redux/module/web3'
 
 const initialState: IState = {
   account: accountInitialState,
@@ -15,7 +15,7 @@ const initialState: IState = {
   entity: entityInitialState,
   setting: settingInitialState,
   ui: uiInitialState,
-  web3: web3InitialState
+  web3: web3InitialState,
 }
 
 export const configurePersistedReducer = (encryptor: Transform<{}, {}>) => {
@@ -25,12 +25,12 @@ export const configurePersistedReducer = (encryptor: Transform<{}, {}>) => {
     entity: entityReducer,
     setting: settingReducer,
     ui: uiReducer,
-    web3: web3Reducer
+    web3: web3Reducer,
   })
 
   const rootReducer = (
     state: IState = initialState,
-    action: Actions
+    action: Actions,
   ): IState => {
     switch (action.type) {
       case ActionType.REST_ROOT:
@@ -44,14 +44,14 @@ export const configurePersistedReducer = (encryptor: Transform<{}, {}>) => {
     key: 'root',
     keyPrefix: '',
     storage: FSStorage(),
-    transform: [encryptor]
+    transform: [encryptor],
   }
 
   return persistReducer(rootPersistConfig, rootReducer)
 }
 
 enum ActionType {
-  REST_ROOT = 'dappface/root/RESET_ROOT'
+  REST_ROOT = 'dappface/root/RESET_ROOT',
 }
 
 type Actions = IResetRoot
@@ -61,5 +61,5 @@ interface IResetRoot {
 }
 
 export const resetRoot = (): IResetRoot => ({
-  type: ActionType.REST_ROOT
+  type: ActionType.REST_ROOT,
 })

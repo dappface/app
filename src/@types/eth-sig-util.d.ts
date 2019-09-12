@@ -5,6 +5,6 @@ declare module 'eth-sig-util' {
   }
   export function personalSign(
     privateKey: Buffer,
-    msgParams: IMsgParams
+    msgParams: IMsgParams,
   ): string
 }

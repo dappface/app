@@ -4,5 +4,5 @@ export const Url = {
   GAS_STATION: 'https://ethgasstation.info/json/ethgasAPI.json',
   bitFlyer: 'https://api.bitflyer.jp',
   coincheck: 'https://coincheck.com',
-  zaif: 'https://oauth.zaif.jp'
+  zaif: 'https://oauth.zaif.jp',
 }

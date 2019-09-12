@@ -1,4 +1,4 @@
-import { randomBytes } from 'react-native-randombytes'
+import {randomBytes} from 'react-native-randombytes'
 
 export function randomBytesAsync(length: number = 32): Promise<Uint8Array> {
   return new Promise((resolve, reject): void => {

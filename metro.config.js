@@ -11,7 +11,7 @@ module.exports = {
       transform: {
         experimentalImportSupport: true,
         inlineRequires: true,
-      }
-    })
-  }
+      },
+    }),
+  },
 }

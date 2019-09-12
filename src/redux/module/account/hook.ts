@@ -1,37 +1,40 @@
 import BN from 'bignumber.js'
-import { entropyToMnemonic } from 'bip39'
+import {entropyToMnemonic} from 'bip39'
 import wordlist from 'bip39/src/wordlists/english.json'
-import { Wallet } from 'ethers'
+import {Wallet} from 'ethers'
 import moment from 'moment'
-import { useCallback } from 'react'
+import {useCallback} from 'react'
 import Reactotron from 'reactotron-react-native'
-import { useDispatch, useMappedState } from 'redux-react-hook'
-import { AccountPath } from 'src/const'
-import { useWeb3 } from 'src/hooks'
-import { IState as IAllState } from 'src/redux/module'
+import {useDispatch, useMappedState} from 'redux-react-hook'
+import {AccountPath} from 'src/const'
+import {useWeb3} from 'src/hooks'
+import {IState as IAllState} from 'src/redux/module'
 import * as accountAction from 'src/redux/module/account/action'
 import * as accountSelector from 'src/redux/module/account/selector'
 import * as accountType from 'src/redux/module/account/type'
-import { entityAction, entityType, entityUtil } from 'src/redux/module/entity'
-import { settingSelector } from 'src/redux/module/setting'
-import { exchangeRelay, randomBytesAsync } from 'src/utils'
+import {entityAction, entityType, entityUtil} from 'src/redux/module/entity'
+import {settingSelector} from 'src/redux/module/setting'
+import {exchangeRelay, randomBytesAsync} from 'src/utils'
 import Web3 from 'web3'
 
 export const useSetSignRequest = () => {
   const dispatch = useDispatch()
-  return useCallback((params?: accountType.ISignRequest) => {
-    dispatch(accountAction.setSignRequest(params))
-  }, [])
+  return useCallback(
+    (params?: accountType.ISignRequest) => {
+      dispatch(accountAction.setSignRequest(params))
+    },
+    [dispatch],
+  )
 }
 
 export const useFiatRateManager = () => {
   const mapState = useCallback(
     (state: IAllState) => ({
-      currency: settingSelector.getCurrency(state)
+      currency: settingSelector.getCurrency(state),
     }),
-    []
+    [],
   )
-  const { currency } = useMappedState(mapState)
+  const {currency} = useMappedState(mapState)
   const dispatch = useDispatch()
 
   const fetchFiatRate = useCallback(async () => {
@@ -41,10 +44,10 @@ export const useFiatRateManager = () => {
     } catch (error) {
       Reactotron.error(`Failed to fetch rate: Error: ${error}`)
     }
-  }, [currency])
+  }, [currency, dispatch])
 
   return {
-    fetchFiatRate
+    fetchFiatRate,
   }
 }
 
@@ -52,11 +55,11 @@ export const useFetchBalance = (web3: Web3) => {
   const mapState = useCallback(
     (state: IAllState) => ({
       currencyDetails: settingSelector.getCurrencyDetails(state),
-      fiatRate: accountSelector.getFiatRate(state)
+      fiatRate: accountSelector.getFiatRate(state),
     }),
-    []
+    [],
   )
-  const { currencyDetails, fiatRate } = useMappedState(mapState)
+  const {currencyDetails, fiatRate} = useMappedState(mapState)
   const dispatch = useDispatch()
 
   return useCallback(
@@ -71,12 +74,12 @@ export const useFetchBalance = (web3: Web3) => {
           balance: {
             ether,
             fiat,
-            wei
-          }
-        })
+            wei,
+          },
+        }),
       )
     },
-    [fiatRate, web3]
+    [currencyDetails.decimalDigits, dispatch, fiatRate, web3],
   )
 }
 
@@ -84,17 +87,17 @@ export const useSignAndSendTransaction = () => {
   const web3 = useWeb3()
   const mapState = useCallback(
     (state: IAllState) => ({
-      network: settingSelector.getNetwork(state)
+      network: settingSelector.getNetwork(state),
     }),
-    []
+    [],
   )
-  const { network } = useMappedState(mapState)
+  const {network} = useMappedState(mapState)
   const dispatch = useDispatch()
 
   return useCallback(
     async (
       a: entityType.IAccount,
-      txParams: accountType.ITransactionParams
+      txParams: accountType.ITransactionParams,
     ) => {
       const nonce = await web3.eth.getTransactionCount(a.address)
       const rawTx = {
@@ -103,7 +106,7 @@ export const useSignAndSendTransaction = () => {
         gasPrice: web3.utils.toHex(txParams.gasPrice),
         nonce: web3.utils.toHex(nonce),
         to: txParams.to,
-        value: web3.utils.toHex(txParams.value)
+        value: web3.utils.toHex(txParams.value),
       }
       const wallet = new Wallet(a.privKey)
       const signedTx = await wallet.sign(rawTx)
@@ -117,12 +120,12 @@ export const useSignAndSendTransaction = () => {
           from: a.address,
           hash: signedTx,
           nonce: 0,
-          timeStamp: moment().unix()
+          timeStamp: moment().unix(),
         }
         dispatch(accountAction.addFailedTransaction(failedTransaction))
       })
     },
-    [network, web3.currentProvider]
+    [dispatch, network, web3.eth, web3.utils],
   )
 }
 
@@ -130,7 +133,7 @@ interface IAccountManager {
   createAccount: () => Promise<void>
   importAccountCandidates: (
     mnemonic: string,
-    candidates: accountType.IAccountCandidate[]
+    candidates: accountType.IAccountCandidate[],
   ) => void
   setCurrentAccountAsDefault: () => void
   setCurrentAccountAddressByIndex: (index: number) => void
@@ -141,11 +144,11 @@ export function useAccountManager(): IAccountManager {
   const mapState = useCallback(
     (state: IAllState) => ({
       accounts: accountSelector.getAccounts(state),
-      currentAccountAddress: accountSelector.getCurrentAccountAddress(state)
+      currentAccountAddress: accountSelector.getCurrentAccountAddress(state),
     }),
-    []
+    [],
   )
-  const { accounts, currentAccountAddress } = useMappedState(mapState)
+  const {accounts, currentAccountAddress} = useMappedState(mapState)
   const dispatch = useDispatch()
 
   const createAccount: IAccountManager['createAccount'] = useCallback(async () => {
@@ -156,19 +159,19 @@ export function useAccountManager(): IAccountManager {
     const a = entityUtil.createAccount({
       address: wallet.address,
       path: wallet.path,
-      privKey: wallet.privateKey
+      privKey: wallet.privateKey,
     })
     dispatch(entityAction.setAccount(a))
     dispatch(accountAction.setMnemonic(mnemonic))
     dispatch(accountAction.setCurrentAccountAddress(a.address))
     dispatch(accountAction.setDefaultAccountAddress(a.address))
-  }, [])
+  }, [dispatch])
 
   const setIsBackedUp = useCallback<IAccountManager['setIsBackedUp']>(
     isBackedUp => {
       dispatch(accountAction.setIsBackedUp(isBackedUp))
     },
-    []
+    [dispatch],
   )
 
   const importAccountCandidates: IAccountManager['importAccountCandidates'] = useCallback(
@@ -179,7 +182,7 @@ export function useAccountManager(): IAccountManager {
           const a = entityUtil.createAccount({
             address: item.address,
             path: item.path,
-            privKey: item.privKey
+            privKey: item.privKey,
           })
           dispatch(entityAction.setAccount(a))
           return a
@@ -189,7 +192,7 @@ export function useAccountManager(): IAccountManager {
       dispatch(accountAction.setCurrentAccountAddress(res[0].address))
       dispatch(accountAction.setDefaultAccountAddress(res[0].address))
     },
-    []
+    [dispatch, setIsBackedUp],
   )
 
   const setCurrentAccountAddressByIndex = useCallback<
@@ -198,20 +201,20 @@ export function useAccountManager(): IAccountManager {
     index => {
       dispatch(accountAction.setCurrentAccountAddress(accounts[index].address))
     },
-    [accounts]
+    [accounts, dispatch],
   )
 
   const setCurrentAccountAsDefault = useCallback<
     IAccountManager['setCurrentAccountAsDefault']
   >(() => {
     dispatch(accountAction.setDefaultAccountAddress(currentAccountAddress))
-  }, [currentAccountAddress])
+  }, [currentAccountAddress, dispatch])
 
   return {
     createAccount,
     importAccountCandidates,
     setCurrentAccountAddressByIndex,
     setCurrentAccountAsDefault,
-    setIsBackedUp
+    setIsBackedUp,
   }
 }

@@ -20,9 +20,9 @@ export const Color = {
     ERROR_HIGH_EMPHASIS: '#ed3860',
     PRIMARY_DISABLED: 'rgba(0, 0, 0, 0.38)',
     PRIMARY_HIGH_EMPHASIS: '#242424',
-    WHITE_HIGH_EMPHASIS: 'rgba(255, 255, 255, 1)'
+    WHITE_HIGH_EMPHASIS: 'rgba(255, 255, 255, 1)',
   },
   VERY_LIGHT_GRAY: '#efefef',
   VERY_VETY_DARK_GRAYISH_BLUE: '#262634',
-  WHITE: '#ffffff'
+  WHITE: '#ffffff',
 }

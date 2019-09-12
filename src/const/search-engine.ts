@@ -2,7 +2,7 @@ export enum SearchEngine {
   Bing = 'bing',
   DuckDuckGo = 'duckDuckGo',
   Google = 'google',
-  Yahoo = 'yahoo'
+  Yahoo = 'yahoo',
 }
 
 interface ISearchEngine {
@@ -18,18 +18,18 @@ interface ISearchEngines {
 export const SearchEngines: ISearchEngines = {
   [SearchEngine.Bing]: {
     name: 'Bing',
-    url: 'https://www.bing.com/search?q='
+    url: 'https://www.bing.com/search?q=',
   },
   [SearchEngine.DuckDuckGo]: {
     name: 'DuckDuckGo',
-    url: 'https://duckduckgo.com/?q='
+    url: 'https://duckduckgo.com/?q=',
   },
   [SearchEngine.Google]: {
     name: 'Google',
-    url: 'https://www.google.com/search?q='
+    url: 'https://www.google.com/search?q=',
   },
   [SearchEngine.Yahoo]: {
     name: 'Yahoo',
-    url: 'https://search.yahoo.com/search?p='
-  }
+    url: 'https://search.yahoo.com/search?p=',
+  },
 }

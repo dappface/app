@@ -7,5 +7,5 @@ export enum ActionType {
   REMOVE_BOOKMARK = 'dappface/entity/REMOVE_BOOKMARK',
   REMOVE_HISTORY = 'dappface/entity/REMOVE_HISTORY',
   REMOVE_TAB = 'dappface/entity/REMOVE_TAB',
-  REMOVE_TOKEN = 'dappface/entity/REMOVE_TOKEN'
+  REMOVE_TOKEN = 'dappface/entity/REMOVE_TOKEN',
 }

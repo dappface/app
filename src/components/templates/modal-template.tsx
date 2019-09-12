@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { Navigation } from 'react-native-navigation'
-import { Colors, FAB } from 'react-native-paper'
-import { Expanded } from 'src/components/atoms'
-import { BottomDrawer } from 'src/components/organisms'
+import {Navigation} from 'react-native-navigation'
+import {Colors, FAB} from 'react-native-paper'
+import {Expanded} from 'src/components/atoms'
+import {BottomDrawer} from 'src/components/organisms'
 import styled from 'styled-components/native'
 
 export interface IProps {
@@ -16,10 +16,10 @@ export const ModalTemplate = ({
   children,
   componentId,
   disabled = false,
-  text
+  text,
 }: IProps) => {
   const onPressClose = React.useCallback((): void => {
-    void Navigation.dismissModal(componentId)
+    Navigation.dismissModal(componentId)
   }, [componentId])
 
   return (
@@ -30,7 +30,7 @@ export const ModalTemplate = ({
           icon='close'
           label={text || 'close'}
           onPress={onPressClose}
-          theme={{ colors: { accent: Colors.white } }}
+          theme={{colors: {accent: Colors.white}}}
         />
       ) : null}
       <BottomDrawer />

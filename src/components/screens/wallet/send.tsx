@@ -1,7 +1,7 @@
 import BN from 'bignumber.js'
 import * as React from 'react'
-import { Field, Form } from 'react-final-form'
-import { View } from 'react-native'
+import {Field, Form} from 'react-final-form'
+import {View} from 'react-native'
 import {
   Button,
   HelperText,
@@ -9,25 +9,25 @@ import {
   List,
   Subheading,
   Switch,
-  TextInput
+  TextInput,
 } from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { useMappedState } from 'redux-react-hook'
+import {useMappedState} from 'redux-react-hook'
 import {
   Blockie,
   Expanded,
   HorizontalPadding,
   Padding,
-  Row
+  Row,
 } from 'src/components/atoms'
-import { Color } from 'src/const'
-import { ISendFormValues, useValidators, useWeb3 } from 'src/hooks'
-import { pushComfirmSend, showWalletScan } from 'src/navigation'
-import { IState } from 'src/redux/module'
-import { accountSelector, accountType } from 'src/redux/module/account'
-import { entityType } from 'src/redux/module/entity'
-import { settingSelector } from 'src/redux/module/setting'
-import { gasStation } from 'src/utils'
+import {Color} from 'src/const'
+import {ISendFormValues, useValidators, useWeb3} from 'src/hooks'
+import {pushComfirmSend, showWalletScan} from 'src/navigation'
+import {IState} from 'src/redux/module'
+import {accountSelector, accountType} from 'src/redux/module/account'
+import {entityType} from 'src/redux/module/entity'
+import {settingSelector} from 'src/redux/module/setting'
+import {gasStation} from 'src/utils'
 
 export interface IProps {
   componentId: string
@@ -39,24 +39,24 @@ interface IGasInfo {
   safeLow: number
 }
 
-export const Send = ({ componentId }: IProps) => {
+export const Send = ({componentId}: IProps) => {
   const web3 = useWeb3()
   const mapState = React.useCallback(
     (state: IState) => ({
       currencyDetails: settingSelector.getCurrencyDetails(state),
       currentAccount: accountSelector.getCurrentAccount(
-        state
+        state,
       ) as entityType.IAccount,
-      fiatRate: accountSelector.getFiatRate(state)
+      fiatRate: accountSelector.getFiatRate(state),
     }),
-    []
+    [],
   )
-  const { currencyDetails, currentAccount, fiatRate } = useMappedState(mapState)
+  const {currencyDetails, currentAccount, fiatRate} = useMappedState(mapState)
   const {
     addressValidator,
     amountValidatorFactory,
     gasPriceValidator,
-    required
+    required,
   } = useValidators()
 
   const [gasInfo, setGasInfo] = React.useState<IGasInfo | null>(null)
@@ -92,7 +92,7 @@ Fast: ${gasInfo.fast / 10} Gwei)`
   }
 
   const onPressScan = (): void => {
-    showWalletScan({ setTo })
+    showWalletScan({setTo})
   }
 
   const onSubmit = async (values: ISendFormValues): Promise<void> => {
@@ -103,10 +103,10 @@ Fast: ${gasInfo.fast / 10} Gwei)`
       gasLimit: gasLimit.toNumber(),
       gasPrice: gasPrice.toString(),
       to: values.to,
-      value: amount.toString()
+      value: amount.toString(),
     }
 
-    pushComfirmSend(componentId, { txParams })
+    pushComfirmSend(componentId, {txParams})
   }
 
   const amountInputRef = React.useRef<TextInput>(null)
@@ -137,15 +137,15 @@ Fast: ${gasInfo.fast / 10} Gwei)`
           initialValues={{
             gasLimit: '21000',
             gasPrice: getGasPrice(),
-            to
+            to,
           }}
-          render={({ handleSubmit, pristine, submitting, invalid }) => (
+          render={({handleSubmit, pristine, submitting, invalid}) => (
             <View>
               <List.Section>
                 <Field
                   name='to'
                   validate={addressValidator}
-                  render={({ input, meta }) => (
+                  render={({input, meta}) => (
                     <Row>
                       <HorizontalPadding>
                         {!(addressValidator as any)(input.value) ? (
@@ -160,7 +160,7 @@ Fast: ${gasInfo.fast / 10} Gwei)`
                       </HorizontalPadding>
                       <Expanded.View>
                         <TextInput
-                          {...input as any}
+                          {...(input as any)}
                           autoCapitalize='none'
                           autoCorrect={false}
                           label='Recipient address'
@@ -187,11 +187,11 @@ Fast: ${gasInfo.fast / 10} Gwei)`
                     name='amount'
                     onSubmitEditing={onSubmitEditingAmount}
                     validate={amountValidatorFactory(currentAccount)}
-                    render={({ input, meta }) => (
+                    render={({input, meta}) => (
                       <Row>
                         <Expanded.View>
                           <TextInput
-                            {...input as any}
+                            {...(input as any)}
                             autoCapitalize='none'
                             autoCorrect={false}
                             label='Amount'
@@ -235,10 +235,10 @@ Fast: ${gasInfo.fast / 10} Gwei)`
                       <Field
                         name='gasLimit'
                         validate={required}
-                        render={({ input, meta }) => (
+                        render={({input, meta}) => (
                           <>
                             <TextInput
-                              {...input as any}
+                              {...(input as any)}
                               autoCapitalize='none'
                               autoCorrect={false}
                               label='Gas Limit'
@@ -257,11 +257,11 @@ Fast: ${gasInfo.fast / 10} Gwei)`
                       <Field
                         name='gasPrice'
                         validate={gasPriceValidator}
-                        render={({ input, meta }) => (
+                        render={({input, meta}) => (
                           <Row>
                             <Expanded.View>
                               <TextInput
-                                {...input as any}
+                                {...(input as any)}
                                 autoCapitalize='none'
                                 autoCorrect={false}
                                 label='Gas Price'
@@ -294,8 +294,7 @@ Fast: ${gasInfo.fast / 10} Gwei)`
                 <Button
                   disabled={pristine || invalid || submitting}
                   mode='contained'
-                  onPress={handleSubmit as any}
-                >
+                  onPress={handleSubmit as any}>
                   next
                 </Button>
               </Padding>

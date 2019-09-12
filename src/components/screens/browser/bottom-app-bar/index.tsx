@@ -1,44 +1,44 @@
 import * as React from 'react'
-import { Animated, StatusBar, StyleSheet } from 'react-native'
+import {Animated, StatusBar, StyleSheet} from 'react-native'
 import Interactable from 'react-native-interactable'
-import { Card } from 'react-native-paper'
-import { useMappedState } from 'redux-react-hook'
-import { NavigationBar } from 'src/components/screens/browser/bottom-app-bar/navigation-bar'
-import { PullBar } from 'src/components/screens/browser/bottom-app-bar/pull-bar'
-import { SignPrompt } from 'src/components/screens/browser/bottom-app-bar/sign-prompt'
-import { Wallet } from 'src/components/screens/wallet'
-import { Color, Size, StatusBarStyle } from 'src/const'
-import { useBottomAppBarManager, useBrowserManager } from 'src/hooks'
-import { IState } from 'src/redux/module'
-import { accountHook, accountSelector } from 'src/redux/module/account'
-import { uiHook, uiType } from 'src/redux/module/ui'
+import {Card} from 'react-native-paper'
+import {useMappedState} from 'redux-react-hook'
+import {NavigationBar} from 'src/components/screens/browser/bottom-app-bar/navigation-bar'
+import {PullBar} from 'src/components/screens/browser/bottom-app-bar/pull-bar'
+import {SignPrompt} from 'src/components/screens/browser/bottom-app-bar/sign-prompt'
+import {Wallet} from 'src/components/screens/wallet'
+import {Color, Size, StatusBarStyle} from 'src/const'
+import {useBottomAppBarManager, useBrowserManager} from 'src/hooks'
+import {IState} from 'src/redux/module'
+import {accountHook, accountSelector} from 'src/redux/module/account'
+import {uiHook, uiType} from 'src/redux/module/ui'
 import styled from 'styled-components/native'
 
 export interface IProps {
   componentId: string
 }
 
-export const BottomAppBar = ({ componentId }: IProps) => {
-  const { bottomAppBarRef, closeBottomAppBar } = useBottomAppBarManager()
-  const { respondData } = useBrowserManager()
+export const BottomAppBar = ({componentId}: IProps) => {
+  const {bottomAppBarRef, closeBottomAppBar} = useBottomAppBarManager()
+  const {respondData} = useBrowserManager()
 
   const mapState = React.useCallback(
     (state: IState) => ({
-      signRequest: accountSelector.getSignRequest(state)
+      signRequest: accountSelector.getSignRequest(state),
     }),
-    []
+    [],
   )
-  const { signRequest } = useMappedState(mapState)
+  const {signRequest} = useMappedState(mapState)
   const setSignRequest = accountHook.useSetSignRequest()
   const setBottomDrawer = uiHook.useSetBottomDrawer()
 
   const [isOpen, setIsOpen] = React.useState(false)
   const [statusBarStyle, setStatusBarStyle] = React.useState(
-    StatusBarStyle.DARK_CONTENT
+    StatusBarStyle.DARK_CONTENT,
   )
 
   const onAlert = React.useCallback(
-    ({ nativeEvent }: any) => {
+    ({nativeEvent}: any) => {
       if (JSON.stringify(nativeEvent).includes('"basePosition":"enter"')) {
         setIsOpen(false)
         if (!signRequest) {
@@ -57,14 +57,14 @@ export const BottomAppBar = ({ componentId }: IProps) => {
         setStatusBarStyle(StatusBarStyle.LIGHT_CONTENT)
       }
     },
-    [signRequest]
+    [respondData, setSignRequest, signRequest],
   )
 
   const onMore = React.useCallback(() => {
     setBottomDrawer({
-      type: uiType.BottomDrawerType.BrowserOptions
+      type: uiType.BottomDrawerType.BrowserOptions,
     })
-  }, [])
+  }, [setBottomDrawer])
 
   return (
     <>
@@ -77,41 +77,39 @@ export const BottomAppBar = ({ componentId }: IProps) => {
               {
                 opacity: position.interpolate({
                   inputRange: [0, Size.BOTTOM_APP_BAR.INITIAL_TOP],
-                  outputRange: [1, 0]
-                })
-              }
+                  outputRange: [1, 0],
+                }),
+              },
             ]}
           />
         </ShadowTouchable>
       ) : null}
-      <Interactable.View
+      <StyledInteractableView
         alertAreas={[
           {
             id: 'basePosition',
-            influenceArea: { top: Size.BOTTOM_APP_BAR.INITIAL_TOP }
+            influenceArea: {top: Size.BOTTOM_APP_BAR.INITIAL_TOP},
           },
-          { id: 'top', influenceArea: { top: Size.SCREEN.TOP + 1 } }
+          {id: 'top', influenceArea: {top: Size.SCREEN.TOP + 1}},
         ]}
         animatedNativeDriver
         animatedValueY={position}
-        boundaries={{ top: Size.SCREEN.TOP }}
-        initialPosition={{ y: Size.BOTTOM_APP_BAR.INITIAL_TOP }}
+        boundaries={{top: Size.SCREEN.TOP}}
+        initialPosition={{y: Size.BOTTOM_APP_BAR.INITIAL_TOP}}
         onAlert={onAlert}
         ref={bottomAppBarRef}
         snapPoints={[
-          { y: Size.BOTTOM_APP_BAR.INITIAL_TOP },
-          { y: Size.SCREEN.HEIGHT / 2 },
-          { y: Size.SCREEN.TOP }
+          {y: Size.BOTTOM_APP_BAR.INITIAL_TOP},
+          {y: Size.SCREEN.HEIGHT / 2},
+          {y: Size.SCREEN.TOP},
         ]}
-        style={{ position: 'absolute' }}
-        verticalOnly
-      >
+        verticalOnly>
         <BottomSheet elevation={8}>
           <NavigationBar isOpen={isOpen} onMore={onMore} position={position} />
           <PullBar />
           {signRequest ? <SignPrompt /> : <Wallet componentId={componentId} />}
         </BottomSheet>
-      </Interactable.View>
+      </StyledInteractableView>
     </>
   )
 }
@@ -123,8 +121,8 @@ const styles = StyleSheet.create({
     backgroundColor: Color.MOSTLY_BLACK,
     height: Size.SCREEN.HEIGHT,
     position: 'absolute',
-    width: Size.SCREEN.WIDTH
-  }
+    width: Size.SCREEN.WIDTH,
+  },
 })
 
 const BottomSheet = styled(Card)`
@@ -138,4 +136,8 @@ const ShadowTouchable = styled.TouchableWithoutFeedback`
   height: ${Size.SCREEN.HEIGHT};
   position: absolute;
   width: ${Size.SCREEN.WIDTH};
+`
+
+const StyledInteractableView = styled(Interactable.View)`
+  position: absolute;
 `

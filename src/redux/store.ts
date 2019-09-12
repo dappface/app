@@ -2,13 +2,15 @@ import base64 from 'base64-js'
 import RNFS from 'react-native-fs'
 import * as Keychain from 'react-native-keychain'
 import Reactotron from 'reactotron-react-native'
-import { compose, createStore } from 'redux'
-import { persistStore } from 'redux-persist'
+import {compose, createStore} from 'redux'
+import {persistStore} from 'redux-persist'
 import createEncryptor from 'redux-persist-transform-encrypt'
-import { configurePersistedReducer } from 'src/redux/reducer'
-import { randomBytesAsync } from 'src/utils'
+import {configurePersistedReducer} from 'src/redux/reducer'
+import {randomBytesAsync} from 'src/utils'
 
+// eslint-disable-next-line import/no-mutable-exports
 export let store: any
+// eslint-disable-next-line import/no-mutable-exports
 export let persistor: any
 
 const REDUX_PERSIST = 'reduxPersist'
@@ -20,7 +22,7 @@ export async function configureStore(): Promise<void> {
     onError: e => {
       Reactotron.error('Faield to init incryptor: ', e)
     },
-    secretKey
+    secretKey,
   })
 
   const persistedReducer = configurePersistedReducer(encryptor)
@@ -31,7 +33,7 @@ export async function configureStore(): Promise<void> {
       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
     store = createStore(
       persistedReducer,
-      composeEnhancers(Reactotron.createEnhancer())
+      composeEnhancers(Reactotron.createEnhancer()),
     )
   } else {
     store = createStore(persistedReducer)
@@ -40,12 +42,12 @@ export async function configureStore(): Promise<void> {
 }
 
 async function getSecretKey(): Promise<string> {
-  const creds = await Keychain.getGenericPassword({ service: REDUX_PERSIST })
+  const creds = await Keychain.getGenericPassword({service: REDUX_PERSIST})
   if (!creds) {
     const byteKey = await randomBytesAsync(64)
     const stringKey = base64.fromByteArray(byteKey)
     await Keychain.setGenericPassword(REDUX_PERSIST, stringKey, {
-      service: REDUX_PERSIST
+      service: REDUX_PERSIST,
     })
     return stringKey
   }
@@ -59,6 +61,6 @@ async function getSecretKey(): Promise<string> {
   }
 
   throw new Error(
-    'Failed to get or set encryption key for apollo-cache-persistor'
+    'Failed to get or set encryption key for apollo-cache-persistor',
   )
 }

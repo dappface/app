@@ -1,19 +1,19 @@
 import * as React from 'react'
-import { TextInputProps } from 'react-native'
+import {TextInputProps} from 'react-native'
 import {
   Caption,
   Card,
   Colors,
   IconButton,
-  ProgressBar
+  ProgressBar,
 } from 'react-native-paper'
-import { useMappedState } from 'redux-react-hook'
-import { CenteredColumn, Padding } from 'src/components/atoms'
-import { Editor } from 'src/components/screens/browser/address-bar/editor'
-import { Color, Size } from 'src/const'
-import { useBrowserManager } from 'src/hooks'
-import { IState } from 'src/redux/module'
-import { browserSelector } from 'src/redux/module/browser'
+import {useMappedState} from 'redux-react-hook'
+import {CenteredColumn, Padding} from 'src/components/atoms'
+import {Editor} from 'src/components/screens/browser/address-bar/editor'
+import {Color, Size} from 'src/const'
+import {useBrowserManager} from 'src/hooks'
+import {IState} from 'src/redux/module'
+import {browserSelector} from 'src/redux/module/browser'
 import styled from 'styled-components/native'
 
 export const AddressBar = () => {
@@ -21,12 +21,12 @@ export const AddressBar = () => {
     (state: IState) => ({
       isLoading: browserSelector.getIsLoading(state),
       loadingProgress: browserSelector.getLoadingProgress(state),
-      url: browserSelector.getUrl(state)
+      url: browserSelector.getUrl(state),
     }),
-    []
+    [],
   )
-  const { isLoading, loadingProgress, url } = useMappedState(mapState)
-  const { onSearch, onStopLoading, onReload } = useBrowserManager()
+  const {isLoading, loadingProgress, url} = useMappedState(mapState)
+  const {onSearch, onStopLoading, onReload} = useBrowserManager()
   const hostname = React.useMemo(() => {
     if (url === 'localhost') {
       return url
@@ -39,7 +39,7 @@ export const AddressBar = () => {
   const [isEditing, setIsEditing] = React.useState(false)
 
   const onSubmitEditing: TextInputProps['onSubmitEditing'] = ({
-    nativeEvent
+    nativeEvent,
   }) => {
     onSearch(nativeEvent.text)
     setIsEditing(false)
@@ -63,8 +63,7 @@ export const AddressBar = () => {
             horizontalSize={Size.MARGIN_4}
             verticalSize={
               loadingProgress < 1 ? Size.MARGIN_4 - 1 : Size.MARGIN_4
-            }
-          >
+            }>
             <CenteredColumn>
               <Caption>{hostname}</Caption>
             </CenteredColumn>

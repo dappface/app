@@ -30,5 +30,5 @@ export enum Currency {
   TRY = 'TRY',
   TWD = 'TWD',
   USD = 'USD',
-  ZAR = 'ZAR'
+  ZAR = 'ZAR',
 }

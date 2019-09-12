@@ -10,26 +10,27 @@ interface IProps {
   size?: Size
 }
 
-export const Blockie = ({ style, address, size }: IProps) => {
+export const Blockie = ({style, address, size}: IProps) => {
   return (
     <StyledImage
       style={style}
-      source={{ uri: makeBlockie(address) }}
+      source={{uri: makeBlockie(address)}}
       size={size}
     />
   )
 }
 
-const getSize = ({ size }: { size: Size }): number => {
+const getSize = ({size}: {size: Size}): number => {
   if (typeof size === 'number') {
     return size
-  } else if (size === 'small') {
-    return 24
-  } else if (size === 'large') {
-    return 48
-  } else {
-    return 36
   }
+  if (size === 'small') {
+    return 24
+  }
+  if (size === 'large') {
+    return 48
+  }
+  return 36
 }
 
 const StyledImage = styled.Image`

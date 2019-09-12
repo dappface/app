@@ -1,28 +1,29 @@
 import qrcode from 'qrcode'
 import * as React from 'react'
-import { View } from 'react-native'
-import { ActivityIndicator } from 'react-native-paper'
-import { WebView } from 'react-native-webview'
+import {View} from 'react-native'
+import {ActivityIndicator} from 'react-native-paper'
+import {WebView} from 'react-native-webview'
+import styled from 'styled-components'
 
 interface IProps {
   size?: number
   value: string
 }
 
-export const QRCode = ({ value, size = 400 }: IProps) => {
+export const QRCode = ({value, size = 400}: IProps) => {
   const [html, setHtml] = React.useState('')
 
   React.useEffect(() => {
     ;(async () => {
       const svg = await qrcode.toString(value, {
-        type: 'svg'
+        type: 'svg',
       })
       const chunks = svg.split(' ')
       const i = 1
       const svgWithSize = [
         ...chunks.slice(0, i),
         `width="100%" height="100%"`,
-        ...chunks.slice(i)
+        ...chunks.slice(i),
       ].join(' ')
       const code = `
         <!DOCTYPE html>
@@ -45,12 +46,16 @@ export const QRCode = ({ value, size = 400 }: IProps) => {
   }, [size, value])
 
   return (
-    <View style={{ height: size, width: size }}>
+    <View style={{height: size, width: size}}>
       {html ? (
-        <WebView scrollEnabled={false} source={{ html }} style={{ flex: 1 }} />
+        <ExpandedWebView scrollEnabled={false} source={{html}} />
       ) : (
         <ActivityIndicator />
       )}
     </View>
   )
 }
+
+const ExpandedWebView = styled(WebView)`
+  flex: 1;
+`

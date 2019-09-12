@@ -6,13 +6,13 @@ import {
   List,
   Paragraph,
   Text,
-  TouchableRipple
+  TouchableRipple,
 } from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { feed } from 'src/apollo/modules'
-import { Padding } from 'src/components/atoms'
-import { OnPress } from 'src/components/screens/browser/web-view/feed/common'
-import { Color, Size } from 'src/const'
+import {feed} from 'src/apollo/modules'
+import {Padding} from 'src/components/atoms'
+import {OnPress} from 'src/components/screens/browser/web-view/feed/common'
+import {Color, Size} from 'src/const'
 import styled from 'styled-components/native'
 
 interface ITweetProps extends feed.ITweet {
@@ -26,10 +26,10 @@ export const Tweet = ({
   retweetedStatus: rs,
   text,
   onPress,
-  user
+  user,
 }: ITweetProps) => {
   const profileImageSource = {
-    uri: rs === null ? user.profileImageUrlHttps : rs.user.profileImageUrlHttps
+    uri: rs === null ? user.profileImageUrlHttps : rs.user.profileImageUrlHttps,
   }
   const profileName = rs === null ? user.name : rs.user.name
   const profileScreenName = rs === null ? user.screenName : rs.user.screenName
@@ -81,13 +81,12 @@ export const Tweet = ({
             <Paragraph>{mainText}</Paragraph>
           </Main>
 
-          {rs === null ? (
-            quotedStatus ? (
-              <QuotedTweet onPress={onPress} quotedStatus={quotedStatus} />
-            ) : null
-          ) : rs.quotedStatus ? (
-            <QuotedTweet onPress={onPress} quotedStatus={rs.quotedStatus} />
-          ) : null}
+          <QuotedTweet
+            onPress={onPress}
+            quotedStatus={
+              quotedStatus || (rs !== null ? rs.quotedStatus : null)
+            }
+          />
 
           <Footer>
             <Text>Twitter</Text>
@@ -101,24 +100,29 @@ export const Tweet = ({
 
 interface IQuotedTweetProps {
   onPress: OnPress
-  quotedStatus: feed.ITweet
+  quotedStatus: feed.ITweet | null
 }
 
-const QuotedTweet = ({ onPress, quotedStatus: qs }: IQuotedTweetProps) => (
-  <QuotedTweetContainer
-    onPress={() =>
-      onPress(`https://twitter.com/${qs.user.screenName}/status/${qs.idStr}`)
-    }
-  >
-    <>
-      <QuotedTweetNames>
-        <QuotedTweetUserName>{qs.user.name}</QuotedTweetUserName>
-        <Caption>@{qs.user.screenName}</Caption>
-      </QuotedTweetNames>
-      <Paragraph>{qs.text}</Paragraph>
-    </>
-  </QuotedTweetContainer>
-)
+function QuotedTweet({onPress, quotedStatus: qs}: IQuotedTweetProps) {
+  if (qs === null) {
+    return null
+  }
+
+  return (
+    <QuotedTweetContainer
+      onPress={() =>
+        onPress(`https://twitter.com/${qs.user.screenName}/status/${qs.idStr}`)
+      }>
+      <>
+        <QuotedTweetNames>
+          <QuotedTweetUserName>{qs.user.name}</QuotedTweetUserName>
+          <Caption>@{qs.user.screenName}</Caption>
+        </QuotedTweetNames>
+        <Paragraph>{qs.text}</Paragraph>
+      </>
+    </QuotedTweetContainer>
+  )
+}
 
 const Annotation = styled(TouchableRipple)`
   flex-direction: row;

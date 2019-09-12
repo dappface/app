@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Clipboard, View } from 'react-native'
+import {Clipboard, View} from 'react-native'
 import {
   Button,
   Caption,
@@ -7,17 +7,17 @@ import {
   Headline,
   IconButton,
   Subheading,
-  Title
+  Title,
 } from 'react-native-paper'
-import { useMappedState } from 'redux-react-hook'
-import { Blockie, Row } from 'src/components/atoms'
-import { Color, Size } from 'src/const'
-import { useDimensions } from 'src/hooks'
-import { IState } from 'src/redux/module'
-import { accountSelector } from 'src/redux/module/account'
-import { entityType } from 'src/redux/module/entity'
-import { uiHook } from 'src/redux/module/ui'
-import { walletHelper } from 'src/utils'
+import {useMappedState} from 'redux-react-hook'
+import {Blockie, Row} from 'src/components/atoms'
+import {Color, Size} from 'src/const'
+import {useDimensions} from 'src/hooks'
+import {IState} from 'src/redux/module'
+import {accountSelector} from 'src/redux/module/account'
+import {entityType} from 'src/redux/module/entity'
+import {uiHook} from 'src/redux/module/ui'
+import {walletHelper} from 'src/utils'
 import styled from 'styled-components/native'
 
 interface IProps {
@@ -33,26 +33,26 @@ export const Item = ({
   onPressBackup,
   onPressOption,
   onPressReceive,
-  onPressSend
+  onPressSend,
 }: IProps) => {
   const mapState = React.useCallback(
     (state: IState) => ({
       defaultAccountAddress: accountSelector.getDefaultAccountAddress(state),
-      isBackedUp: accountSelector.getIsBackedUp(state)
+      isBackedUp: accountSelector.getIsBackedUp(state),
     }),
-    []
+    [],
   )
-  const { defaultAccountAddress, isBackedUp } = useMappedState(mapState)
-  const { notifyAddressCopied } = uiHook.useSnackbarManager()
+  const {defaultAccountAddress, isBackedUp} = useMappedState(mapState)
+  const {notifyAddressCopied} = uiHook.useSnackbarManager()
 
   const {
-    window: { width }
+    window: {width},
   } = useDimensions()
 
   const onPressCopy = React.useCallback(() => {
     Clipboard.setString(item.address)
     notifyAddressCopied()
-  }, [])
+  }, [item.address, notifyAddressCopied])
 
   return (
     <Container width={width}>
@@ -118,7 +118,7 @@ interface IContainerProps {
 const Container = styled.View<IContainerProps>`
   background: ${Color.PRIMARY};
   padding: ${Size.MARGIN_20}px;
-  width: ${({ width }) => width};
+  width: ${({width}) => width};
 `
 
 const AccountCard = styled(Card)`

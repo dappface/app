@@ -1,23 +1,23 @@
-import { useCallback } from 'react'
-import { useDispatch, useMappedState } from 'redux-react-hook'
-import { IState } from 'src/redux/module'
-import { accountSelector } from 'src/redux/module/account'
-import { entityAction, entityType, entityUtil } from 'src/redux/module/entity'
-import { IHistoryManager } from 'src/redux/module/history/type'
-import { tabHook } from 'src/redux/module/tab'
+import {useCallback} from 'react'
+import {useDispatch, useMappedState} from 'redux-react-hook'
+import {IState} from 'src/redux/module'
+import {accountSelector} from 'src/redux/module/account'
+import {entityAction, entityType, entityUtil} from 'src/redux/module/entity'
+import {IHistoryManager} from 'src/redux/module/history/type'
+import {tabHook} from 'src/redux/module/tab'
 
 export function useHistoryManager(): IHistoryManager {
   const mapState = useCallback(
     (state: IState) => ({
       defaultAccountEntity: accountSelector.getDefaultAccountEntity(
-        state
-      ) as entityType.IAccount
+        state,
+      ) as entityType.IAccount,
     }),
-    []
+    [],
   )
-  const { defaultAccountEntity } = useMappedState(mapState)
+  const {defaultAccountEntity} = useMappedState(mapState)
   const dispatch = useDispatch()
-  const { setLatestHistoryId } = tabHook.useTabManager()
+  const {setLatestHistoryId} = tabHook.useTabManager()
 
   const addHistory = useCallback<IHistoryManager['addHistory']>(
     (tabId, title, url) => {
@@ -26,20 +26,20 @@ export function useHistoryManager(): IHistoryManager {
           ? defaultAccountEntity.address
           : undefined,
         title,
-        url
+        url,
       })
       dispatch(entityAction.setHistory(h))
       if (defaultAccountEntity) {
         dispatch(
           entityAction.setAccount({
             ...defaultAccountEntity,
-            historyIds: [...defaultAccountEntity.historyIds, h.id]
-          })
+            historyIds: [...defaultAccountEntity.historyIds, h.id],
+          }),
         )
       }
       setLatestHistoryId(tabId, h.id)
     },
-    [defaultAccountEntity, setLatestHistoryId]
+    [defaultAccountEntity, dispatch, setLatestHistoryId],
   )
 
   const removeHistory = useCallback<IHistoryManager['removeHistory']>(
@@ -48,17 +48,17 @@ export function useHistoryManager(): IHistoryManager {
         entityAction.setAccount({
           ...defaultAccountEntity,
           historyIds: defaultAccountEntity.historyIds.filter(
-            (item: string) => item !== historyId
-          )
-        })
+            (item: string) => item !== historyId,
+          ),
+        }),
       )
       dispatch(entityAction.removeHistory(historyId))
     },
-    [defaultAccountEntity]
+    [defaultAccountEntity, dispatch],
   )
 
   return {
     addHistory,
-    removeHistory
+    removeHistory,
   }
 }

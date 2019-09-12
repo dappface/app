@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Color, Size } from 'src/const'
+import {Color, Size} from 'src/const'
 import styled from 'styled-components/native'
 
 export const PullBar = () => (

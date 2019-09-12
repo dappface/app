@@ -1,5 +1,5 @@
-import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native'
-import { entityType } from 'src/redux/module/entity'
+import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native'
+import {entityType} from 'src/redux/module/entity'
 
 export interface ITabListManager {
   addTab: () => entityType.ITab

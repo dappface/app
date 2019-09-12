@@ -1,9 +1,9 @@
 import * as React from 'react'
 import Ripple from 'react-native-material-ripple'
-import { Subheading } from 'react-native-paper'
+import {Subheading} from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { HorizontalPadding, Row } from 'src/components/atoms'
-import { Color } from 'src/const'
+import {HorizontalPadding, Row} from 'src/components/atoms'
+import {Color} from 'src/const'
 import styled from 'styled-components/native'
 
 interface IProps {
@@ -19,7 +19,7 @@ export const Option = ({
   title,
   iconName,
   onPress,
-  disabled = false
+  disabled = false,
 }: IProps) => (
   <Container onPress={onPress} disabled={disabled} style={style}>
     <HorizontalPadding>
@@ -40,9 +40,8 @@ export const Option = ({
             style={{
               color: disabled
                 ? Color.TEXT.BLACK_DISABLED
-                : Color.TEXT.BLACK_HIGH_EMPHASIS
-            }}
-          >
+                : Color.TEXT.BLACK_HIGH_EMPHASIS,
+            }}>
             {title}
           </Subheading>
         </HorizontalPadding>

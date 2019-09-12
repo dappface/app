@@ -1,5 +1,5 @@
-import { ITokenCandidate } from 'lib/token-list.json'
-import { entityType } from 'src/redux/module/entity'
+import {ITokenCandidate} from 'lib/token-list.json'
+import {entityType} from 'src/redux/module/entity'
 import Web3 from 'web3'
 
 export interface ITokenManager {

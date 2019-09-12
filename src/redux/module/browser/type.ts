@@ -1,4 +1,4 @@
-import { ActionType } from 'src/redux/module/browser/action-type'
+import {ActionType} from 'src/redux/module/browser/action-type'
 
 export interface IState {
   activeTabId?: string // persisted
@@ -9,17 +9,17 @@ export interface IState {
 export type Actions = ISetActiveTabId | ISetTabIds | ISetOpenRequest
 
 export interface ISetActiveTabId {
-  payload: { activeTabId?: string }
+  payload: {activeTabId?: string}
   type: ActionType.SET_ACTIVE_TAB_ID
 }
 
 export interface ISetTabIds {
-  payload: { tabIds: string[] }
+  payload: {tabIds: string[]}
   type: ActionType.SET_TAB_IDS
 }
 
 export interface ISetOpenRequest {
-  payload: { openRequest?: IOpenRequest }
+  payload: {openRequest?: IOpenRequest}
   type: ActionType.SET_OPEN_REQUEST
 }
 
@@ -31,5 +31,5 @@ export interface IOpenRequest {
 export enum BookmarkStatus {
   Disabled = 'Disabled',
   Bookmarked = 'Bookmarked',
-  NotBookmarked = 'NotBookmarked'
+  NotBookmarked = 'NotBookmarked',
 }

@@ -1,25 +1,25 @@
 import * as React from 'react'
-import { useMappedState } from 'redux-react-hook'
-import { List } from 'src/components/organisms/bottom-drawer/list'
-import { Option } from 'src/components/organisms/bottom-drawer/option'
-import { IState } from 'src/redux/module'
-import { tokenHook } from 'src/redux/module/token'
-import { uiHook, uiSelector } from 'src/redux/module/ui'
+import {useMappedState} from 'redux-react-hook'
+import {List} from 'src/components/organisms/bottom-drawer/list'
+import {Option} from 'src/components/organisms/bottom-drawer/option'
+import {IState} from 'src/redux/module'
+import {tokenHook} from 'src/redux/module/token'
+import {uiHook, uiSelector} from 'src/redux/module/ui'
 
 export const TokenOptions = () => {
   const mapState = React.useCallback(
     (state: IState) => ({
-      bottomDrawer: uiSelector.getBottomDrawer(state)
+      bottomDrawer: uiSelector.getBottomDrawer(state),
     }),
-    []
+    [],
   )
-  const { bottomDrawer } = useMappedState(mapState)
+  const {bottomDrawer} = useMappedState(mapState)
   const setBottomDrawer = uiHook.useSetBottomDrawer()
-  const { removeToken } = tokenHook.useTokenManager()
+  const {removeToken} = tokenHook.useTokenManager()
 
   const onClose = React.useCallback(() => {
     setBottomDrawer()
-  }, [])
+  }, [setBottomDrawer])
 
   const onPressRemove = React.useCallback(() => {
     if (!bottomDrawer) {
@@ -27,7 +27,7 @@ export const TokenOptions = () => {
     }
     removeToken(bottomDrawer.payload.token)
     setBottomDrawer()
-  }, [bottomDrawer])
+  }, [bottomDrawer, removeToken, setBottomDrawer])
 
   return (
     <List onClose={onClose}>

@@ -2,31 +2,21 @@ module.exports = {
   cacheDirectory: '.jest/cache',
   coverageDirectory: './coverage/',
   collectCoverage: true,
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    'src/**/*.tsx'
-  ],
+  collectCoverageFrom: ['src/**/*.ts', 'src/**/*.tsx'],
   coveragePathIgnorePatterns: [
     '.*\\.d\\.ts',
     '<rootDir>/node_modules/',
     'src/const/',
     'src/i18n/',
-    'src/realm/schemas/'
+    'src/realm/schemas/',
   ],
-  moduleFileExtensions: [
-    'js',
-    'ts',
-    'tsx'
-  ],
+  moduleFileExtensions: ['js', 'ts', 'tsx'],
   moduleNameMapper: {
-    "^src/(.+)": "<rootDir>/src/$1"
+    '^src/(.+)': '<rootDir>/src/$1',
   },
   preset: 'react-native',
-  testPathIgnorePatterns: [
-    '\\.snap$',
-    '<rootDir>/node_modules/'
-  ],
+  testPathIgnorePatterns: ['\\.snap$', '<rootDir>/node_modules/'],
   transform: {
-    '^.+\\.(j|t)sx?$': 'babel-jest'
-  }
+    '^.+\\.(j|t)sx?$': 'babel-jest',
+  },
 }

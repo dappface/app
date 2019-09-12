@@ -5,5 +5,5 @@ export enum ActionType {
   ADD_FAILED_TRANSACTION = 'dappface/account/ADD_FAILED_TRANSACTION',
   SET_IS_BACKED_UP = 'dappface/browser/SET_IS_BACKED_UP',
   SET_MNEMONIC = 'dappface/account/SET_MNEMONIC',
-  SET_SIGN_REQUEST = 'dappface/account/SET_SIGN_REQUEST'
+  SET_SIGN_REQUEST = 'dappface/account/SET_SIGN_REQUEST',
 }

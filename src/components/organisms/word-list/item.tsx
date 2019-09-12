@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Ripple from 'react-native-material-ripple'
-import { IconButton, Text } from 'react-native-paper'
-import { Color, Size } from 'src/const'
+import {IconButton, Text} from 'react-native-paper'
+import {Color, Size} from 'src/const'
 import styled from 'styled-components/native'
 
 interface IProps {
@@ -12,12 +12,11 @@ interface IProps {
   words: string[]
 }
 
-export const Item = ({ i, index, onPressItem, remove, words }: IProps) => (
+export const Item = ({i, index, onPressItem, remove, words}: IProps) => (
   <Container
     key={i}
     disabled={!onPressItem}
-    onPress={() => onPressItem && onPressItem(i)}
-  >
+    onPress={() => onPressItem && onPressItem(i)}>
     <Index>
       <Text>{i + 1}</Text>
     </Index>
@@ -34,7 +33,7 @@ export const Item = ({ i, index, onPressItem, remove, words }: IProps) => (
 
 enum ItemSize {
   IndexWidth = 16,
-  WordWidth = 84
+  WordWidth = 84,
 }
 
 const Container = styled(Ripple)`
@@ -56,6 +55,6 @@ const Word = styled.View`
   width: ${ItemSize.WordWidth};
   align-items: center;
   border-bottom-width: 1;
-  border-bottom-color: ${({ selected }: { selected: boolean }) =>
+  border-bottom-color: ${({selected}: {selected: boolean}) =>
     selected ? Color.BRIGHT_RED : Color.TEXT.BLACK_HIGH_EMPHASIS};
 `

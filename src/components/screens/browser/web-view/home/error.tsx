@@ -1,13 +1,13 @@
 import * as React from 'react'
-import { Button, Caption, Card, Headline } from 'react-native-paper'
-import { CenteredColumn, Padding } from 'src/components/atoms'
-import { Size } from 'src/const'
+import {Button, Caption, Card, Headline} from 'react-native-paper'
+import {CenteredColumn, Padding} from 'src/components/atoms'
+import {Size} from 'src/const'
 
 interface IProps {
   retry: () => Promise<void>
 }
 
-export const Error = ({ retry }: IProps) => (
+export const Error = ({retry}: IProps) => (
   <Padding>
     <Card>
       <Card.Content>

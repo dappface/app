@@ -1,43 +1,43 @@
 import moment from 'moment'
 import * as React from 'react'
 import Ripple from 'react-native-material-ripple'
-import { Caption, IconButton, Subheading } from 'react-native-paper'
+import {Caption, IconButton, Subheading} from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { useMappedState } from 'redux-react-hook'
-import { Blockie, Padding } from 'src/components/atoms'
-import { Color } from 'src/const'
-import { useBottomAppBarManager, useBrowserManager, useWeb3 } from 'src/hooks'
-import { IState } from 'src/redux/module'
-import { accountSelector, accountType } from 'src/redux/module/account'
-import { entityType } from 'src/redux/module/entity'
-import { settingSelector } from 'src/redux/module/setting'
-import { walletHelper as wHelper } from 'src/utils'
+import {useMappedState} from 'redux-react-hook'
+import {Blockie, Padding} from 'src/components/atoms'
+import {Color} from 'src/const'
+import {useBottomAppBarManager, useBrowserManager, useWeb3} from 'src/hooks'
+import {IState} from 'src/redux/module'
+import {accountSelector, accountType} from 'src/redux/module/account'
+import {entityType} from 'src/redux/module/entity'
+import {settingSelector} from 'src/redux/module/setting'
+import {walletHelper as wHelper} from 'src/utils'
 import styled from 'styled-components/native'
 
 interface IProps {
   tx: accountType.ITransaction
 }
 
-export const TxItem = ({ tx }: IProps) => {
+export const TxItem = ({tx}: IProps) => {
   const mapState = React.useCallback(
     (state: IState) => ({
       currentAccount: accountSelector.getCurrentAccount(
-        state
+        state,
       ) as entityType.IAccount,
-      etherscanUrl: settingSelector.getEtherscanUrl(state)
+      etherscanUrl: settingSelector.getEtherscanUrl(state),
     }),
-    []
+    [],
   )
-  const { currentAccount, etherscanUrl } = useMappedState(mapState)
+  const {currentAccount, etherscanUrl} = useMappedState(mapState)
   const web3 = useWeb3()
-  const { openLink } = useBrowserManager()
-  const { closeBottomAppBar } = useBottomAppBarManager()
+  const {openLink} = useBrowserManager()
+  const {closeBottomAppBar} = useBottomAppBarManager()
 
   const onPress = React.useCallback(() => {
     closeBottomAppBar()
-    const url = etherscanUrl + `/tx/${tx.hash}`
+    const url = `${etherscanUrl}/tx/${tx.hash}`
     openLink(url, true)
-  }, [etherscanUrl])
+  }, [closeBottomAppBar, etherscanUrl, openLink, tx.hash])
 
   return (
     <Ripple onPress={onPress}>
@@ -79,7 +79,7 @@ interface IMainIconProps {
   tx: accountType.ITransaction
 }
 
-const MainIcon = ({ currentAccount, tx }: IMainIconProps) => {
+const MainIcon = ({currentAccount, tx}: IMainIconProps) => {
   if (tx.errorMessage) {
     return (
       <Icon type={TxType.Error}>
@@ -90,7 +90,8 @@ const MainIcon = ({ currentAccount, tx }: IMainIconProps) => {
         />
       </Icon>
     )
-  } else if (tx.to.toLowerCase() === tx.from.toLowerCase()) {
+  }
+  if (tx.to.toLowerCase() === tx.from.toLowerCase()) {
     return (
       <Icon type={TxType.Cycle}>
         <Ionicons
@@ -100,7 +101,8 @@ const MainIcon = ({ currentAccount, tx }: IMainIconProps) => {
         />
       </Icon>
     )
-  } else if (currentAccount.address === tx.from.toLowerCase()) {
+  }
+  if (currentAccount.address === tx.from.toLowerCase()) {
     return (
       <Icon type={TxType.From}>
         <Ionicons
@@ -146,7 +148,7 @@ const Icon = styled.View<IIconProps>`
   align-items: center;
   justify-content: center;
 
-  ${({ type }) => {
+  ${({type}) => {
     switch (type) {
       case TxType.From:
       case TxType.To:
@@ -154,11 +156,10 @@ const Icon = styled.View<IIconProps>`
       case TxType.Cycle:
         return `transform: rotate(-45deg);`
       default:
-        return
     }
   }}
 
-  ${({ type }) => {
+  ${({type}) => {
     switch (type) {
       case TxType.Error:
         return `border-color: ${Color.TEXT.ERROR_HIGH_EMPHASIS}`
@@ -191,5 +192,5 @@ enum TxType {
   Cycle = 'cycle',
   Error = 'error',
   From = 'from',
-  To = 'to'
+  To = 'to',
 }

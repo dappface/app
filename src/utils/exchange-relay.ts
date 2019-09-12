@@ -1,12 +1,12 @@
-import { Url } from 'src/const'
-import { httpClient } from 'src/utils'
+import {Url} from 'src/const'
+import {httpClient} from './http-client'
 
-export const getRate = async (currency: string): Promise<string> => {
-  const { data } = await httpClient.get(
+export async function getRate(currency: string): Promise<string> {
+  const {data} = await httpClient.get(
     `${Url.COINMARKETCAP}/v1/ticker/ethereum/`,
     {
-      params: { convert: currency }
-    }
+      params: {convert: currency},
+    },
   )
   return data[0][`price_${currency.toLowerCase()}`]
 }

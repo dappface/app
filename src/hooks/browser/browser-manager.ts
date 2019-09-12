@@ -5,21 +5,21 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef
+  useRef,
 } from 'react'
-import { FlatList } from 'react-native'
-import { WebView } from 'react-native-webview'
-import { useMappedState } from 'redux-react-hook'
-import { IState } from 'src/redux/module'
-import { browserHook, browserSelector } from 'src/redux/module/browser'
-import { tabHook, tabType } from 'src/redux/module/tab'
+import {FlatList} from 'react-native'
+import {WebView} from 'react-native-webview'
+import {useMappedState} from 'redux-react-hook'
+import {IState} from 'src/redux/module'
+import {browserHook, browserSelector} from 'src/redux/module/browser'
+import {tabHook, tabType} from 'src/redux/module/tab'
 import validator from 'validator'
 
 export const useBrowserManager = () =>
   useContext(BrowserManagerContext) as IBrowserManager
 
 export const BrowserManagerContext = createContext<IBrowserManager | undefined>(
-  undefined
+  undefined,
 )
 
 export interface IBrowserManager {
@@ -43,26 +43,26 @@ export function useInitializedBrowserManager(): IBrowserManager {
     (state: IState) => ({
       activeTabId: browserSelector.getActiveTabId(state),
       searchUrl: browserSelector.getSearchUrl(state),
-      tabs: browserSelector.getTabs(state)
+      tabs: browserSelector.getTabs(state),
     }),
-    []
+    [],
   )
-  const { activeTabId, searchUrl, tabs } = useMappedState(mapState)
-  const { setLoadingProgress } = tabHook.useTabManager()
+  const {activeTabId, searchUrl, tabs} = useMappedState(mapState)
+  const {setLoadingProgress} = tabHook.useTabManager()
   const setOpenRequest = browserHook.useSetOpenRequest()
 
   const webViewListRef: IBrowserManager['webViewListRef'] = useRef(null)
   const webViewRefs: IBrowserManager['webViewRefs'] = useRef(
     tabs.reduce(
       (
-        res: { [key: string]: RefObject<WebView | undefined> },
-        tab: tabType.ITab
+        res: {[key: string]: RefObject<WebView | undefined>},
+        tab: tabType.ITab,
       ) => ({
         ...res,
-        [tab.id]: createRef()
+        [tab.id]: createRef(),
       }),
-      {}
-    )
+      {},
+    ),
   )
 
   const goBack: IBrowserManager['goBack'] = () => {
@@ -91,7 +91,7 @@ export function useInitializedBrowserManager(): IBrowserManager {
     if (!webViewListRef.current) {
       return
     }
-    webViewListRef.current.scrollToIndex({ index })
+    webViewListRef.current.scrollToIndex({index})
   }
 
   const tabListManager = tabHook.useTabListManager(scrollTo)
@@ -133,7 +133,7 @@ export function useInitializedBrowserManager(): IBrowserManager {
       const searchQuery = trimed.replace(' ', '+')
       return searchUrl + searchQuery
     },
-    [searchUrl]
+    [searchUrl],
   )
 
   const openLink = useCallback<IBrowserManager['openLink']>(
@@ -144,10 +144,10 @@ export function useInitializedBrowserManager(): IBrowserManager {
       }
       setOpenRequest({
         tabId: tab ? tab.id : (activeTabId as string),
-        url
+        url,
       })
     },
-    [activeTabId, setOpenRequest, tabListManager.addTab]
+    [activeTabId, setOpenRequest, tabListManager],
   )
 
   const onSearch = useCallback<IBrowserManager['onSearch']>(
@@ -155,7 +155,7 @@ export function useInitializedBrowserManager(): IBrowserManager {
       const u = queryToUrl(str)
       openLink(u)
     },
-    [activeTabId, openLink, queryToUrl]
+    [openLink, queryToUrl],
   )
 
   const onStopLoading: IBrowserManager['onStopLoading'] = () => {
@@ -173,7 +173,7 @@ export function useInitializedBrowserManager(): IBrowserManager {
   const respondData: IBrowserManager['respondData'] = (
     tabId,
     callbackId,
-    data
+    data,
   ) => {
     if (!webViewRefs.current) {
       return
@@ -194,15 +194,15 @@ export function useInitializedBrowserManager(): IBrowserManager {
     // @ts-ignore
     webViewRefs.current = tabs.reduce(
       (
-        res: { [key: string]: RefObject<WebView | undefined> },
-        tab: tabType.ITab
+        res: {[key: string]: RefObject<WebView | undefined>},
+        tab: tabType.ITab,
       ) => ({
         ...res,
-        [tab.id]: createRef()
+        [tab.id]: createRef(),
       }),
-      {}
+      {},
     )
-  }, [tabs.length])
+  }, [tabs, tabs.length])
 
   return {
     goBack,
@@ -215,6 +215,6 @@ export function useInitializedBrowserManager(): IBrowserManager {
     scrollTo,
     tabListManager,
     webViewListRef,
-    webViewRefs
+    webViewRefs,
   }
 }

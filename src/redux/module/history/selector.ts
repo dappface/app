@@ -1,18 +1,18 @@
-import { createSelector } from 'reselect'
-import { accountSelector } from 'src/redux/module/account'
+import {createSelector} from 'reselect'
+import {accountSelector} from 'src/redux/module/account'
 import * as browserSelector from 'src/redux/module/browser/selector'
-import { entitySelector, entityType } from 'src/redux/module/entity'
+import {entitySelector, entityType} from 'src/redux/module/entity'
 
 export const getHistories = createSelector(
   accountSelector.getDefaultAccountEntity,
   entitySelector.getHistories,
   (
     defaultAccountEntity: entityType.IAccount | undefined,
-    histories: entityType.IHistories
+    histories: entityType.IHistories,
   ): entityType.IHistory[] =>
     defaultAccountEntity
       ? defaultAccountEntity.historyIds.map(item => histories[item])
-      : []
+      : [],
 )
 
 export const getActiveHistory = createSelector(
@@ -20,9 +20,9 @@ export const getActiveHistory = createSelector(
   browserSelector.getActiveTab,
   (
     histories: entityType.IHistories,
-    activeTab?: entityType.ITab
+    activeTab?: entityType.ITab,
   ): entityType.IHistory | undefined =>
     activeTab && activeTab.latestHistoryId
       ? histories[activeTab.latestHistoryId]
-      : undefined
+      : undefined,
 )

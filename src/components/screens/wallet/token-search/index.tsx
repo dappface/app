@@ -1,18 +1,18 @@
 import * as React from 'react'
-import { Searchbar } from 'react-native-paper'
-import { Padding } from 'src/components/atoms'
-import { Candidates } from 'src/components/screens/wallet/token-search/candidates'
+import {Searchbar} from 'react-native-paper'
+import {Padding} from 'src/components/atoms'
+import {Candidates} from 'src/components/screens/wallet/token-search/candidates'
 import {
   TokenSearchContext,
-  useInitializedTokenSearchManager
+  useInitializedTokenSearchManager,
 } from 'src/components/screens/wallet/token-search/hooks'
-import { Size } from 'src/const'
+import {Size} from 'src/const'
 
 interface IProps {
   componentId: string
 }
 
-export const TokenSearch = ({ componentId }: IProps) => {
+export const TokenSearch = ({componentId}: IProps) => {
   const tokenSearchManager = useInitializedTokenSearchManager(componentId)
 
   return (
@@ -23,7 +23,7 @@ export const TokenSearch = ({ componentId }: IProps) => {
           autoCorrect={false}
           onChangeText={tokenSearchManager.onChangeText}
           placeholder='Name, symbol, contract address...'
-          theme={{ roundness: Size.TEXT_INPUT_MIN_HEIGHT / 2 }}
+          theme={{roundness: Size.TEXT_INPUT_MIN_HEIGHT / 2}}
           value={tokenSearchManager.searchInput}
         />
       </Padding>

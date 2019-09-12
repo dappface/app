@@ -1,5 +1,5 @@
-import { useCallback, useReducer } from 'react'
-import { createSelector } from 'reselect'
+import {useCallback, useReducer} from 'react'
+import {createSelector} from 'reselect'
 
 export interface IWordListManager {
   clear: () => void
@@ -23,38 +23,38 @@ export const useWordListManager = (): IWordListManager => {
 
   const clear = useCallback<IWordListManager['clear']>(() => {
     dispatch({
-      type: ActionType.Clear
+      type: ActionType.Clear,
     })
   }, [dispatch])
 
   const move = useCallback<IWordListManager['move']>(
     (index: number) => {
       dispatch({
-        payload: { index },
-        type: ActionType.Move
+        payload: {index},
+        type: ActionType.Move,
       })
     },
-    [dispatch]
+    [dispatch],
   )
 
   const remove = useCallback<IWordListManager['remove']>(
     (index: number) => {
       dispatch({
-        payload: { index },
-        type: ActionType.Remove
+        payload: {index},
+        type: ActionType.Remove,
       })
     },
-    [dispatch]
+    [dispatch],
   )
 
   const toggleFactory = useCallback<IWordListManager['toggleFactory']>(
     (word: string) => () => {
       dispatch({
-        payload: { word },
-        type: ActionType.Toggle
+        payload: {word},
+        type: ActionType.Toggle,
       })
     },
-    [dispatch]
+    [dispatch],
   )
 
   return {
@@ -66,7 +66,7 @@ export const useWordListManager = (): IWordListManager => {
     move,
     remove,
     toggleFactory,
-    wordList: state.wordList
+    wordList: state.wordList,
   }
 }
 
@@ -75,18 +75,18 @@ const wordListSelector = (state: IState) => state.wordList
 const isEmptySelector = createSelector(
   wordListSelector,
   (wordList: string[]): boolean =>
-    wordList.findIndex(item => item !== '') === -1
+    wordList.findIndex(item => item !== '') === -1,
 )
 
 const isFilledSelector = createSelector(
   wordListSelector,
-  (wordList: string[]): boolean => wordList.indexOf('') === -1
+  (wordList: string[]): boolean => wordList.indexOf('') === -1,
 )
 
 const isUsedSelectorFactory = (word: string) =>
   createSelector(
     wordListSelector,
-    (wordList: string[]): boolean => wordList.indexOf(word) !== -1
+    (wordList: string[]): boolean => wordList.indexOf(word) !== -1,
   )
 
 interface IState {
@@ -96,14 +96,14 @@ interface IState {
 
 const initialState = {
   index: 0,
-  wordList: Array.from({ length: 12 }, () => '')
+  wordList: Array.from({length: 12}, () => ''),
 }
 
 enum ActionType {
   Clear = 'clear',
   Move = 'move',
   Remove = 'remove',
-  Toggle = 'toggle'
+  Toggle = 'toggle',
 }
 
 type Actions = IClear | IMove | IRemove | IToggle
@@ -113,33 +113,42 @@ const reducer = (state: IState, action: Actions) => {
     case ActionType.Clear:
       return initialState
     case ActionType.Move:
-      return { ...state, index: action.payload.index }
+      return {...state, index: action.payload.index}
     case ActionType.Remove:
       return {
         ...state,
         index: action.payload.index,
         wordList: state.wordList.map((item, i) =>
-          i === action.payload.index ? '' : item
-        )
+          i === action.payload.index ? '' : item,
+        ),
       }
     case ActionType.Toggle: {
       const i = state.wordList.indexOf(action.payload.word)
+
+      let index
+      if (i === -1) {
+        if (state.index === state.wordList.length - 1) {
+          if (state.wordList.findIndex(item => item === '')) {
+            index = state.wordList.findIndex(item => item === '')
+          } else {
+            ;({index} = state)
+          }
+        } else {
+          index = state.index + 1
+        }
+      } else {
+        index = i
+      }
+
       return {
         ...state,
-        index:
-          i === -1
-            ? state.index === state.wordList.length - 1
-              ? state.wordList.findIndex(item => item === '')
-                ? state.wordList.findIndex(item => item === '')
-                : state.index
-              : state.index + 1
-            : i,
+        index,
         wordList:
           i === -1
             ? state.wordList.map((item, ii) =>
-                ii === state.index ? action.payload.word : item
+                ii === state.index ? action.payload.word : item,
               )
-            : state.wordList.map((item, ii) => (ii === i ? '' : item))
+            : state.wordList.map((item, ii) => (ii === i ? '' : item)),
       }
     }
     default:
@@ -152,16 +161,16 @@ interface IClear {
 }
 
 interface IMove {
-  payload: { index: number }
+  payload: {index: number}
   type: ActionType.Move
 }
 
 interface IRemove {
-  payload: { index: number }
+  payload: {index: number}
   type: ActionType.Remove
 }
 
 interface IToggle {
-  payload: { word: string }
+  payload: {word: string}
   type: ActionType.Toggle
 }

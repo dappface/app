@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Alert } from 'react-native'
-import { RNCamera } from 'react-native-camera'
-import { Navigation } from 'react-native-navigation'
-import { ModalTemplate } from 'src/components/templates'
-import { Color } from 'src/const'
+import {Alert} from 'react-native'
+import {RNCamera} from 'react-native-camera'
+import {Navigation} from 'react-native-navigation'
+import {ModalTemplate} from 'src/components/templates'
+import {Color} from 'src/const'
 import styled from 'styled-components/native'
 
 export interface IProps {
@@ -11,7 +11,7 @@ export interface IProps {
   setTo: (to: string) => void
 }
 
-export const Scan = ({ componentId, setTo }: IProps) => {
+export const Scan = ({componentId, setTo}: IProps) => {
   const onScan = (data: any) => {
     if (typeof data === 'object' && typeof data.data === 'string') {
       setTo(data.data)
@@ -20,7 +20,7 @@ export const Scan = ({ componentId, setTo }: IProps) => {
     } else {
       Alert.alert('Whoops!', 'Scanning failed.')
     }
-    void Navigation.dismissModal(componentId)
+    Navigation.dismissModal(componentId)
   }
 
   return (
@@ -29,8 +29,7 @@ export const Scan = ({ componentId, setTo }: IProps) => {
         <QrCodeScanner
           barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
           captureAudio={false}
-          onBarCodeRead={onScan}
-        >
+          onBarCodeRead={onScan}>
           <RectangleContainer>
             <Rectangle />
           </RectangleContainer>

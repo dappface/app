@@ -1,5 +1,5 @@
+import {useQuery} from '@apollo/react-hooks'
 import * as React from 'react'
-import * as apolloHooks from 'react-apollo-hooks'
 import {FlatList, ViewStyle} from 'react-native'
 import {feed} from 'src/apollo/modules'
 import {Post} from 'src/components/screens/browser/web-view/feed/post'
@@ -15,15 +15,11 @@ export interface IProps {
 export const Home = ({style}: IProps) => {
   const {openLink} = useBrowserManager()
 
-  const {data, error, fetchMore, loading} = apolloHooks.useQuery(
-    feed.GET_FEED,
-    {
-      suspend: false,
-      variables: {
-        first: DEFAULT_POST_NUM,
-      },
+  const {data, error, fetchMore, loading} = useQuery(feed.GET_FEED, {
+    variables: {
+      first: DEFAULT_POST_NUM,
     },
-  ) as any
+  })
 
   const [refreshing, setRefreshing] = React.useState(false)
 
@@ -86,7 +82,7 @@ export const Home = ({style}: IProps) => {
     <FlatList
       contentContainerStyle={style}
       extraData={onPressPost}
-      data={(data.feed ? data.feed.edges : []) as feed.IPostEdge[]}
+      data={(data && data.feed ? data.feed.edges : []) as feed.IPostEdge[]}
       keyExtractor={item => item.cursor}
       ListFooterComponent={renderListFooterComponent}
       ListHeaderComponent={<Search />}

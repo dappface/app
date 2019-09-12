@@ -38,6 +38,7 @@ const fetchSchema = async () => {
     }
     fs.writeFileSync(FILE_DIST, JSON.stringify(newData))
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err.response.data)
   }
 }

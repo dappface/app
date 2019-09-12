@@ -23,7 +23,7 @@ export const BookmarkList = ({screenProps: {componentId}}: IListProps) => {
   const onPressFactory = React.useCallback(
     (url: string) => () => {
       openLink(url)
-      void Navigation.dismissModal(componentId)
+      Navigation.dismissModal(componentId)
     },
     [componentId, openLink],
   )

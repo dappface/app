@@ -10,6 +10,7 @@ import introspectionQueryResultData from 'lib/fragment-types.json'
 import {API_URL} from 'react-native-dotenv'
 import Reactotron from 'reactotron-react-native'
 
+// eslint-disable-next-line import/no-mutable-exports
 export let client: ApolloClient<any>
 
 export const initClient = () => {

@@ -81,13 +81,12 @@ export const Tweet = ({
             <Paragraph>{mainText}</Paragraph>
           </Main>
 
-          {rs === null ? (
-            quotedStatus ? (
-              <QuotedTweet onPress={onPress} quotedStatus={quotedStatus} />
-            ) : null
-          ) : rs.quotedStatus ? (
-            <QuotedTweet onPress={onPress} quotedStatus={rs.quotedStatus} />
-          ) : null}
+          <QuotedTweet
+            onPress={onPress}
+            quotedStatus={
+              quotedStatus || (rs !== null ? rs.quotedStatus : null)
+            }
+          />
 
           <Footer>
             <Text>Twitter</Text>
@@ -101,23 +100,29 @@ export const Tweet = ({
 
 interface IQuotedTweetProps {
   onPress: OnPress
-  quotedStatus: feed.ITweet
+  quotedStatus: feed.ITweet | null
 }
 
-const QuotedTweet = ({onPress, quotedStatus: qs}: IQuotedTweetProps) => (
-  <QuotedTweetContainer
-    onPress={() =>
-      onPress(`https://twitter.com/${qs.user.screenName}/status/${qs.idStr}`)
-    }>
-    <>
-      <QuotedTweetNames>
-        <QuotedTweetUserName>{qs.user.name}</QuotedTweetUserName>
-        <Caption>@{qs.user.screenName}</Caption>
-      </QuotedTweetNames>
-      <Paragraph>{qs.text}</Paragraph>
-    </>
-  </QuotedTweetContainer>
-)
+function QuotedTweet({onPress, quotedStatus: qs}: IQuotedTweetProps) {
+  if (qs === null) {
+    return null
+  }
+
+  return (
+    <QuotedTweetContainer
+      onPress={() =>
+        onPress(`https://twitter.com/${qs.user.screenName}/status/${qs.idStr}`)
+      }>
+      <>
+        <QuotedTweetNames>
+          <QuotedTweetUserName>{qs.user.name}</QuotedTweetUserName>
+          <Caption>@{qs.user.screenName}</Caption>
+        </QuotedTweetNames>
+        <Paragraph>{qs.text}</Paragraph>
+      </>
+    </QuotedTweetContainer>
+  )
+}
 
 const Annotation = styled(TouchableRipple)`
   flex-direction: row;

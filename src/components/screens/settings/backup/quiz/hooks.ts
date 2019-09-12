@@ -124,16 +124,25 @@ const reducer = (state: IState, action: Actions) => {
       }
     case ActionType.Toggle: {
       const i = state.wordList.indexOf(action.payload.word)
+
+      let index
+      if (i === -1) {
+        if (state.index === state.wordList.length - 1) {
+          if (state.wordList.findIndex(item => item === '')) {
+            index = state.wordList.findIndex(item => item === '')
+          } else {
+            ;({index} = state)
+          }
+        } else {
+          index = state.index + 1
+        }
+      } else {
+        index = i
+      }
+
       return {
         ...state,
-        index:
-          i === -1
-            ? state.index === state.wordList.length - 1
-              ? state.wordList.findIndex(item => item === '')
-                ? state.wordList.findIndex(item => item === '')
-                : state.index
-              : state.index + 1
-            : i,
+        index,
         wordList:
           i === -1
             ? state.wordList.map((item, ii) =>

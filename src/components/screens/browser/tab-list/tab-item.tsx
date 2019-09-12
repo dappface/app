@@ -105,11 +105,10 @@ export const TabItem = ({tab}: IProps) => {
             </>
           )}
           {tab.id === activeTabId && (
-            <IconButton
+            <CloseButton
               icon='close'
               onPress={tabListManager.removeFactory(tab.id)}
               size={16}
-              style={{margin: 0}}
             />
           )}
         </Container>
@@ -170,4 +169,8 @@ const Title = styled(Text)`
   flex: 1;
   align-items: center;
   justify-content: center;
+`
+
+const CloseButton = styled(IconButton)`
+  margin: 0;
 `

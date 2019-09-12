@@ -26,7 +26,7 @@ export const Network = () => {
 
   const candidates = Object.keys(NetworkEnum)
     .map(val => parseInt(val, 10))
-    .filter(val => isNaN(val) === false)
+    .filter(val => !Number.isNaN(val))
 
   return (
     <FlatList

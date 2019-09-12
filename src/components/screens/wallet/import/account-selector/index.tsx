@@ -48,7 +48,7 @@ export const AccountSelector = ({componentId, mnemonic}: IProps) => {
 
   const onPressRecover = React.useCallback((): void => {
     importAccountCandidates(mnemonic, candidates)
-    void Navigation.dismissModal(componentId)
+    Navigation.dismissModal(componentId)
   }, [candidates, componentId, importAccountCandidates, mnemonic])
 
   const deriveAccountByIndex = React.useCallback(

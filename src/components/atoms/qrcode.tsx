@@ -3,6 +3,7 @@ import * as React from 'react'
 import {View} from 'react-native'
 import {ActivityIndicator} from 'react-native-paper'
 import {WebView} from 'react-native-webview'
+import styled from 'styled-components'
 
 interface IProps {
   size?: number
@@ -47,10 +48,14 @@ export const QRCode = ({value, size = 400}: IProps) => {
   return (
     <View style={{height: size, width: size}}>
       {html ? (
-        <WebView scrollEnabled={false} source={{html}} style={{flex: 1}} />
+        <ExpandedWebView scrollEnabled={false} source={{html}} />
       ) : (
         <ActivityIndicator />
       )}
     </View>
   )
 }
+
+const ExpandedWebView = styled(WebView)`
+  flex: 1;
+`

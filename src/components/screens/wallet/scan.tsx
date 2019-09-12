@@ -20,7 +20,7 @@ export const Scan = ({componentId, setTo}: IProps) => {
     } else {
       Alert.alert('Whoops!', 'Scanning failed.')
     }
-    void Navigation.dismissModal(componentId)
+    Navigation.dismissModal(componentId)
   }
 
   return (

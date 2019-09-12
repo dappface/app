@@ -48,11 +48,12 @@ export const useMessageChannelManager = (
       case PostMessageActionType.OpenTargetBlankLink:
         openLink(data.payload.uri, true)
         break
-      case PostMessageActionType.PushState:
+      case PostMessageActionType.PushState: {
         const res = await httpClient.get(data.payload.url)
         const title = res.data.split('<title>')[1].split('</title>')[0]
         addHistory(tabId, title, data.payload.url)
         break
+      }
       case PostMessageActionType.ApprovePersonalMessage:
         Alert.alert(
           'Signature Request',

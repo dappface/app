@@ -56,7 +56,7 @@ cannot be recovered without it.`,
           {
             onPress: () => {
               setIsBackedUp(true)
-              void Navigation.popToRoot(componentId)
+              Navigation.popToRoot(componentId)
             },
             text: 'Got it',
           },
@@ -79,7 +79,7 @@ Please review your backup and try again. `,
       <View>
         <Padding verticalSize={Size.MARGIN_8}>
           <CenteredColumn>
-            <Subheading>Let's verify your recovery phrase.</Subheading>
+            <Subheading>Let&apos;s verify your recovery phrase.</Subheading>
           </CenteredColumn>
         </Padding>
 

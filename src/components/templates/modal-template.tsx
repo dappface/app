@@ -19,7 +19,7 @@ export const ModalTemplate = ({
   text,
 }: IProps) => {
   const onPressClose = React.useCallback((): void => {
-    void Navigation.dismissModal(componentId)
+    Navigation.dismissModal(componentId)
   }, [componentId])
 
   return (

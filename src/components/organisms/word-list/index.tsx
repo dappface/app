@@ -15,14 +15,14 @@ export const WordList = (props: IProps) => (
   <Container>
     <View>
       {Array.from({length: 6}).map((_, i) => (
-        <Item key={i} {...props} i={i} />
+        <Item key={props.words[i]} {...props} i={i} />
       ))}
     </View>
 
     <View>
       {Array.from({length: 6}).map((_, ii) => {
         const i = ii + 6
-        return <Item key={i} {...props} i={i} />
+        return <Item key={props.words[i + 6]} {...props} i={i} />
       })}
     </View>
   </Container>

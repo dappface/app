@@ -10,6 +10,7 @@ const fetchAndWriteToken = async () => {
     const {data: tokenList} = await axios.get(TOKEN_LIST_URL)
     fs.writeFileSync(FILE_DIST, JSON.stringify(tokenList))
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e)
   }
 }

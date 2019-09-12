@@ -18,6 +18,16 @@ module.exports = {
       },
     ],
     'import/prefer-default-export': 'off',
+    'no-underscore-dangle': [
+      'error',
+      {
+        allow: [
+          '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__',
+          '__schema',
+          '__typename',
+        ],
+      },
+    ],
     'no-use-before-define': 'off',
   },
   settings: {

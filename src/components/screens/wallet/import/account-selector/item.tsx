@@ -12,7 +12,7 @@ interface IProps {
   onPress: () => void
 }
 
-export const Item = ({i, account, onPress}: IProps) => {
+export const Item = ({account, onPress}: IProps) => {
   const web3 = useWeb3()
   const [balance, setBalance] = React.useState('--')
 

@@ -84,7 +84,7 @@ export const BottomAppBar = ({componentId}: IProps) => {
           />
         </ShadowTouchable>
       ) : null}
-      <Interactable.View
+      <StyledInteractableView
         alertAreas={[
           {
             id: 'basePosition',
@@ -103,14 +103,13 @@ export const BottomAppBar = ({componentId}: IProps) => {
           {y: Size.SCREEN.HEIGHT / 2},
           {y: Size.SCREEN.TOP},
         ]}
-        style={{position: 'absolute'}}
         verticalOnly>
         <BottomSheet elevation={8}>
           <NavigationBar isOpen={isOpen} onMore={onMore} position={position} />
           <PullBar />
           {signRequest ? <SignPrompt /> : <Wallet componentId={componentId} />}
         </BottomSheet>
-      </Interactable.View>
+      </StyledInteractableView>
     </>
   )
 }
@@ -137,4 +136,8 @@ const ShadowTouchable = styled.TouchableWithoutFeedback`
   height: ${Size.SCREEN.HEIGHT};
   position: absolute;
   width: ${Size.SCREEN.WIDTH};
+`
+
+const StyledInteractableView = styled(Interactable.View)`
+  position: absolute;
 `

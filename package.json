@@ -5,7 +5,6 @@
   "scripts": {
     "android": "react-native run-android",
     "create-token-list": "node bin/token-list.js",
-    "debugger": "open \"rndebugger://set-debugger-loc?host=localhost&port=8081\"",
     "ios": "bundle exec fastlane ios dev",
     "ios:beta": "bundle exec fastlane ios beta",
     "ios:device": "bundle exec fastlane ios dev device:true",

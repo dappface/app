@@ -65,8 +65,10 @@ export const useInitializedWeb3 = (): Web3 | undefined => {
   }, [setLatestBlockNumber, web3])
 
   const connect = useCallback((): void => {
+    Reactotron.log('Web3: Connecting')
     const w = new Web3(remoteNodeUrl)
     setWeb3(w)
+    setConnection(ConnectionStatus.Connecting)
 
     // @ts-ignore
     w.currentProvider.on('connect', onConnect)
@@ -78,22 +80,27 @@ export const useInitializedWeb3 = (): Web3 | undefined => {
 
   useEffect(() => {
     ;(async () => {
-      if (!web3) {
+      if (!web3 || connection === ConnectionStatus.Connecting) {
         return
       }
-      if (!connection) {
-        Reactotron.log('Web3: Connecting')
-        connect()
-        return
-      }
-      if (connection !== ConnectionStatus.Connected) {
+
+      if (
+        connection === ConnectionStatus.Error ||
+        connection === ConnectionStatus.End
+      ) {
         Reactotron.log('Web3: Attempting to reconnect in 5 secs')
         setTimeout(() => {
           connect()
         }, 5000)
+      }
+    })()
+  }, [connect, connection, web3])
+
+  useEffect(() => {
+    ;(async () => {
+      if (!web3 || connection !== ConnectionStatus.Connected) {
         return
       }
-
       const blockNum = await web3.eth.getBlockNumber()
       setLatestBlockNumber(blockNum)
 
@@ -102,7 +109,7 @@ export const useInitializedWeb3 = (): Web3 | undefined => {
         // @ts-ignore
         .on('data', onNewBlockHeaders)
     })()
-  }, [connect, connection, onNewBlockHeaders, setLatestBlockNumber, web3])
+  }, [connection, onNewBlockHeaders, setLatestBlockNumber, web3])
 
   useEffect(() => {
     connect()
@@ -145,7 +152,8 @@ export const useInitializedWeb3 = (): Web3 | undefined => {
 }
 
 enum ConnectionStatus {
-  Connected = 'connected',
-  End = 'end',
-  Error = 'error',
+  Connected,
+  Connecting,
+  End,
+  Error,
 }

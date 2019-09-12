@@ -38,7 +38,7 @@ export const useBookmarkManager = (): bookmarkType.IBookmarkManager => {
         bookmarkIds: [...defaultAccountEntity.bookmarkIds, bookmark.id],
       }),
     )
-  }, [defaultAccountEntity, activeHistory.title, activeHistory.url, dispatch])
+  }, [defaultAccountEntity, activeHistory, dispatch])
 
   const removeBookmark = useCallback<
     bookmarkType.IBookmarkManager['removeBookmark']

@@ -79,7 +79,7 @@ export const useFetchBalance = (web3: Web3) => {
         }),
       )
     },
-    [currencyDetails.decimalDigits, dispatch, fiatRate, web3.eth, web3.utils],
+    [currencyDetails.decimalDigits, dispatch, fiatRate, web3],
   )
 }
 

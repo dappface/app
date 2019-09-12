@@ -4,7 +4,6 @@ import wordlist from 'bip39/src/wordlists/english.json'
 import { Wallet } from 'ethers'
 import moment from 'moment'
 import { useCallback } from 'react'
-import { randomBytes } from 'react-native-randombytes'
 import Reactotron from 'reactotron-react-native'
 import { useDispatch, useMappedState } from 'redux-react-hook'
 import { AccountPath } from 'src/const'
@@ -15,7 +14,7 @@ import * as accountSelector from 'src/redux/module/account/selector'
 import * as accountType from 'src/redux/module/account/type'
 import { entityAction, entityType, entityUtil } from 'src/redux/module/entity'
 import { settingSelector } from 'src/redux/module/setting'
-import { exchangeRelay } from 'src/utils'
+import { exchangeRelay, randomBytesAsync } from 'src/utils'
 import Web3 from 'web3'
 
 export const useSetSignRequest = () => {
@@ -150,8 +149,8 @@ export function useAccountManager(): IAccountManager {
   const dispatch = useDispatch()
 
   const createAccount: IAccountManager['createAccount'] = useCallback(async () => {
-    const entropy = await randomBytes(128 / 8)
-    const mnemonic = entropyToMnemonic(entropy, wordlist)
+    const entropy = await randomBytesAsync()
+    const mnemonic = entropyToMnemonic(entropy as Buffer, wordlist)
     const path = `${AccountPath[0]}/0`
     const wallet = Wallet.fromMnemonic(mnemonic, path)
     const a = entityUtil.createAccount({

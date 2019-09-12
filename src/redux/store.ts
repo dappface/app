@@ -1,12 +1,12 @@
 import base64 from 'base64-js'
 import RNFS from 'react-native-fs'
 import * as Keychain from 'react-native-keychain'
-import { generateSecureRandom } from 'react-native-securerandom'
 import Reactotron from 'reactotron-react-native'
 import { compose, createStore } from 'redux'
 import { persistStore } from 'redux-persist'
 import createEncryptor from 'redux-persist-transform-encrypt'
 import { configurePersistedReducer } from 'src/redux/reducer'
+import { randomBytesAsync } from 'src/utils'
 
 export let store: any
 export let persistor: any
@@ -42,7 +42,7 @@ export async function configureStore(): Promise<void> {
 async function getSecretKey(): Promise<string> {
   const creds = await Keychain.getGenericPassword({ service: REDUX_PERSIST })
   if (!creds) {
-    const byteKey = await generateSecureRandom(64)
+    const byteKey = await randomBytesAsync(64)
     const stringKey = base64.fromByteArray(byteKey)
     await Keychain.setGenericPassword(REDUX_PERSIST, stringKey, {
       service: REDUX_PERSIST

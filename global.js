@@ -1,5 +1,5 @@
-import { URL, URLSearchParams } from 'whatwg-url'
-import { Buffer } from 'buffer'
+import {URL, URLSearchParams} from 'whatwg-url'
+import {Buffer} from 'buffer'
 import process from 'process'
 
 global.Buffer = Buffer

@@ -1,19 +1,19 @@
 import axios from 'axios'
 import * as React from 'react'
-import { ETHERSCAN_API_KEY } from 'react-native-dotenv'
-import { useMappedState } from 'redux-react-hook'
-import { IState } from 'src/redux/module'
-import { entityType } from 'src/redux/module/entity'
-import { settingSelector } from 'src/redux/module/setting'
+import {ETHERSCAN_API_KEY} from 'react-native-dotenv'
+import {useMappedState} from 'redux-react-hook'
+import {IState} from 'src/redux/module'
+import {entityType} from 'src/redux/module/entity'
+import {settingSelector} from 'src/redux/module/setting'
 
 export const useFetchTransactions = () => {
   const mapState = React.useCallback(
     (state: IState) => ({
-      etherscanApiUrl: settingSelector.getEtherscanApiUrl(state)
+      etherscanApiUrl: settingSelector.getEtherscanApiUrl(state),
     }),
-    []
+    [],
   )
-  const { etherscanApiUrl } = useMappedState(mapState)
+  const {etherscanApiUrl} = useMappedState(mapState)
 
   return React.useCallback(
     (a: entityType.IAccount) =>
@@ -23,22 +23,22 @@ export const useFetchTransactions = () => {
           address: a.address,
           apikey: ETHERSCAN_API_KEY,
           module: Module.Account,
-          sort: Sort.Desc
-        }
+          sort: Sort.Desc,
+        },
       }),
-    [etherscanApiUrl]
+    [etherscanApiUrl],
   )
 }
 
 enum Module {
-  Account = 'account'
+  Account = 'account',
 }
 
 enum Action {
-  TxList = 'txlist'
+  TxList = 'txlist',
 }
 
 enum Sort {
   Asc = 'asc',
-  Desc = 'desc'
+  Desc = 'desc',
 }

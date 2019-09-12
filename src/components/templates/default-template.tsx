@@ -1,12 +1,12 @@
-import React, { ReactNode } from 'react'
-import { BottomDrawer } from 'src/components/organisms'
+import React, {ReactNode} from 'react'
+import {BottomDrawer} from 'src/components/organisms'
 import styled from 'styled-components/native'
 
 interface IProps {
   children: ReactNode
 }
 
-export const DefaultTemplate = ({ children }: IProps) => (
+export const DefaultTemplate = ({children}: IProps) => (
   <Container>
     {children}
     <BottomDrawer />

@@ -1,21 +1,21 @@
-import { ActionType } from 'src/redux/module/browser/action-type'
+import {ActionType} from 'src/redux/module/browser/action-type'
 import * as browserType from 'src/redux/module/browser/type'
 
 export const setActiveTabId = (
-  activeTabId?: string
+  activeTabId?: string,
 ): browserType.ISetActiveTabId => ({
-  payload: { activeTabId },
-  type: ActionType.SET_ACTIVE_TAB_ID
+  payload: {activeTabId},
+  type: ActionType.SET_ACTIVE_TAB_ID,
 })
 
 export const setTabIds = (tabIds: string[]): browserType.ISetTabIds => ({
-  payload: { tabIds },
-  type: ActionType.SET_TAB_IDS
+  payload: {tabIds},
+  type: ActionType.SET_TAB_IDS,
 })
 
 export const setOpenRequest = (
-  openRequest?: browserType.IOpenRequest
+  openRequest?: browserType.IOpenRequest,
 ): browserType.ISetOpenRequest => ({
-  payload: { openRequest },
-  type: ActionType.SET_OPEN_REQUEST
+  payload: {openRequest},
+  type: ActionType.SET_OPEN_REQUEST,
 })

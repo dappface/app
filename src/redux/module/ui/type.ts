@@ -1,4 +1,4 @@
-import { ActionType } from 'src/redux/module/ui/action-type'
+import {ActionType} from 'src/redux/module/ui/action-type'
 
 // State
 export interface IState {
@@ -14,7 +14,7 @@ export interface IBottomDrawer {
 export enum BottomDrawerType {
   AccountOptions = 'accountOptions',
   BrowserOptions = 'browserOptions',
-  TokenOptions = 'tokenOptions'
+  TokenOptions = 'tokenOptions',
 }
 
 export interface ISnackbarMessage {
@@ -26,19 +26,19 @@ export interface ISnackbarMessage {
 
 export enum SnackbarLabel {
   Dismiss = 'dismiss',
-  None = ''
+  None = '',
 }
 
 // Actions
 export type Actions = ISetBottomDrawer | ISetSnackbarMessage
 
 export interface ISetBottomDrawer {
-  payload: { bottomDrawer?: IBottomDrawer }
+  payload: {bottomDrawer?: IBottomDrawer}
   type: ActionType.SET_BOTTOM_DRAWER
 }
 
 export interface ISetSnackbarMessage {
-  payload: { snackbarMessage: ISnackbarMessage }
+  payload: {snackbarMessage: ISnackbarMessage}
   type: ActionType.SET_SNACKBAR_MESSAGE
 }
 

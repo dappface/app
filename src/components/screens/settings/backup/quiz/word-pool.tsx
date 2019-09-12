@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Button } from 'react-native-paper'
-import { Padding } from 'src/components/atoms'
-import { IWordListManager } from 'src/components/screens/settings/backup/quiz/hooks'
-import { Size } from 'src/const'
-import { IDimensions, useDimensions } from 'src/hooks'
+import {Button} from 'react-native-paper'
+import {Padding} from 'src/components/atoms'
+import {IWordListManager} from 'src/components/screens/settings/backup/quiz/hooks'
+import {Size} from 'src/const'
+import {IDimensions, useDimensions} from 'src/hooks'
 import styled from 'styled-components/native'
 
 interface IProps {
@@ -15,7 +15,7 @@ interface IProps {
 export const WordPool = ({
   isUsedFactory,
   mnemonicList,
-  toggleFactory
+  toggleFactory,
 }: IProps) => {
   const dimensions = useDimensions()
   return (
@@ -23,13 +23,11 @@ export const WordPool = ({
       {mnemonicList.map(word => (
         <Padding
           key={word}
-          size={isUsedFactory(word) ? Size.MARGIN_4 + 0.5 : Size.MARGIN_4}
-        >
+          size={isUsedFactory(word) ? Size.MARGIN_4 + 0.5 : Size.MARGIN_4}>
           <Button
             mode={isUsedFactory(word) ? 'text' : 'outlined'}
             onPress={toggleFactory(word)}
-            uppercase={false}
-          >
+            uppercase={false}>
             {word}
           </Button>
         </Padding>
@@ -45,6 +43,6 @@ interface IContainerProps {
 const Container = styled.View<IContainerProps>`
   flex-direction: row;
   flex-wrap: wrap;
-  width: ${({ dimensions }) => dimensions.window.width - Size.MARGIN_16 * 2};
+  width: ${({dimensions}) => dimensions.window.width - Size.MARGIN_16 * 2};
   justify-content: center;
 `

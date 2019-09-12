@@ -6,13 +6,13 @@ import {
   List,
   Paragraph,
   Text,
-  TouchableRipple
+  TouchableRipple,
 } from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { feed } from 'src/apollo/modules'
-import { Padding } from 'src/components/atoms'
-import { OnPress } from 'src/components/screens/browser/web-view/feed/common'
-import { Color, Size } from 'src/const'
+import {feed} from 'src/apollo/modules'
+import {Padding} from 'src/components/atoms'
+import {OnPress} from 'src/components/screens/browser/web-view/feed/common'
+import {Color, Size} from 'src/const'
 import styled from 'styled-components/native'
 
 interface ITweetProps extends feed.ITweet {
@@ -26,10 +26,10 @@ export const Tweet = ({
   retweetedStatus: rs,
   text,
   onPress,
-  user
+  user,
 }: ITweetProps) => {
   const profileImageSource = {
-    uri: rs === null ? user.profileImageUrlHttps : rs.user.profileImageUrlHttps
+    uri: rs === null ? user.profileImageUrlHttps : rs.user.profileImageUrlHttps,
   }
   const profileName = rs === null ? user.name : rs.user.name
   const profileScreenName = rs === null ? user.screenName : rs.user.screenName
@@ -104,12 +104,11 @@ interface IQuotedTweetProps {
   quotedStatus: feed.ITweet
 }
 
-const QuotedTweet = ({ onPress, quotedStatus: qs }: IQuotedTweetProps) => (
+const QuotedTweet = ({onPress, quotedStatus: qs}: IQuotedTweetProps) => (
   <QuotedTweetContainer
     onPress={() =>
       onPress(`https://twitter.com/${qs.user.screenName}/status/${qs.idStr}`)
-    }
-  >
+    }>
     <>
       <QuotedTweetNames>
         <QuotedTweetUserName>{qs.user.name}</QuotedTweetUserName>

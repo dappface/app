@@ -1,21 +1,21 @@
 import * as React from 'react'
-import { FlatList, StyleSheet } from 'react-native'
-import { useMappedState } from 'redux-react-hook'
-import { TabItem } from 'src/components/screens/browser/tab-list/tab-item'
-import { Color, Size } from 'src/const'
-import { IState } from 'src/redux/module'
-import { browserSelector } from 'src/redux/module/browser'
+import {FlatList, StyleSheet} from 'react-native'
+import {useMappedState} from 'redux-react-hook'
+import {TabItem} from 'src/components/screens/browser/tab-list/tab-item'
+import {Color, Size} from 'src/const'
+import {IState} from 'src/redux/module'
+import {browserSelector} from 'src/redux/module/browser'
 import styled from 'styled-components/native'
 
 export const TabList = () => {
   const mapState = React.useCallback(
     (state: IState) => ({
       activeTabId: browserSelector.getActiveTabId(state),
-      tabs: browserSelector.getTabs(state)
+      tabs: browserSelector.getTabs(state),
     }),
-    []
+    [],
   )
-  const { activeTabId, tabs } = useMappedState(mapState)
+  const {activeTabId, tabs} = useMappedState(mapState)
 
   if (!tabs) {
     return null
@@ -28,13 +28,13 @@ export const TabList = () => {
   return (
     <Container>
       <FlatList
-        horizontal={true}
+        horizontal
         contentContainerStyle={styles.contentContainer}
         data={tabs}
         extraData={[activeTabId]}
         keyExtractor={item => item.id}
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => <TabItem tab={item} />}
+        renderItem={({item}) => <TabItem tab={item} />}
       />
     </Container>
   )
@@ -43,8 +43,8 @@ export const TabList = () => {
 const styles = StyleSheet.create({
   contentContainer: {
     alignItems: 'center',
-    paddingVertical: Size.MARGIN_4
-  }
+    paddingVertical: Size.MARGIN_4,
+  },
 })
 
 const Container = styled.View`

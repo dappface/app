@@ -1,9 +1,9 @@
-import { IState } from 'src/redux/module'
+import {IState} from 'src/redux/module'
 import * as uiType from 'src/redux/module/ui/type'
 
 export const getBottomDrawer = ({
-  ui
+  ui,
 }: IState): uiType.IBottomDrawer | undefined => ui.bottomDrawer
 
-export const getSnackbarMessage = ({ ui }: IState): uiType.ISnackbarMessage =>
+export const getSnackbarMessage = ({ui}: IState): uiType.ISnackbarMessage =>
   ui.snackbarMessage

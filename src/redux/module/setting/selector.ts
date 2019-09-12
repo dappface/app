@@ -1,14 +1,14 @@
 import currencyFormatter from 'currency-formatter'
-import { INFURA_PROJECT_ID } from 'react-native-dotenv'
-import { createSelector } from 'reselect'
+import {INFURA_PROJECT_ID} from 'react-native-dotenv'
+import {createSelector} from 'reselect'
 import {
   Currency,
   Network,
   Networks,
   SearchEngine,
-  SearchEngines
+  SearchEngines,
 } from 'src/const'
-import { IState as IAllState } from 'src/redux/module'
+import {IState as IAllState} from 'src/redux/module'
 
 export const getCurrency = (state: IAllState): Currency =>
   state.setting.currency
@@ -21,7 +21,7 @@ export const getSearchEngine = (state: IAllState): SearchEngine =>
 export const getCurrencyDetails = createSelector(
   getCurrency,
   (currency: Currency): currencyFormatter.Currency =>
-    currencyFormatter.findCurrency(currency)
+    currencyFormatter.findCurrency(currency),
 )
 
 export const getRemoteNodeUrlFactory = (ws: boolean) =>
@@ -32,25 +32,25 @@ export const getRemoteNodeUrlFactory = (ws: boolean) =>
       return ws
         ? `wss://${domain}/ws/v3/${INFURA_PROJECT_ID}`
         : `https://${domain}/v3/${INFURA_PROJECT_ID}`
-    }
+    },
   )
 
 export const getEtherscanApiUrl = createSelector(
   getNetwork,
-  (network: Network): string => Networks[network].etherscanApiUrl
+  (network: Network): string => Networks[network].etherscanApiUrl,
 )
 
 export const getEtherscanUrl = createSelector(
   getNetwork,
-  (network: Network): string => Networks[network].etherscanUrl
+  (network: Network): string => Networks[network].etherscanUrl,
 )
 
 export const getNetworkName = createSelector(
   getNetwork,
-  (network: Network): string => Networks[network].name
+  (network: Network): string => Networks[network].name,
 )
 
 export const getSearchEngineName = createSelector(
   getSearchEngine,
-  (searchEngine: SearchEngine): string => SearchEngines[searchEngine].name
+  (searchEngine: SearchEngine): string => SearchEngines[searchEngine].name,
 )

@@ -1,28 +1,28 @@
 import * as React from 'react'
 import * as apolloHooks from 'react-apollo-hooks'
-import { FlatList, ViewStyle } from 'react-native'
-import { feed } from 'src/apollo/modules'
-import { Post } from 'src/components/screens/browser/web-view/feed/post'
-import { Error } from 'src/components/screens/browser/web-view/home/error'
-import { Loading } from 'src/components/screens/browser/web-view/home/loading'
-import { Search } from 'src/components/screens/browser/web-view/home/search'
-import { useBrowserManager } from 'src/hooks'
+import {FlatList, ViewStyle} from 'react-native'
+import {feed} from 'src/apollo/modules'
+import {Post} from 'src/components/screens/browser/web-view/feed/post'
+import {Error} from 'src/components/screens/browser/web-view/home/error'
+import {Loading} from 'src/components/screens/browser/web-view/home/loading'
+import {Search} from 'src/components/screens/browser/web-view/home/search'
+import {useBrowserManager} from 'src/hooks'
 
 export interface IProps {
   style?: ViewStyle
 }
 
-export const Home = ({ style }: IProps) => {
-  const { openLink } = useBrowserManager()
+export const Home = ({style}: IProps) => {
+  const {openLink} = useBrowserManager()
 
-  const { data, error, fetchMore, loading } = apolloHooks.useQuery(
+  const {data, error, fetchMore, loading} = apolloHooks.useQuery(
     feed.GET_FEED,
     {
       suspend: false,
       variables: {
-        first: DEFAULT_POST_NUM
-      }
-    }
+        first: DEFAULT_POST_NUM,
+      },
+    },
   ) as any
 
   const [refreshing, setRefreshing] = React.useState(false)
@@ -34,8 +34,8 @@ export const Home = ({ style }: IProps) => {
       updateQuery,
       variables: {
         before: data.feed.edges[0].cursor,
-        last: DEFAULT_POST_NUM
-      }
+        last: DEFAULT_POST_NUM,
+      },
     })
     setRefreshing(false)
   }
@@ -60,8 +60,8 @@ export const Home = ({ style }: IProps) => {
       updateQuery,
       variables: {
         after: data.feed.edges[data.feed.edges.length - 1].cursor,
-        first: DEFAULT_POST_NUM
-      }
+        first: DEFAULT_POST_NUM,
+      },
     })
     setLoadingMore(false)
   }
@@ -94,14 +94,14 @@ export const Home = ({ style }: IProps) => {
       onEndReachedThreshold={0.01}
       onRefresh={onRefresh}
       refreshing={refreshing}
-      renderItem={({ item }) => <Post {...item.node} onPress={onPressPost} />}
+      renderItem={({item}) => <Post {...item.node} onPress={onPressPost} />}
     />
   )
 }
 
 export const DEFAULT_POST_NUM = 10
 
-const updateQuery = (prev: any, { fetchMoreResult }: any) => {
+const updateQuery = (prev: any, {fetchMoreResult}: any) => {
   if (!fetchMoreResult) {
     return prev
   }
@@ -110,7 +110,7 @@ const updateQuery = (prev: any, { fetchMoreResult }: any) => {
     feed: {
       __typename: prev.feed.__typename,
       edges: [...prev.feed.edges, ...fetchMoreResult.feed.edges],
-      pageInfo: fetchMoreResult.feed.pageInfo
-    }
+      pageInfo: fetchMoreResult.feed.pageInfo,
+    },
   }
 }

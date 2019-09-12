@@ -1,47 +1,47 @@
 import {
   PostMessageActions,
-  PostMessageActionType
+  PostMessageActionType,
 } from 'dappface-inpage-provider'
 import sigUtil from 'eth-sig-util'
-import { Wallet } from 'ethers'
-import { useCallback } from 'react'
-import { Alert } from 'react-native'
-import { WebViewSharedProps } from 'react-native-webview/lib/WebViewTypes'
-import { useMappedState } from 'redux-react-hook'
-import { useBottomAppBarManager } from 'src/hooks/bottom-app-bar'
-import { useBrowserManager } from 'src/hooks/browser/browser-manager'
-import { useWeb3 } from 'src/hooks/web3'
-import { IState } from 'src/redux/module'
-import { accountHook, accountSelector } from 'src/redux/module/account'
-import { entityType } from 'src/redux/module/entity'
-import { historyHook } from 'src/redux/module/history'
-import { settingSelector } from 'src/redux/module/setting'
-import { httpClient } from 'src/utils'
+import {Wallet} from 'ethers'
+import {useCallback} from 'react'
+import {Alert} from 'react-native'
+import {WebViewSharedProps} from 'react-native-webview/lib/WebViewTypes'
+import {useMappedState} from 'redux-react-hook'
+import {useBottomAppBarManager} from 'src/hooks/bottom-app-bar'
+import {useBrowserManager} from 'src/hooks/browser/browser-manager'
+import {useWeb3} from 'src/hooks/web3'
+import {IState} from 'src/redux/module'
+import {accountHook, accountSelector} from 'src/redux/module/account'
+import {entityType} from 'src/redux/module/entity'
+import {historyHook} from 'src/redux/module/history'
+import {settingSelector} from 'src/redux/module/setting'
+import {httpClient} from 'src/utils'
 
 interface IMessageChannelManager {
   onMessage: WebViewSharedProps['onMessage']
 }
 
 export const useMessageChannelManager = (
-  tabId: string
+  tabId: string,
 ): IMessageChannelManager => {
   const mapState = useCallback(
     (state: IState) => ({
       accounts: accountSelector.getAccounts(state),
       addresses: accountSelector.getDefaultAccountAddresses(state),
-      network: settingSelector.getNetwork(state)
+      network: settingSelector.getNetwork(state),
     }),
-    []
+    [],
   )
-  const { accounts, addresses, network } = useMappedState(mapState)
-  const { openLink, respondData } = useBrowserManager()
-  const { addHistory } = historyHook.useHistoryManager()
+  const {accounts, addresses, network} = useMappedState(mapState)
+  const {openLink, respondData} = useBrowserManager()
+  const {addHistory} = historyHook.useHistoryManager()
   const setSignRequest = accountHook.useSetSignRequest()
-  const { openBottomAppBar } = useBottomAppBarManager()
+  const {openBottomAppBar} = useBottomAppBarManager()
   const web3 = useWeb3()
 
   const onMessage: IMessageChannelManager['onMessage'] = async ({
-    nativeEvent
+    nativeEvent,
   }) => {
     const data: PostMessageActions = JSON.parse(nativeEvent.data)
     switch (data.type) {
@@ -64,15 +64,15 @@ export const useMessageChannelManager = (
               onPress: () => {
                 respondData(tabId, data.payload.callbackId, false)
               },
-              text: 'CANCEL'
+              text: 'CANCEL',
             },
             {
               onPress: () => {
                 respondData(tabId, data.payload.callbackId, true)
               },
-              text: 'SIGN'
-            }
-          ]
+              text: 'SIGN',
+            },
+          ],
         )
         break
       case PostMessageActionType.ApproveTransaction:
@@ -81,7 +81,7 @@ export const useMessageChannelManager = (
           from: data.payload.txParams.from,
           tabId,
           to: data.payload.txParams.to,
-          value: data.payload.txParams.value
+          value: data.payload.txParams.value,
         })
         openBottomAppBar()
         break
@@ -90,7 +90,7 @@ export const useMessageChannelManager = (
         break
       case PostMessageActionType.SignPersonalMessage: {
         const a = accounts.find(
-          item => item.address === data.payload.msgParams.from
+          item => item.address === data.payload.msgParams.from,
         ) as entityType.IAccount
         const privateKey = Buffer.from(a.privKey, 'hex')
         const sign = sigUtil.personalSign(privateKey, data.payload.msgParams)
@@ -99,7 +99,7 @@ export const useMessageChannelManager = (
       }
       case PostMessageActionType.SignTransaction: {
         const a = accounts.find(
-          item => item.address === data.payload.txParams.from
+          item => item.address === data.payload.txParams.from,
         ) as entityType.IAccount
         const rawTx = {
           chainId: network,
@@ -107,7 +107,7 @@ export const useMessageChannelManager = (
           gasPrice: data.payload.txParams.gasPrice,
           nonce: data.payload.txParams.nonce,
           to: data.payload.txParams.to,
-          value: data.payload.txParams.value
+          value: data.payload.txParams.value,
         }
         const wallet = new Wallet(a.privKey)
         const signedTx = await wallet.sign(rawTx)
@@ -119,5 +119,5 @@ export const useMessageChannelManager = (
     }
   }
 
-  return { onMessage }
+  return {onMessage}
 }

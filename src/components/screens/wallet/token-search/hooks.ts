@@ -1,16 +1,10 @@
 import Fuse from 'fuse.js'
-import { ITokenCandidate } from 'lib/token-list.json'
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState
-} from 'react'
-import { Navigation } from 'react-native-navigation'
-import { useMappedState } from 'redux-react-hook'
-import { IState } from 'src/redux/module'
-import { tokenHook, tokenSelector } from 'src/redux/module/token'
+import {ITokenCandidate} from 'lib/token-list.json'
+import {createContext, useCallback, useContext, useMemo, useState} from 'react'
+import {Navigation} from 'react-native-navigation'
+import {useMappedState} from 'redux-react-hook'
+import {IState} from 'src/redux/module'
+import {tokenHook, tokenSelector} from 'src/redux/module/token'
 
 export const useTokenSearchManager = () =>
   useContext(TokenSearchContext) as ITokenSearchManager
@@ -23,23 +17,23 @@ export interface ITokenSearchManager {
 }
 
 export function useInitializedTokenSearchManager(
-  componentId: string
+  componentId: string,
 ): ITokenSearchManager {
   const mapState = useCallback(
     (state: IState) => ({
-      initialCandidates: tokenSelector.getTokenCandidates(state)
+      initialCandidates: tokenSelector.getTokenCandidates(state),
     }),
-    []
+    [],
   )
-  const { initialCandidates } = useMappedState(mapState)
-  const { addToken } = tokenHook.useTokenManager()
+  const {initialCandidates} = useMappedState(mapState)
+  const {addToken} = tokenHook.useTokenManager()
 
   const fuse = useMemo(
     () =>
       new Fuse(initialCandidates, {
-        keys: ['address', 'name', 'symbol']
+        keys: ['address', 'name', 'symbol'],
       }),
-    [initialCandidates]
+    [initialCandidates],
   )
 
   const [candidates, setCandidates] = useState(initialCandidates)
@@ -50,7 +44,7 @@ export function useInitializedTokenSearchManager(
       setSearchInput(s)
       setCandidates(s !== '' ? fuse.search(s) : initialCandidates)
     },
-    [initialCandidates]
+    [fuse, initialCandidates],
   )
 
   const onSelectFactory: ITokenSearchManager['onSelectFactory'] = useCallback(
@@ -58,14 +52,14 @@ export function useInitializedTokenSearchManager(
       addToken(t)
       Navigation.pop(componentId)
     },
-    [componentId]
+    [addToken, componentId],
   )
 
   return {
     candidates,
     onChangeText,
     onSelectFactory,
-    searchInput
+    searchInput,
   }
 }
 

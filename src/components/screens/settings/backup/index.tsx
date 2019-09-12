@@ -1,32 +1,32 @@
-export { Quiz } from 'src/components/screens/settings/backup/quiz'
-
 import * as React from 'react'
-import { Alert } from 'react-native'
-import { Navigation } from 'react-native-navigation'
-import { Button } from 'react-native-paper'
+import {Alert} from 'react-native'
+import {Navigation} from 'react-native-navigation'
+import {Button} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
-import { useMappedState } from 'redux-react-hook'
-import { Padding } from 'src/components/atoms'
-import { WordList } from 'src/components/organisms'
-import { ModalTemplate } from 'src/components/templates'
-import { BiometryType, Screen, Size } from 'src/const'
-import { pushQuiz } from 'src/navigation'
-import { IState } from 'src/redux/module'
-import { accountSelector } from 'src/redux/module/account'
+import {useMappedState} from 'redux-react-hook'
+import {Padding} from 'src/components/atoms'
+import {WordList} from 'src/components/organisms'
+import {ModalTemplate} from 'src/components/templates'
+import {BiometryType, Screen, Size} from 'src/const'
+import {pushQuiz} from 'src/navigation'
+import {IState} from 'src/redux/module'
+import {accountSelector} from 'src/redux/module/account'
+
+export {Quiz} from 'src/components/screens/settings/backup/quiz'
 
 export interface IProps {
   componentId: string
   isModal?: boolean
 }
 
-export const Backup = ({ componentId, isModal = false }: IProps) => {
+export const Backup = ({componentId, isModal = false}: IProps) => {
   const mapState = React.useCallback(
     (state: IState) => ({
-      mnemonic: accountSelector.getMnemonic(state) as string
+      mnemonic: accountSelector.getMnemonic(state) as string,
     }),
-    []
+    [],
   )
-  const { mnemonic } = useMappedState(mapState)
+  const {mnemonic} = useMappedState(mapState)
   const [mnemonicList, setMnemonicList] = React.useState<string[]>([])
 
   const onPressUnlock = React.useCallback(async () => {
@@ -47,20 +47,20 @@ export const Backup = ({ componentId, isModal = false }: IProps) => {
         Alert.alert('Whoops!', error.message)
       }
     }
-  }, [])
+  }, [mnemonic])
 
   const onPressWrittenDown = React.useCallback(() => {
-    pushQuiz(componentId, { isModal })
-  }, [])
+    pushQuiz(componentId, {isModal})
+  }, [componentId, isModal])
 
   React.useEffect(() => {
     const listener = Navigation.events().registerComponentDidDisappearListener(
-      ({ componentName }) => {
+      ({componentName}) => {
         if (componentName !== Screen.SETTINGS.BACKUP.BASE) {
           return
         }
         setMnemonicList([])
-      }
+      },
     )
     return () => {
       listener.remove()
@@ -74,7 +74,7 @@ export const Backup = ({ componentId, isModal = false }: IProps) => {
         `If you take a screenshot, \
 your backup may be viewed by other apps. \
 You can make a safe backup with physical paper and a pen.`,
-        [{ text: 'I understand' }]
+        [{text: 'I understand'}],
       )
     }, 1000)
   }, [])

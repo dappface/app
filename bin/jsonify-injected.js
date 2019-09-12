@@ -9,7 +9,7 @@ const inject = fs.readFileSync(INJECT_FILE, UTF8)
 const injected = fs.readFileSync(INJECTED_FILE, UTF8)
 const json = JSON.stringify({
   injected: injected.toString(),
-  inject: inject.toString()
+  inject: inject.toString(),
 })
 
 fs.writeFileSync(JSON_FILE_DIST, json)

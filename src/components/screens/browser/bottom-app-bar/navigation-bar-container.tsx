@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Animated, StyleSheet, View } from 'react-native'
-import { Size } from 'src/const'
+import {Animated, StyleSheet, View} from 'react-native'
+import {Size} from 'src/const'
 
 interface IProps {
   children: any
@@ -8,11 +8,7 @@ interface IProps {
   position: Animated.Value
 }
 
-export const NavigationBarContainer = ({
-  children,
-  isOpen,
-  position
-}: IProps) =>
+export const NavigationBarContainer = ({children, isOpen, position}: IProps) =>
   isOpen ? (
     <Animated.View
       style={[
@@ -22,13 +18,12 @@ export const NavigationBarContainer = ({
             inputRange: [
               Size.SCREEN.TOP,
               (Size.SCREEN.HEIGHT * 3) / 4,
-              Size.BOTTOM_APP_BAR.INITIAL_TOP
+              Size.BOTTOM_APP_BAR.INITIAL_TOP,
             ],
-            outputRange: [0, 0, 1]
-          })
-        }
-      ]}
-    >
+            outputRange: [0, 0, 1],
+          }),
+        },
+      ]}>
       {children}
     </Animated.View>
   ) : (
@@ -40,6 +35,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     height: Size.BOTTOM_APP_BAR.HEIGHT,
-    justifyContent: 'space-around'
-  }
+    justifyContent: 'space-around',
+  },
 })

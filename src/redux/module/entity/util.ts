@@ -2,45 +2,45 @@ import * as entityType from 'src/redux/module/entity/type'
 import uuid from 'uuid/v4'
 
 export const createAccount = (
-  params: entityType.ICreateAccountParams
+  params: entityType.ICreateAccountParams,
 ): entityType.IAccount => ({
   ...params,
   balance: {
     ether: '--',
     fiat: '--',
-    wei: '--'
+    wei: '--',
   },
   bookmarkIds: [],
   historyIds: [],
-  tokenAddresses: []
+  tokenAddresses: [],
 })
 
 export const createBookmark = (
-  params: entityType.ICreateBookmarkParams
+  params: entityType.ICreateBookmarkParams,
 ): entityType.IBookmark => ({
   ...params,
   createdAt: new Date(),
-  id: uuid()
+  id: uuid(),
 })
 
 export const createHistory = (
-  params: entityType.ICreateHistoryParams
+  params: entityType.ICreateHistoryParams,
 ): entityType.IHistory => ({
   ...params,
   createdAt: new Date(),
-  id: uuid()
+  id: uuid(),
 })
 
 export const createTab = (): entityType.ITab => ({
   canGoBack: false,
   canGoForward: false,
   id: uuid(),
-  loadingProgress: 0
+  loadingProgress: 0,
 })
 
 export const createToken = (
-  params: entityType.ICreateTokenParams
+  params: entityType.ICreateTokenParams,
 ): entityType.IToken => ({
   ...params,
-  balance: '--'
+  balance: '--',
 })

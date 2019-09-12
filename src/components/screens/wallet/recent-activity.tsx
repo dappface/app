@@ -1,31 +1,31 @@
 import * as React from 'react'
-import { FlatList } from 'react-native'
-import { ActivityIndicator, Button, Caption, Card } from 'react-native-paper'
-import { useMappedState } from 'redux-react-hook'
-import { Expanded, Padding } from 'src/components/atoms'
-import { TxItem } from 'src/components/screens/wallet/tx-item'
-import { etherscanHooks } from 'src/hooks'
-import { IState } from 'src/redux/module'
-import { accountSelector, accountType } from 'src/redux/module/account'
-import { entityType } from 'src/redux/module/entity'
-import { web3Selector } from 'src/redux/module/web3'
+import {FlatList} from 'react-native'
+import {ActivityIndicator, Button, Caption, Card} from 'react-native-paper'
+import {useMappedState} from 'redux-react-hook'
+import {Expanded, Padding} from 'src/components/atoms'
+import {TxItem} from 'src/components/screens/wallet/tx-item'
+import {etherscanHooks} from 'src/hooks'
+import {IState} from 'src/redux/module'
+import {accountSelector, accountType} from 'src/redux/module/account'
+import {entityType} from 'src/redux/module/entity'
+import {web3Selector} from 'src/redux/module/web3'
 import styled from 'styled-components/native'
 
 export const RecentActivity = () => {
   const mapState = React.useCallback(
     (state: IState) => ({
       currentAccount: accountSelector.getCurrentAccount(
-        state
+        state,
       ) as entityType.IAccount,
-      latestBlockNumber: web3Selector.getLatestBlockNumber(state)
+      latestBlockNumber: web3Selector.getLatestBlockNumber(state),
     }),
-    []
+    [],
   )
-  const { currentAccount, latestBlockNumber } = useMappedState(mapState)
+  const {currentAccount, latestBlockNumber} = useMappedState(mapState)
 
   const [showSize, setShowSize] = React.useState(DEFAULT_SHOW_SIZE)
   const [transactions, setTransactions] = React.useState<Transactions>(
-    TransactionType.Loading
+    TransactionType.Loading,
   )
   const isMaxed = transactions.length === showSize
   const fetchTransactions = etherscanHooks.useFetchTransactions()
@@ -35,33 +35,33 @@ export const RecentActivity = () => {
     setShowSize(
       hiddenNum > DEFAULT_SHOW_SIZE
         ? showSize + DEFAULT_SHOW_SIZE
-        : showSize + hiddenNum
+        : showSize + hiddenNum,
     )
-  }, [showSize])
+  }, [showSize, transactions.length])
 
   const fetchTx = React.useCallback(async (): Promise<void> => {
     try {
       const res = await fetchTransactions(currentAccount)
-      const result: accountType.ITransaction[] = res.data.result
+      const {result} = res.data
       setTransactions(
         result.filter((item, i, arr) =>
-          arr[i - 1] ? item.hash !== arr[i - 1].hash : true
-        )
+          arr[i - 1] ? item.hash !== arr[i - 1].hash : true,
+        ),
       )
     } catch (error) {
       setTransactions(TransactionType.FetchFailed)
     }
-  }, [currentAccount, latestBlockNumber])
+  }, [currentAccount, fetchTransactions])
 
   React.useEffect(() => {
     fetchTx()
-  }, [latestBlockNumber])
+  }, [fetchTx, latestBlockNumber])
 
   React.useEffect(() => {
     setShowSize(DEFAULT_SHOW_SIZE)
     setTransactions(TransactionType.Loading)
     fetchTx()
-  }, [currentAccount.address])
+  }, [currentAccount.address, fetchTx])
 
   const Content = () => {
     if (transactions === TransactionType.Loading) {
@@ -91,7 +91,7 @@ export const RecentActivity = () => {
       <FlatList
         data={transactions.slice(0, showSize)}
         keyExtractor={(item, i) => `${item.hash}:${i}`}
-        renderItem={({ item }) => <TxItem tx={item} />}
+        renderItem={({item}) => <TxItem tx={item} />}
       />
     )
   }
@@ -131,7 +131,7 @@ const Message = styled.View`
 
 enum TransactionType {
   FetchFailed = 'fetchFailed',
-  Loading = 'loading'
+  Loading = 'loading',
 }
 
 type Transactions = TransactionType | accountType.ITransaction[]

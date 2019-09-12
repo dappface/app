@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { Animated } from 'react-native'
-import { IconButton } from 'react-native-paper'
-import { useMappedState } from 'redux-react-hook'
-import { NavigationBarContainer } from 'src/components/screens/browser/bottom-app-bar/navigation-bar-container'
-import { useBottomAppBarManager, useBrowserManager } from 'src/hooks'
-import { IState } from 'src/redux/module'
-import { bookmarkHook } from 'src/redux/module/bookmark'
-import { browserSelector, browserType } from 'src/redux/module/browser'
+import {Animated} from 'react-native'
+import {IconButton} from 'react-native-paper'
+import {useMappedState} from 'redux-react-hook'
+import {NavigationBarContainer} from 'src/components/screens/browser/bottom-app-bar/navigation-bar-container'
+import {useBottomAppBarManager, useBrowserManager} from 'src/hooks'
+import {IState} from 'src/redux/module'
+import {bookmarkHook} from 'src/redux/module/bookmark'
+import {browserSelector, browserType} from 'src/redux/module/browser'
 
 interface IProps {
   isOpen: boolean
@@ -14,23 +14,23 @@ interface IProps {
   position: Animated.Value
 }
 
-export const NavigationBar = ({ isOpen, onMore, position }: IProps) => {
-  const { closeBottomAppBar } = useBottomAppBarManager()
+export const NavigationBar = ({isOpen, onMore, position}: IProps) => {
+  const {closeBottomAppBar} = useBottomAppBarManager()
   const {
     goBack,
     goForward,
-    tabListManager: { addTab }
+    tabListManager: {addTab},
   } = useBrowserManager()
   const mapState = React.useCallback(
     (state: IState) => ({
       bookmarkStatus: browserSelector.getBookmarkStatusFactory(isOpen)(state),
       canGoBack: browserSelector.getCanGoBack(state),
-      canGoForward: browserSelector.getCanGoForward(state)
+      canGoForward: browserSelector.getCanGoForward(state),
     }),
-    []
+    [isOpen],
   )
-  const { bookmarkStatus, canGoBack, canGoForward } = useMappedState(mapState)
-  const { toggleBookmark } = bookmarkHook.useBookmarkManager()
+  const {bookmarkStatus, canGoBack, canGoForward} = useMappedState(mapState)
+  const {toggleBookmark} = bookmarkHook.useBookmarkManager()
 
   const onPressAdd = () => {
     closeBottomAppBar()

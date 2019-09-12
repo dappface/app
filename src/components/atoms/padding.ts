@@ -1,4 +1,4 @@
-import { Size } from 'src/const'
+import {Size} from 'src/const'
 import styled from 'styled-components/native'
 
 interface IProps {
@@ -8,9 +8,9 @@ interface IProps {
 }
 
 export const Padding = styled.View<IProps>`
-  margin-horizontal: ${({ horizontalSize, size = Size.MARGIN_16 }) =>
+  margin-horizontal: ${({horizontalSize, size = Size.MARGIN_16}) =>
     typeof horizontalSize === 'number' ? horizontalSize : size};
-  margin-vertical: ${({ verticalSize, size = Size.MARGIN_16 }) =>
+  margin-vertical: ${({verticalSize, size = Size.MARGIN_16}) =>
     typeof verticalSize === 'number' ? verticalSize : size};
 `
 

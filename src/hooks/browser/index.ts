@@ -2,8 +2,8 @@ export {
   BrowserManagerContext,
   IBrowserManager,
   useBrowserManager,
-  useInitializedBrowserManager
+  useInitializedBrowserManager,
 } from 'src/hooks/browser/browser-manager'
 export {
-  useMessageChannelManager
+  useMessageChannelManager,
 } from 'src/hooks/browser/message-channel-manager'

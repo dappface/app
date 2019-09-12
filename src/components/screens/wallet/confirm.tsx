@@ -1,23 +1,23 @@
 import BN from 'bignumber.js'
 import * as React from 'react'
-import { Alert } from 'react-native'
-import { Navigation } from 'react-native-navigation'
-import { Button, Text } from 'react-native-paper'
+import {Alert} from 'react-native'
+import {Navigation} from 'react-native-navigation'
+import {Button, Text} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { useMappedState } from 'redux-react-hook'
-import { Blockie } from 'src/components/atoms'
-import { BiometryType, Size } from 'src/const'
-import { useWeb3 } from 'src/hooks'
-import { IState } from 'src/redux/module'
+import {useMappedState} from 'redux-react-hook'
+import {Blockie} from 'src/components/atoms'
+import {BiometryType, Size} from 'src/const'
+import {useWeb3} from 'src/hooks'
+import {IState} from 'src/redux/module'
 import {
   accountHook,
   accountSelector,
-  accountType
+  accountType,
 } from 'src/redux/module/account'
-import { entityType } from 'src/redux/module/entity'
-import { settingSelector } from 'src/redux/module/setting'
-import { walletHelper as wHelper } from 'src/utils'
+import {entityType} from 'src/redux/module/entity'
+import {settingSelector} from 'src/redux/module/setting'
+import {walletHelper as wHelper} from 'src/utils'
 import styled from 'styled-components/native'
 
 export interface IProps {
@@ -25,19 +25,19 @@ export interface IProps {
   txParams: accountType.ITransactionParams
 }
 
-export const Confirm = ({ componentId, txParams }: IProps) => {
+export const Confirm = ({componentId, txParams}: IProps) => {
   const web3 = useWeb3()
   const mapState = React.useCallback(
     (state: IState) => ({
       currencyDetails: settingSelector.getCurrencyDetails(state),
       currentAccount: accountSelector.getCurrentAccount(
-        state
+        state,
       ) as entityType.IAccount,
-      fiatRate: accountSelector.getFiatRate(state)
+      fiatRate: accountSelector.getFiatRate(state),
     }),
-    []
+    [],
   )
-  const { currencyDetails, currentAccount, fiatRate } = useMappedState(mapState)
+  const {currencyDetails, currentAccount, fiatRate} = useMappedState(mapState)
   const signAndSendTx = accountHook.useSignAndSendTransaction()
 
   const onPressSend = async () => {
@@ -64,21 +64,21 @@ export const Confirm = ({ componentId, txParams }: IProps) => {
 
   const ether = React.useMemo(
     () => web3.utils.fromWei(txParams.value, 'ether'),
-    [txParams.value]
+    [txParams.value, web3.utils],
   )
 
   const maxGas = React.useMemo(
     () => new BN(txParams.gasLimit).multipliedBy(txParams.gasLimit),
-    [txParams]
+    [txParams],
   )
 
   const maxTotal = React.useMemo(
     () =>
       web3.utils.fromWei(
         new BN(txParams.value).plus(maxGas).toString(),
-        'ether'
+        'ether',
       ),
-    [maxGas]
+    [maxGas, txParams.value, web3.utils],
   )
 
   const fiat = React.useMemo(
@@ -86,7 +86,7 @@ export const Confirm = ({ componentId, txParams }: IProps) => {
       new BN(fiatRate)
         .multipliedBy(ether)
         .toFormat(currencyDetails.decimalDigits),
-    [currencyDetails, ether, fiatRate]
+    [currencyDetails, ether, fiatRate],
   )
 
   return (

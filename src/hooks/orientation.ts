@@ -3,7 +3,7 @@ import Orientation from 'react-native-orientation'
 
 export const useOrientation = () => {
   const [orientation, setOrientation] = React.useState(
-    Orientation.getInitialOrientation()
+    Orientation.getInitialOrientation(),
   )
 
   const orientationListener = (o: Orientation.orientation) => {

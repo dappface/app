@@ -1,4 +1,4 @@
-import { IState as IAllState } from 'src/redux/module'
+import {IState as IAllState} from 'src/redux/module'
 import * as entityType from 'src/redux/module/entity/type'
 
 export const getAccounts = (state: IAllState): entityType.IAccounts =>

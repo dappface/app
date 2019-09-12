@@ -1,40 +1,40 @@
-export { Backup, Quiz } from 'src/components/screens/settings/backup'
-export { Currency } from 'src/components/screens/settings/currency'
-export { Network } from 'src/components/screens/settings/network'
-export { SearchEngine } from 'src/components/screens/settings/search-engine'
-
 import * as React from 'react'
-import { Navigation } from 'react-native-navigation'
-import { Colors, List } from 'react-native-paper'
-import { useMappedState } from 'redux-react-hook'
-import { ModalTemplate } from 'src/components/templates'
+import {Navigation} from 'react-native-navigation'
+import {Colors, List} from 'react-native-paper'
+import {useMappedState} from 'redux-react-hook'
+import {ModalTemplate} from 'src/components/templates'
 import * as Navigator from 'src/navigation'
-import { useNukeRedux } from 'src/redux'
-import { IState } from 'src/redux/module'
-import { accountSelector } from 'src/redux/module/account'
-import { settingSelector } from 'src/redux/module/setting'
+import {useNukeRedux} from 'src/redux'
+import {IState} from 'src/redux/module'
+import {accountSelector} from 'src/redux/module/account'
+import {settingSelector} from 'src/redux/module/setting'
+
+export {Backup, Quiz} from 'src/components/screens/settings/backup'
+export {Currency} from 'src/components/screens/settings/currency'
+export {Network} from 'src/components/screens/settings/network'
+export {SearchEngine} from 'src/components/screens/settings/search-engine'
 
 export interface IProps {
   componentId: string
 }
 
-export const Settings = ({ componentId }: IProps) => {
+export const Settings = ({componentId}: IProps) => {
   const mapState = React.useCallback(
     (state: IState) => ({
       currency: settingSelector.getCurrency(state),
       isBackedUp: accountSelector.getIsBackedUp(state),
       mnemonic: accountSelector.getMnemonic(state),
       network: settingSelector.getNetworkName(state),
-      searchEngine: settingSelector.getSearchEngineName(state)
+      searchEngine: settingSelector.getSearchEngineName(state),
     }),
-    []
+    [],
   )
   const {
     currency,
     isBackedUp,
     mnemonic,
     network,
-    searchEngine
+    searchEngine,
   } = useMappedState(mapState)
   const nukeRedux = useNukeRedux()
 
@@ -42,7 +42,7 @@ export const Settings = ({ componentId }: IProps) => {
     await Navigation.dismissAllModals()
     await Navigator.goToBrowser()
     nukeRedux()
-  }, [])
+  }, [nukeRedux])
 
   const onPressCurrency = React.useCallback((): void => {
     Navigator.pushCurrencySetting(componentId)

@@ -1,5 +1,5 @@
-import { Network } from 'src/const'
-import { ActionType } from 'src/redux/module/account/action-type'
+import {Network} from 'src/const'
+import {ActionType} from 'src/redux/module/account/action-type'
 
 export interface IState {
   currentAccountAddress?: string // persisted
@@ -21,37 +21,37 @@ export type Actions =
   | ISetSignRequest
 
 export interface ISetCurrentAccountAddress {
-  payload: { currentAccountAddress?: string }
+  payload: {currentAccountAddress?: string}
   type: ActionType.SET_CURRENT_ACCOUNT_ADDRESS
 }
 
 export interface ISetDefaultAccountAddress {
-  payload: { defaultAccountAddress?: string }
+  payload: {defaultAccountAddress?: string}
   type: ActionType.SET_DEFAULT_ACCOUNT_ADDRESS
 }
 
 export interface ISetFiatRate {
-  payload: { fiatRate: string }
+  payload: {fiatRate: string}
   type: ActionType.SET_FIAT_RATE
 }
 
 export interface IAddFailedTransaction {
-  payload: { failedTransaction: ITransaction }
+  payload: {failedTransaction: ITransaction}
   type: ActionType.ADD_FAILED_TRANSACTION
 }
 
 export interface ISetIsBackedUp {
-  payload: { isBackedUp: boolean }
+  payload: {isBackedUp: boolean}
   type: ActionType.SET_IS_BACKED_UP
 }
 
 export interface ISetMnemonic {
-  payload: { mnemonic?: string }
+  payload: {mnemonic?: string}
   type: ActionType.SET_MNEMONIC
 }
 
 export interface ISetSignRequest {
-  payload: { signRequest: ISignRequest }
+  payload: {signRequest: ISignRequest}
   type: ActionType.SET_SIGN_REQUEST
 }
 

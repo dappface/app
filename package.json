@@ -13,7 +13,7 @@
     "ios:certificates": "bundle exec fastlane ios certificates",
     "ios:register": "bundle exec fastlane ios register",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx . --fix",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "lint:ruby": "bundle exec rubocop",
     "lint:ruby:fix": "bundle exec rubocop -x",
     "postinstall": "bin/postinstall.sh",

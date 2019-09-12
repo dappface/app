@@ -3,7 +3,7 @@ import DeviceInfo from 'react-native-device-info'
 
 export default axios.create({
   headers: {
-    'User-Agent': DeviceInfo.getUserAgent()
+    'User-Agent': DeviceInfo.getUserAgent(),
   },
-  timeout: 30000
+  timeout: 30000,
 })

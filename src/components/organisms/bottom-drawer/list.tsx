@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { TouchableWithoutFeedback } from 'react-native'
-import { Card } from 'react-native-paper'
-import { Option } from 'src/components/organisms/bottom-drawer/option'
-import { Color } from 'src/const'
-import { IDimensions, useDimensions } from 'src/hooks'
-import { deviceHelper } from 'src/utils'
+import {TouchableWithoutFeedback} from 'react-native'
+import {Card} from 'react-native-paper'
+import {Option} from 'src/components/organisms/bottom-drawer/option'
+import {Color} from 'src/const'
+import {IDimensions, useDimensions} from 'src/hooks'
+import {deviceHelper} from 'src/utils'
 import styled from 'styled-components/native'
 
 interface IProps {
@@ -12,7 +12,7 @@ interface IProps {
   onClose: () => void
 }
 
-export const List = ({ children, onClose }: IProps) => {
+export const List = ({children, onClose}: IProps) => {
   const dimensions = useDimensions()
   return (
     <TouchableWithoutFeedback onPress={onClose}>
@@ -32,8 +32,8 @@ interface IBackgroundProps {
 
 const Background = styled.View<IBackgroundProps>`
   background: rgba(0, 0, 0, 0.38);
-  height: ${({ dimensions }) => dimensions.window.height};
-  width: ${({ dimensions }) => dimensions.window.width};
+  height: ${({dimensions}) => dimensions.window.height};
+  width: ${({dimensions}) => dimensions.window.width};
   position: absolute;
   bottom: 0;
 `
@@ -46,7 +46,7 @@ const Container = styled(Card)<IContainerProps>`
   position: absolute;
   bottom: 0;
   background-color: ${Color.PRIMARY};
-  width: ${({ dimensions }) => dimensions.window.width};
+  width: ${({dimensions}) => dimensions.window.width};
 
   ${deviceHelper.hasBezel() &&
     `

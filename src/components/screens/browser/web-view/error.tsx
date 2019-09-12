@@ -1,14 +1,14 @@
 import * as React from 'react'
-import { Caption, Headline } from 'react-native-paper'
+import {Caption, Headline} from 'react-native-paper'
 import styled from 'styled-components/native'
 
-import { Color } from 'src/const'
+import {Color} from 'src/const'
 
 interface IProps {
   error?: string
 }
 
-export const Error = ({ error }: IProps) => (
+export const Error = ({error}: IProps) => (
   <Container>
     <Headline>Whoops!</Headline>
     <Caption>{error}</Caption>

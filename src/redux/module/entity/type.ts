@@ -1,4 +1,4 @@
-import { ActionType } from 'src/redux/module/entity/action-type'
+import {ActionType} from 'src/redux/module/entity/action-type'
 
 // All fields are persisted
 export interface IState {
@@ -21,47 +21,47 @@ export type Actions =
   | IRemoveToken
 
 export interface ISetAccount {
-  payload: { account: IAccount }
+  payload: {account: IAccount}
   type: ActionType.SET_ACCOUNT
 }
 
 export interface ISetBookmark {
-  payload: { bookmark: IBookmark }
+  payload: {bookmark: IBookmark}
   type: ActionType.SET_BOOKMARK
 }
 
 export interface ISetHistory {
-  payload: { history: IHistory }
+  payload: {history: IHistory}
   type: ActionType.SET_HISTORY
 }
 
 export interface ISetTab {
-  payload: { tab: ITab }
+  payload: {tab: ITab}
   type: ActionType.SET_TAB
 }
 
 export interface ISetToken {
-  payload: { token: IToken }
+  payload: {token: IToken}
   type: ActionType.SET_TOKEN
 }
 
 export interface IRemoveBookmark {
-  payload: { id: string }
+  payload: {id: string}
   type: ActionType.REMOVE_BOOKMARK
 }
 
 export interface IRemoveHistory {
-  payload: { id: string }
+  payload: {id: string}
   type: ActionType.REMOVE_HISTORY
 }
 
 export interface IRemoveTab {
-  payload: { id: string }
+  payload: {id: string}
   type: ActionType.REMOVE_TAB
 }
 
 export interface IRemoveToken {
-  payload: { id: string }
+  payload: {id: string}
   type: ActionType.REMOVE_TOKEN
 }
 

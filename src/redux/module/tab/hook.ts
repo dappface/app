@@ -1,32 +1,28 @@
-import { useCallback, useState } from 'react'
-import { useDispatch, useMappedState } from 'redux-react-hook'
-import { IBrowserManager, useDimensions } from 'src/hooks'
-import { IState as IAllState } from 'src/redux/module'
-import { browserAction, browserSelector } from 'src/redux/module/browser'
-import {
-  entityAction,
-  entitySelector,
-  entityUtil
-} from 'src/redux/module/entity'
-import { ITabListManager, ITabManager } from 'src/redux/module/tab/type'
+import {useCallback, useState} from 'react'
+import {useDispatch, useMappedState} from 'redux-react-hook'
+import {IBrowserManager, useDimensions} from 'src/hooks'
+import {IState as IAllState} from 'src/redux/module'
+import {browserAction, browserSelector} from 'src/redux/module/browser'
+import {entityAction, entitySelector, entityUtil} from 'src/redux/module/entity'
+import {ITabListManager, ITabManager} from 'src/redux/module/tab/type'
 
 export const useTabListManager = (
-  scrollTo: IBrowserManager['scrollTo']
+  scrollTo: IBrowserManager['scrollTo'],
 ): ITabListManager => {
   const [haltScrollCB, setHaltScrollCB] = useState(false)
   const {
-    window: { width }
+    window: {width},
   } = useDimensions()
   const dispatch = useDispatch()
   const mapState = useCallback(
     (state: IAllState) => ({
       activeTabIndex: browserSelector.getActiveTabIndex(state),
       tabIds: browserSelector.getTabIds(state),
-      tabs: browserSelector.getTabs(state)
+      tabs: browserSelector.getTabs(state),
     }),
-    []
+    [],
   )
-  const { activeTabIndex, tabIds, tabs } = useMappedState(mapState)
+  const {activeTabIndex, tabIds, tabs} = useMappedState(mapState)
 
   const addTab = useCallback<ITabListManager['addTab']>(() => {
     const t = entityUtil.createTab()
@@ -43,7 +39,7 @@ export const useTabListManager = (
     }, 100)
 
     return t
-  }, [activeTabIndex, tabIds])
+  }, [activeTabIndex, dispatch, scrollTo, tabIds])
 
   const onMomentumScrollEnd = useCallback<
     ITabListManager['onMomentumScrollEnd']
@@ -60,7 +56,7 @@ export const useTabListManager = (
       }
       dispatch(browserAction.setActiveTabId(tabs[newIndex].id))
     },
-    [tabs, haltScrollCB]
+    [haltScrollCB, width, dispatch, tabs],
   )
 
   const removeFactory = useCallback<ITabListManager['removeFactory']>(
@@ -75,7 +71,7 @@ export const useTabListManager = (
           dispatch(browserAction.setActiveTabId(tabIds[newIndex]))
           setTimeout(() => {
             dispatch(
-              browserAction.setTabIds(tabIds.filter(item => item !== tabId))
+              browserAction.setTabIds(tabIds.filter(item => item !== tabId)),
             )
             dispatch(entityAction.removeTab(tabId))
           }, 100)
@@ -90,7 +86,7 @@ export const useTabListManager = (
         setTimeout(() => {
           dispatch(browserAction.setActiveTabId(tabIds[newIndex]))
           dispatch(
-            browserAction.setTabIds(tabIds.filter(item => item !== tabId))
+            browserAction.setTabIds(tabIds.filter(item => item !== tabId)),
           )
           dispatch(entityAction.removeTab(tabId))
         }, 400)
@@ -102,7 +98,7 @@ export const useTabListManager = (
       dispatch(browserAction.setTabIds(tabIds.filter(item => item !== tabId)))
       dispatch(entityAction.removeTab(tabId))
     },
-    [activeTabIndex, tabIds]
+    [activeTabIndex, dispatch, scrollTo, tabIds],
   )
 
   const selectFactory = useCallback<ITabListManager['selectFactory']>(
@@ -111,25 +107,25 @@ export const useTabListManager = (
       const i = tabIds.indexOf(tabId)
       scrollTo(i)
     },
-    [tabIds]
+    [dispatch, scrollTo, tabIds],
   )
 
   return {
     addTab,
     onMomentumScrollEnd,
     removeFactory,
-    selectFactory
+    selectFactory,
   }
 }
 
 export const useTabManager = (): ITabManager => {
   const mapState = useCallback(
     (state: IAllState) => ({
-      tabs: entitySelector.getTabs(state)
+      tabs: entitySelector.getTabs(state),
     }),
-    []
+    [],
   )
-  const { tabs } = useMappedState(mapState)
+  const {tabs} = useMappedState(mapState)
   const dispatch = useDispatch()
 
   const setNavigatables = useCallback<ITabManager['setNavigatables']>(
@@ -139,11 +135,11 @@ export const useTabManager = (): ITabManager => {
         entityAction.setTab({
           ...t,
           canGoBack: params.canGoBack,
-          canGoForward: params.canGoForward
-        })
+          canGoForward: params.canGoForward,
+        }),
       )
     },
-    [tabs]
+    [dispatch, tabs],
   )
 
   const setLatestHistoryId = useCallback<ITabManager['setLatestHistoryId']>(
@@ -152,11 +148,11 @@ export const useTabManager = (): ITabManager => {
       dispatch(
         entityAction.setTab({
           ...t,
-          latestHistoryId
-        })
+          latestHistoryId,
+        }),
       )
     },
-    [tabs]
+    [dispatch, tabs],
   )
 
   const setLoadingProgress = useCallback<ITabManager['setLoadingProgress']>(
@@ -165,16 +161,16 @@ export const useTabManager = (): ITabManager => {
       dispatch(
         entityAction.setTab({
           ...t,
-          loadingProgress
-        })
+          loadingProgress,
+        }),
       )
     },
-    [tabs]
+    [dispatch, tabs],
   )
 
   return {
     setLatestHistoryId,
     setLoadingProgress,
-    setNavigatables
+    setNavigatables,
   }
 }

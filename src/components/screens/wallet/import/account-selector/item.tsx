@@ -1,10 +1,10 @@
 import * as React from 'react'
 import Ripple from 'react-native-material-ripple'
-import { Checkbox, List } from 'react-native-paper'
-import { Blockie, HorizontalPadding } from 'src/components/atoms'
-import { useWeb3 } from 'src/hooks'
-import { accountType } from 'src/redux/module/account'
-import { walletHelper as wHelper } from 'src/utils'
+import {Checkbox, List} from 'react-native-paper'
+import {Blockie, HorizontalPadding} from 'src/components/atoms'
+import {useWeb3} from 'src/hooks'
+import {accountType} from 'src/redux/module/account'
+import {walletHelper as wHelper} from 'src/utils'
 
 interface IProps {
   i: number
@@ -12,7 +12,7 @@ interface IProps {
   onPress: () => void
 }
 
-export const Item = ({ i, account, onPress }: IProps) => {
+export const Item = ({i, account, onPress}: IProps) => {
   const web3 = useWeb3()
   const [balance, setBalance] = React.useState('--')
 
@@ -22,7 +22,7 @@ export const Item = ({ i, account, onPress }: IProps) => {
       const ether = web3.utils.fromWei(wei, 'ether')
       setBalance(ether)
     })()
-  }, [])
+  }, [account.address, web3.eth, web3.utils])
 
   return (
     <Ripple onPress={onPress}>

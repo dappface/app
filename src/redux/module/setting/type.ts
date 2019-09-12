@@ -1,5 +1,5 @@
-import { Currency, Network, SearchEngine } from 'src/const'
-import { ActionType } from 'src/redux/module/setting/action-type'
+import {Currency, Network, SearchEngine} from 'src/const'
+import {ActionType} from 'src/redux/module/setting/action-type'
 
 export interface IState {
   currency: Currency
@@ -10,17 +10,17 @@ export interface IState {
 export type Actions = ISetCurrency | ISetNetwork | ISetSearchEngine
 
 export interface ISetCurrency {
-  payload: { currency: Currency }
+  payload: {currency: Currency}
   type: ActionType.SET_CURRENCY
 }
 
 export interface ISetNetwork {
-  payload: { network: Network }
+  payload: {network: Network}
   type: ActionType.SET_NETWORK
 }
 
 export interface ISetSearchEngine {
-  payload: { searchEngine: SearchEngine }
+  payload: {searchEngine: SearchEngine}
   type: ActionType.SET_SEARCH_ENGINE
 }
 

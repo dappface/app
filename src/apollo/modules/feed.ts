@@ -48,7 +48,7 @@ export interface IUser {
 
 export enum QueryType {
   after = 'after',
-  before = 'before'
+  before = 'before',
 }
 
 export const GET_FEED = gql`

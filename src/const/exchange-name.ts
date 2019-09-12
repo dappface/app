@@ -1,5 +1,5 @@
 export default {
   bitFlyer: 'bitFlyer',
   coincheck: 'Coincheck',
-  zaif: 'Zaif'
+  zaif: 'Zaif',
 }

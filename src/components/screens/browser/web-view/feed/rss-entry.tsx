@@ -6,12 +6,12 @@ import {
   Headline,
   Paragraph,
   Subheading,
-  Text
+  Text,
 } from 'react-native-paper'
-import { feed } from 'src/apollo/modules'
-import { Expanded, Padding } from 'src/components/atoms'
-import { OnPress } from 'src/components/screens/browser/web-view/feed/common'
-import { Size } from 'src/const'
+import {feed} from 'src/apollo/modules'
+import {Expanded, Padding} from 'src/components/atoms'
+import {OnPress} from 'src/components/screens/browser/web-view/feed/common'
+import {Size} from 'src/const'
 import styled from 'styled-components/native'
 
 interface IRSSEntryProps extends feed.IRSSEntry {
@@ -26,7 +26,7 @@ export const RSSEntry = ({
   onPress,
   publisherUrl,
   title,
-  url
+  url,
 }: IRSSEntryProps) => (
   <Padding horizontalSize={Size.MARGIN_8} verticalSize={Size.MARGIN_2}>
     <Card onPress={() => onPress(url)}>
@@ -37,7 +37,7 @@ export const RSSEntry = ({
         </Header>
 
         <ImageContainer>
-          <Expanded.Image source={{ uri: imageUrl }} resizeMode='cover' />
+          <Expanded.Image source={{uri: imageUrl}} resizeMode='cover' />
         </ImageContainer>
 
         <Main>

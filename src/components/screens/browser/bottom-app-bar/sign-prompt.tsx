@@ -1,41 +1,41 @@
 import * as React from 'react'
-import { Alert, View } from 'react-native'
-import { Button, Caption, Headline, Text } from 'react-native-paper'
+import {Alert, View} from 'react-native'
+import {Button, Caption, Headline, Text} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
-import { useMappedState } from 'redux-react-hook'
+import {useMappedState} from 'redux-react-hook'
 import {
   Blockie,
   Padding,
   Row,
   SpaceBetweenRow,
   SpaceEvenlyRow,
-  VerticalPadding
+  VerticalPadding,
 } from 'src/components/atoms'
-import { BiometryType, Size } from 'src/const'
-import { useBottomAppBarManager, useBrowserManager, useWeb3 } from 'src/hooks'
-import { IState } from 'src/redux/module'
+import {BiometryType, Size} from 'src/const'
+import {useBottomAppBarManager, useBrowserManager, useWeb3} from 'src/hooks'
+import {IState} from 'src/redux/module'
 import {
   accountHook,
   accountSelector,
-  accountType
+  accountType,
 } from 'src/redux/module/account'
-import { walletHelper } from 'src/utils'
+import {walletHelper} from 'src/utils'
 import styled from 'styled-components/native'
 
 export const SignPrompt = () => {
   const mapState = React.useCallback(
     (state: IState) => ({
       signRequest: accountSelector.getSignRequest(
-        state
-      ) as accountType.ISignRequest
+        state,
+      ) as accountType.ISignRequest,
     }),
-    []
+    [],
   )
-  const { signRequest } = useMappedState(mapState)
+  const {signRequest} = useMappedState(mapState)
   const setSignRerquest = accountHook.useSetSignRequest()
   const web3 = useWeb3()
   const browserManager = useBrowserManager()
-  const { closeBottomAppBar } = useBottomAppBarManager()
+  const {closeBottomAppBar} = useBottomAppBarManager()
 
   const gasFeeInWei = (
     parseInt(web3.utils.toWei('1', 'gwei'), 10) * 21000
@@ -60,7 +60,7 @@ export const SignPrompt = () => {
       browserManager.respondData(
         signRequest.tabId,
         signRequest.callbackId,
-        true
+        true,
       )
       setSignRerquest()
       closeBottomAppBar()
@@ -71,7 +71,13 @@ export const SignPrompt = () => {
         Alert.alert('Whoops!', error.message)
       }
     }
-  }, [signRequest])
+  }, [
+    browserManager,
+    closeBottomAppBar,
+    setSignRerquest,
+    signRequest.callbackId,
+    signRequest.tabId,
+  ])
 
   return (
     <Container>

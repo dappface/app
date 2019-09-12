@@ -1,7 +1,7 @@
-import { Navigation } from 'react-native-navigation'
+import {Navigation} from 'react-native-navigation'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { Color, NavigationEvent, Screen } from 'src/const'
-import { accountType } from 'src/redux/module/account'
+import {Color, NavigationEvent, Screen} from 'src/const'
+import {accountType} from 'src/redux/module/account'
 
 export const initNavigation = async (): Promise<void> => {
   const backButtonIcon = await Ionicons.getImageSource('md-arrow-back', 24)
@@ -12,18 +12,18 @@ export const initNavigation = async (): Promise<void> => {
         backButton: {
           color: Color.TEXT.BLACK_HIGH_EMPHASIS,
           icon: backButtonIcon,
-          title: ''
+          title: '',
         },
         background: {
-          color: Color.WHITE
+          color: Color.WHITE,
         },
         drawBehind: false,
         noBorder: true,
         title: {
           fontFamily: 'Roboto-Regular',
-          fontSize: 20
-        }
-      }
+          fontSize: 20,
+        },
+      },
     })
     goToBrowser()
   })
@@ -40,14 +40,14 @@ export const goToBrowser = (): void => {
               name: Screen.BROWSER,
               options: {
                 topBar: {
-                  visible: false
-                }
-              }
-            }
-          }
-        ]
-      }
-    }
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
   })
 }
 
@@ -65,18 +65,18 @@ export const showImportAccounts = async (): Promise<void> => {
                 leftButtons: [
                   {
                     icon: cancelIcon,
-                    id: NavigationEvent.CancelImport
-                  }
+                    id: NavigationEvent.CancelImport,
+                  },
                 ],
                 title: {
-                  text: 'Import Accounts'
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+                  text: 'Import Accounts',
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
   })
 }
 
@@ -90,14 +90,14 @@ export const showLinks = (): void => {
             options: {
               topBar: {
                 title: {
-                  text: 'Links'
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+                  text: 'Links',
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
   })
 }
 
@@ -111,25 +111,23 @@ export const showSettings = (): void => {
             options: {
               topBar: {
                 title: {
-                  text: 'Settings'
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+                  text: 'Settings',
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
   })
 }
 
-export const showWalletScan = (props: {
-  setTo: (to: string) => void
-}): void => {
+export const showWalletScan = (props: {setTo: (to: string) => void}): void => {
   void Navigation.showModal({
     component: {
       name: Screen.WALLET.SCAN,
-      passProps: props
-    }
+      passProps: props,
+    },
   })
 }
 
@@ -143,24 +141,24 @@ export const showBackup = (): void => {
             options: {
               topBar: {
                 title: {
-                  text: 'Backup'
-                }
-              }
+                  text: 'Backup',
+                },
+              },
             },
             passProps: {
-              isModal: true
-            }
-          }
-        }
-      ]
-    }
+              isModal: true,
+            },
+          },
+        },
+      ],
+    },
   })
 }
 
 // Stacks
 export const pushAccountSelector = (
   componentId: string,
-  props: { mnemonic: string }
+  props: {mnemonic: string},
 ): void => {
   void Navigation.push(componentId, {
     component: {
@@ -168,12 +166,12 @@ export const pushAccountSelector = (
       options: {
         topBar: {
           title: {
-            text: 'Choose Accounts'
-          }
-        }
+            text: 'Choose Accounts',
+          },
+        },
       },
-      passProps: props
-    }
+      passProps: props,
+    },
   })
 }
 
@@ -184,17 +182,17 @@ export const pushBackup = (componentId: string): void => {
       options: {
         topBar: {
           title: {
-            text: 'Backup'
-          }
-        }
-      }
-    }
+            text: 'Backup',
+          },
+        },
+      },
+    },
   })
 }
 
 export const pushQuiz = (
   componentId: string,
-  props: { [key: string]: any }
+  props: {[key: string]: any},
 ): void => {
   void Navigation.push(componentId, {
     component: {
@@ -202,12 +200,12 @@ export const pushQuiz = (
       options: {
         topBar: {
           title: {
-            text: 'Quiz'
-          }
-        }
+            text: 'Quiz',
+          },
+        },
       },
-      passProps: props
-    }
+      passProps: props,
+    },
   })
 }
 
@@ -218,11 +216,11 @@ export const pushCurrencySetting = (componentId: string): void => {
       options: {
         topBar: {
           title: {
-            text: 'Currency'
-          }
-        }
-      }
-    }
+            text: 'Currency',
+          },
+        },
+      },
+    },
   })
 }
 
@@ -233,11 +231,11 @@ export const pushNetworkSetting = (componentId: string): void => {
       options: {
         topBar: {
           title: {
-            text: 'Network'
-          }
-        }
-      }
-    }
+            text: 'Network',
+          },
+        },
+      },
+    },
   })
 }
 
@@ -248,11 +246,11 @@ export const pushReceive = (componentId: string): void => {
       options: {
         topBar: {
           title: {
-            text: 'Receive'
-          }
-        }
-      }
-    }
+            text: 'Receive',
+          },
+        },
+      },
+    },
   })
 }
 
@@ -263,11 +261,11 @@ export const pushSearchEngineSetting = (componentId: string): void => {
       options: {
         topBar: {
           title: {
-            text: 'Search Engine'
-          }
-        }
-      }
-    }
+            text: 'Search Engine',
+          },
+        },
+      },
+    },
   })
 }
 
@@ -278,11 +276,11 @@ export const pushSend = (componentId: string): void => {
       options: {
         topBar: {
           title: {
-            text: 'Send'
-          }
-        }
-      }
-    }
+            text: 'Send',
+          },
+        },
+      },
+    },
   })
 }
 
@@ -293,17 +291,17 @@ export const pushTokenSearch = (componentId: string): void => {
       options: {
         topBar: {
           title: {
-            text: 'Search Tokens'
-          }
-        }
-      }
-    }
+            text: 'Search Tokens',
+          },
+        },
+      },
+    },
   })
 }
 
 export const pushComfirmSend = (
   componentId: string,
-  props: { txParams: accountType.ITransactionParams }
+  props: {txParams: accountType.ITransactionParams},
 ): void => {
   void Navigation.push(componentId, {
     component: {
@@ -311,11 +309,11 @@ export const pushComfirmSend = (
       options: {
         topBar: {
           title: {
-            text: 'Confirm'
-          }
-        }
+            text: 'Confirm',
+          },
+        },
       },
-      passProps: props
-    }
+      passProps: props,
+    },
   })
 }

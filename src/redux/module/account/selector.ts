@@ -1,18 +1,18 @@
-import { createSelector } from 'reselect'
-import { IState as IAllState } from 'src/redux/module'
+import {createSelector} from 'reselect'
+import {IState as IAllState} from 'src/redux/module'
 import * as accountType from 'src/redux/module/account/type'
-import { entitySelector, entityType } from 'src/redux/module/entity'
+import {entitySelector, entityType} from 'src/redux/module/entity'
 
 export const getCurrentAccountAddress = (
-  state: IAllState
+  state: IAllState,
 ): string | undefined => state.account.currentAccountAddress
 
 export const getDefaultAccountAddress = (
-  state: IAllState
+  state: IAllState,
 ): string | undefined => state.account.defaultAccountAddress
 
 export const getFailedTransactions = (
-  state: IAllState
+  state: IAllState,
 ): accountType.ITransactions => state.account.failedTransactions
 
 export const getFiatRate = (state: IAllState): string => state.account.fiatRate
@@ -24,12 +24,12 @@ export const getMnemonic = (state: IAllState): string | undefined =>
   state.account.mnemonic
 
 export const getSignRequest = (
-  state: IAllState
+  state: IAllState,
 ): accountType.ISignRequest | undefined => state.account.signRequest
 
 export const getIsAccountExist = createSelector(
   getDefaultAccountAddress,
-  (defaultAccountAddress: string | undefined) => !!defaultAccountAddress
+  (defaultAccountAddress: string | undefined) => !!defaultAccountAddress,
 )
 
 export const getAccounts = createSelector(
@@ -37,7 +37,7 @@ export const getAccounts = createSelector(
   getDefaultAccountAddress,
   (
     accounts: entityType.IAccounts,
-    defaultAccountAddress: string | undefined
+    defaultAccountAddress: string | undefined,
   ): entityType.IAccount[] =>
     Object.keys(accounts)
       .map(key => accounts[key])
@@ -48,7 +48,7 @@ export const getAccounts = createSelector(
         const indexB = pathB[pathB.length - 1]
         return indexA > indexB ? 1 : -1
       })
-      .sort(item => (item.address === defaultAccountAddress ? -1 : 0))
+      .sort(item => (item.address === defaultAccountAddress ? -1 : 0)),
 )
 
 export const getCurrentAccount = createSelector(
@@ -56,9 +56,9 @@ export const getCurrentAccount = createSelector(
   entitySelector.getAccounts,
   (
     currentAccountAddress: string | undefined,
-    accounts: entityType.IAccounts
+    accounts: entityType.IAccounts,
   ): entityType.IAccount | undefined =>
-    currentAccountAddress ? accounts[currentAccountAddress] : undefined
+    currentAccountAddress ? accounts[currentAccountAddress] : undefined,
 )
 
 export const getCurrentAccountIndex = createSelector(
@@ -66,11 +66,11 @@ export const getCurrentAccountIndex = createSelector(
   getCurrentAccountAddress,
   (
     accounts: entityType.IAccount[],
-    currentAccountAddress: string | undefined
+    currentAccountAddress: string | undefined,
   ): number =>
     currentAccountAddress
       ? accounts.findIndex(item => item.address === currentAccountAddress)
-      : -1
+      : -1,
 )
 
 export const getCurrentAccountFailedTransactions = createSelector(
@@ -78,10 +78,10 @@ export const getCurrentAccountFailedTransactions = createSelector(
   getFailedTransactions,
   (
     currentAccountAddress: string | undefined,
-    failedTransactions: accountType.ITransactions
+    failedTransactions: accountType.ITransactions,
   ): accountType.ITransaction[] =>
     (currentAccountAddress ? failedTransactions[currentAccountAddress] : []) ||
-    []
+    [],
 )
 
 export const getDefaultAccountEntity = createSelector(
@@ -89,15 +89,15 @@ export const getDefaultAccountEntity = createSelector(
   entitySelector.getAccounts,
   (
     defaultAccountAddress: string | undefined,
-    accounts: entityType.IAccounts
+    accounts: entityType.IAccounts,
   ): entityType.IAccount | undefined =>
-    defaultAccountAddress ? accounts[defaultAccountAddress] : undefined
+    defaultAccountAddress ? accounts[defaultAccountAddress] : undefined,
 )
 
 export const getDefaultAccountAddresses = createSelector(
   getDefaultAccountAddress,
   (defaultAddress: string | undefined): string[] =>
-    defaultAddress ? [defaultAddress] : []
+    defaultAddress ? [defaultAddress] : [],
 )
 
 export const getIsCurrentAccountDefault = createSelector(
@@ -105,9 +105,9 @@ export const getIsCurrentAccountDefault = createSelector(
   getDefaultAccountAddress,
   (
     currentAccountAddress: string | undefined,
-    defaultAccountAddress: string | undefined
+    defaultAccountAddress: string | undefined,
   ): boolean =>
     !!currentAccountAddress &&
     !!defaultAccountAddress &&
-    currentAccountAddress === defaultAccountAddress
+    currentAccountAddress === defaultAccountAddress,
 )

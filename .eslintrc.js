@@ -6,5 +6,8 @@ module.exports = {
     'prettier',
     'prettier/@typescript-eslint',
     'prettier/react'
-  ]
+  ],
+  rules: {
+    'import/prefer-default-export': 'off'
+  }
 }

@@ -63,7 +63,13 @@ export const useBookmarkManager = (): bookmarkType.IBookmarkManager => {
     if (!activeHistory) {
       return
     }
-    activeBookmark ? removeBookmark(activeBookmark.id) : addBookmark()
+
+    if (activeBookmark) {
+      removeBookmark(activeBookmark.id)
+      return
+    }
+
+    addBookmark()
   }, [activeHistory, activeBookmark, removeBookmark, addBookmark])
 
   return {

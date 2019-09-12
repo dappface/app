@@ -8,7 +8,9 @@ import createEncryptor from 'redux-persist-transform-encrypt'
 import {configurePersistedReducer} from 'src/redux/reducer'
 import {randomBytesAsync} from 'src/utils'
 
+// eslint-disable-next-line import/no-mutable-exports
 export let store: any
+// eslint-disable-next-line import/no-mutable-exports
 export let persistor: any
 
 const REDUX_PERSIST = 'reduxPersist'

@@ -1,7 +1,7 @@
 import firebase from 'react-native-firebase'
 import Reactotron from 'reactotron-react-native'
 
-export const init = async () => {
+export async function init(): Promise<void> {
   try {
     const credential = await firebase.auth().signInAnonymously()
     if (credential) {

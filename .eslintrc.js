@@ -8,16 +8,17 @@ module.exports = {
     'prettier/react',
   ],
   rules: {
-    'import/prefer-default-export': 'off',
+    'consistent-return': 'off',
     'import/no-extraneous-dependencies': [
       'error',
       {
-        devDependencies: false,
         optionalDependencies: false,
         peerDependencies: false,
         packageDir: './',
       },
     ],
+    'import/prefer-default-export': 'off',
+    'no-use-before-define': 'off',
   },
   settings: {
     'import/resolver': {

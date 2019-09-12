@@ -31,7 +31,7 @@ export const initNavigation = async (): Promise<void> => {
 
 // Roots
 export const goToBrowser = (): void => {
-  void Navigation.setRoot({
+  Navigation.setRoot({
     root: {
       stack: {
         children: [
@@ -54,7 +54,7 @@ export const goToBrowser = (): void => {
 // Modals
 export const showImportAccounts = async (): Promise<void> => {
   const cancelIcon = await Ionicons.getImageSource('md-close', 24)
-  void Navigation.showModal({
+  Navigation.showModal({
     stack: {
       children: [
         {
@@ -81,7 +81,7 @@ export const showImportAccounts = async (): Promise<void> => {
 }
 
 export const showLinks = (): void => {
-  void Navigation.showModal({
+  Navigation.showModal({
     stack: {
       children: [
         {
@@ -102,7 +102,7 @@ export const showLinks = (): void => {
 }
 
 export const showSettings = (): void => {
-  void Navigation.showModal({
+  Navigation.showModal({
     stack: {
       children: [
         {
@@ -123,7 +123,7 @@ export const showSettings = (): void => {
 }
 
 export const showWalletScan = (props: {setTo: (to: string) => void}): void => {
-  void Navigation.showModal({
+  Navigation.showModal({
     component: {
       name: Screen.WALLET.SCAN,
       passProps: props,
@@ -132,7 +132,7 @@ export const showWalletScan = (props: {setTo: (to: string) => void}): void => {
 }
 
 export const showBackup = (): void => {
-  void Navigation.showModal({
+  Navigation.showModal({
     stack: {
       children: [
         {
@@ -160,7 +160,7 @@ export const pushAccountSelector = (
   componentId: string,
   props: {mnemonic: string},
 ): void => {
-  void Navigation.push(componentId, {
+  Navigation.push(componentId, {
     component: {
       name: Screen.WALLET.IMPORT.ACCOUNT_SELECTOR,
       options: {
@@ -176,7 +176,7 @@ export const pushAccountSelector = (
 }
 
 export const pushBackup = (componentId: string): void => {
-  void Navigation.push(componentId, {
+  Navigation.push(componentId, {
     component: {
       name: Screen.SETTINGS.BACKUP.BASE,
       options: {
@@ -194,7 +194,7 @@ export const pushQuiz = (
   componentId: string,
   props: {[key: string]: any},
 ): void => {
-  void Navigation.push(componentId, {
+  Navigation.push(componentId, {
     component: {
       name: Screen.SETTINGS.BACKUP.QUIZ,
       options: {
@@ -210,7 +210,7 @@ export const pushQuiz = (
 }
 
 export const pushCurrencySetting = (componentId: string): void => {
-  void Navigation.push(componentId, {
+  Navigation.push(componentId, {
     component: {
       name: Screen.SETTINGS.CURRENCY,
       options: {
@@ -225,7 +225,7 @@ export const pushCurrencySetting = (componentId: string): void => {
 }
 
 export const pushNetworkSetting = (componentId: string): void => {
-  void Navigation.push(componentId, {
+  Navigation.push(componentId, {
     component: {
       name: Screen.SETTINGS.NETWORK,
       options: {
@@ -240,7 +240,7 @@ export const pushNetworkSetting = (componentId: string): void => {
 }
 
 export const pushReceive = (componentId: string): void => {
-  void Navigation.push(componentId, {
+  Navigation.push(componentId, {
     component: {
       name: Screen.WALLET.RECEIVE,
       options: {
@@ -255,7 +255,7 @@ export const pushReceive = (componentId: string): void => {
 }
 
 export const pushSearchEngineSetting = (componentId: string): void => {
-  void Navigation.push(componentId, {
+  Navigation.push(componentId, {
     component: {
       name: Screen.SETTINGS.SEARCH_ENGINE,
       options: {
@@ -270,7 +270,7 @@ export const pushSearchEngineSetting = (componentId: string): void => {
 }
 
 export const pushSend = (componentId: string): void => {
-  void Navigation.push(componentId, {
+  Navigation.push(componentId, {
     component: {
       name: Screen.WALLET.SEND,
       options: {
@@ -285,7 +285,7 @@ export const pushSend = (componentId: string): void => {
 }
 
 export const pushTokenSearch = (componentId: string): void => {
-  void Navigation.push(componentId, {
+  Navigation.push(componentId, {
     component: {
       name: Screen.WALLET.TOKEN_SEARCH,
       options: {
@@ -303,7 +303,7 @@ export const pushComfirmSend = (
   componentId: string,
   props: {txParams: accountType.ITransactionParams},
 ): void => {
-  void Navigation.push(componentId, {
+  Navigation.push(componentId, {
     component: {
       name: Screen.WALLET.CONFIRM,
       options: {

@@ -88,7 +88,7 @@ You can make a safe backup with physical paper and a pen.`,
       <Padding verticalSize={Size.MARGIN_8}>
         {mnemonicList.length === 0 ? (
           <Button mode='text' onPress={onPressUnlock}>
-            unclock
+            unlock
           </Button>
         ) : (
           <Button mode='contained' onPress={onPressWrittenDown}>

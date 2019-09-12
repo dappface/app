@@ -30,7 +30,6 @@ export const Size = {
   },
   ICON_BUTTON_WIDTH: 42,
   LIST_ITEM_HEIGHT: 40,
-  /* tslint:disable:object-literal-sort-keys */
   MARGIN_2: 2,
   MARGIN_4: 4,
   MARGIN_8: 8,
@@ -41,7 +40,6 @@ export const Size = {
   MARGIN_40: 40,
   MARGIN_64: 64,
   MARGIN_80: 80,
-  /* tslint:enable:object-literal-sort-keys */
   SCREEN,
   TEXT_INPUT_MIN_HEIGHT: 64,
   WORD_ITEM_HEIGHT: 36,

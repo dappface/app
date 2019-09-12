@@ -9,10 +9,8 @@ import {
 export const emptySnackbarMessage: ISnackbarMessage = {
   label: SnackbarLabel.None,
   message: '',
-  // tslint:disable:no-empty
   onDismiss: () => {},
   onPress: () => {},
-  // tslint:enable:no-empty
 }
 
 export const initialState: IState = {

@@ -45,6 +45,7 @@ export const Import = ({componentId}: IProps) => {
   return (
     <Form
       onSubmit={onSubmit as any}
+      // @ts-ignore
       render={({handleSubmit, pristine, submitting}) => (
         <View>
           <HorizontalPadding>

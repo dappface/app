@@ -25,6 +25,7 @@ export async function configureStore(): Promise<void> {
     secretKey,
   })
 
+  // @ts-ignore
   const persistedReducer = configurePersistedReducer(encryptor)
 
   if (__DEV__) {

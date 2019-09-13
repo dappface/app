@@ -26,11 +26,10 @@ export const Currency = () => {
 
   return (
     <FlatList
-      data={Object.keys(CurrencyEnum)}
+      data={Object.values(CurrencyEnum)}
       keyExtractor={key => key}
       renderItem={({item}) => (
-        <Ripple
-          onPress={onSelectFactory(CurrencyEnum[item as any] as CurrencyEnum)}>
+        <Ripple onPress={onSelectFactory(item as CurrencyEnum)}>
           <List.Item
             left={() => (
               <RadioButton.Android

@@ -1,8 +1,11 @@
 import {initInjectedJavaScript} from 'dappface-inpage-provider'
-import * as React from 'react'
-import {NativeSyntheticEvent, NavState, View} from 'react-native'
+import React, {useCallback} from 'react'
+import {View} from 'react-native'
 import {WebView as NativeWebView} from 'react-native-webview'
-import {WebViewSharedProps} from 'react-native-webview/lib/WebViewTypes'
+import {
+  WebViewError,
+  WebViewSharedProps,
+} from 'react-native-webview/lib/WebViewTypes'
 import {useMappedState} from 'redux-react-hook'
 import {Error} from 'src/components/screens/browser/web-view/error'
 import {Home} from 'src/components/screens/browser/web-view/home'
@@ -20,7 +23,7 @@ export interface IProps {
 
 export const WebView = ({style, tab}: IProps) => {
   const {webViewRefs} = useBrowserManager()
-  const mapState = React.useCallback(
+  const mapState = useCallback(
     (state: IState) => ({
       remoteNodeUrl: settingSelector.getRemoteNodeUrlFactory(false)(state),
     }),
@@ -32,8 +35,8 @@ export const WebView = ({style, tab}: IProps) => {
   const {setLoadingProgress, setNavigatables} = tabHook.useTabManager()
   const {onMessage} = useMessageChannelManager(tab.id)
 
-  const onLoadEnd = async ({nativeEvent}: NativeSyntheticEvent<NavState>) => {
-    if (nativeEvent.code) {
+  const onLoadEnd: WebViewSharedProps['onLoadEnd'] = async ({nativeEvent}) => {
+    if ((nativeEvent as WebViewError).code) {
       return
     }
     const url = nativeEvent.url as string
@@ -42,7 +45,7 @@ export const WebView = ({style, tab}: IProps) => {
     setOpenRequest()
   }
 
-  const onNavigationStateChange = (e: NavState): void => {
+  const onNavigationStateChange: WebViewSharedProps['onNavigationStateChange'] = e => {
     if (!e.loading) {
       return
     }
@@ -52,7 +55,7 @@ export const WebView = ({style, tab}: IProps) => {
     })
   }
 
-  const onLoadProgress: WebViewSharedProps['onLoadProgress'] = React.useCallback(
+  const onLoadProgress: WebViewSharedProps['onLoadProgress'] = useCallback(
     ({nativeEvent}) => {
       setLoadingProgress(tab.id, nativeEvent.progress)
     },

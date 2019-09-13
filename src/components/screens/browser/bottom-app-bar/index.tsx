@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {useCallback, useState} from 'react'
 import {Animated, StatusBar, StyleSheet} from 'react-native'
 import Interactable from 'react-native-interactable'
 import {Card} from 'react-native-paper'
@@ -8,7 +8,11 @@ import {PullBar} from 'src/components/screens/browser/bottom-app-bar/pull-bar'
 import {SignPrompt} from 'src/components/screens/browser/bottom-app-bar/sign-prompt'
 import {Wallet} from 'src/components/screens/wallet'
 import {Color, Size, StatusBarStyle} from 'src/const'
-import {useBottomAppBarManager, useBrowserManager} from 'src/hooks'
+import {
+  useBottomAppBarManager,
+  useBrowserManager,
+  useSafeAreaPosition,
+} from 'src/hooks'
 import {IState} from 'src/redux/module'
 import {accountHook, accountSelector} from 'src/redux/module/account'
 import {uiHook, uiType} from 'src/redux/module/ui'
@@ -18,11 +22,12 @@ export interface IProps {
   componentId: string
 }
 
-export const BottomAppBar = ({componentId}: IProps) => {
+export function BottomAppBar({componentId}: IProps) {
   const {bottomAppBarRef, closeBottomAppBar} = useBottomAppBarManager()
   const {respondData} = useBrowserManager()
+  const safeAreaPosition = useSafeAreaPosition()
 
-  const mapState = React.useCallback(
+  const mapState = useCallback(
     (state: IState) => ({
       signRequest: accountSelector.getSignRequest(state),
     }),
@@ -32,12 +37,12 @@ export const BottomAppBar = ({componentId}: IProps) => {
   const setSignRequest = accountHook.useSetSignRequest()
   const setBottomDrawer = uiHook.useSetBottomDrawer()
 
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [statusBarStyle, setStatusBarStyle] = React.useState(
+  const [isOpen, setIsOpen] = useState(false)
+  const [statusBarStyle, setStatusBarStyle] = useState(
     StatusBarStyle.DARK_CONTENT,
   )
 
-  const onAlert = React.useCallback(
+  const onAlert = useCallback(
     ({nativeEvent}: any) => {
       if (JSON.stringify(nativeEvent).includes('"basePosition":"enter"')) {
         setIsOpen(false)
@@ -60,7 +65,7 @@ export const BottomAppBar = ({componentId}: IProps) => {
     [respondData, setSignRequest, signRequest],
   )
 
-  const onMore = React.useCallback(() => {
+  const onMore = useCallback(() => {
     setBottomDrawer({
       type: uiType.BottomDrawerType.BrowserOptions,
     })
@@ -90,18 +95,18 @@ export const BottomAppBar = ({componentId}: IProps) => {
             id: 'basePosition',
             influenceArea: {top: Size.BOTTOM_APP_BAR.INITIAL_TOP},
           },
-          {id: 'top', influenceArea: {top: Size.SCREEN.TOP + 1}},
+          {id: 'top', influenceArea: {top: safeAreaPosition.top + 1}},
         ]}
         animatedNativeDriver
         animatedValueY={position}
-        boundaries={{top: Size.SCREEN.TOP}}
+        boundaries={{top: safeAreaPosition.top}}
         initialPosition={{y: Size.BOTTOM_APP_BAR.INITIAL_TOP}}
         onAlert={onAlert}
         ref={bottomAppBarRef}
         snapPoints={[
           {y: Size.BOTTOM_APP_BAR.INITIAL_TOP},
           {y: Size.SCREEN.HEIGHT / 2},
-          {y: Size.SCREEN.TOP},
+          {y: safeAreaPosition.top},
         ]}
         verticalOnly>
         <BottomSheet elevation={8}>

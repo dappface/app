@@ -1,5 +1,4 @@
 import {Dimensions, PixelRatio, Platform} from 'react-native'
-import {deviceHelper} from 'src/utils'
 
 const SCREEN = {
   BOTTOM: deviceHelper.hasBezel() ? 34 : 0,

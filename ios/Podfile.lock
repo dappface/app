@@ -164,7 +164,7 @@ PODS:
     - React-Core (= 0.60.5)
   - ReactNativeNavigation (3.2.0):
     - React
-  - RNDeviceInfo (1.8.0):
+  - RNDeviceInfo (3.0.0):
     - React
   - RNFirebase (5.5.6):
     - Firebase/Core
@@ -355,7 +355,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 2105b2e0e2b66a6408fc69a46c8a7fb5b2fdade0
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
   ReactNativeNavigation: aad255980f20cc5d2001ed37972319f3789fea70
-  RNDeviceInfo: 17bd6ed6c8c230f5da87d53f6275a520005f0914
+  RNDeviceInfo: dddbef5ba86b57c5ddf155fa27c30fd9823cc799
   RNFirebase: ac0de8b24c6f91ae9459575491ed6a77327619c6
   RNFS: a8fbe7060fa49157d819466404794ad9c58e58cf
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa

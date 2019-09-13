@@ -1,6 +1,7 @@
-import * as React from 'react'
+import React from 'react'
 import {Animated, StyleSheet, View} from 'react-native'
 import {Size} from 'src/const'
+import {useSafeAreaPosition} from 'src/hooks'
 
 interface IProps {
   children: any
@@ -8,15 +9,21 @@ interface IProps {
   position: Animated.Value
 }
 
-export const NavigationBarContainer = ({children, isOpen, position}: IProps) =>
-  isOpen ? (
+export function NavigationBarContainer({children, isOpen, position}: IProps) {
+  const safeAreaPosition = useSafeAreaPosition()
+
+  if (!isOpen) {
+    return <View style={styles.navigationBar}>{children}</View>
+  }
+
+  return (
     <Animated.View
       style={[
         styles.navigationBar,
         {
           opacity: position.interpolate({
             inputRange: [
-              Size.SCREEN.TOP,
+              safeAreaPosition.top,
               (Size.SCREEN.HEIGHT * 3) / 4,
               Size.BOTTOM_APP_BAR.INITIAL_TOP,
             ],
@@ -26,9 +33,8 @@ export const NavigationBarContainer = ({children, isOpen, position}: IProps) =>
       ]}>
       {children}
     </Animated.View>
-  ) : (
-    <View style={styles.navigationBar}>{children}</View>
   )
+}
 
 const styles = StyleSheet.create({
   navigationBar: {

@@ -1,11 +1,11 @@
-import * as React from 'react'
-import * as rh from 'redux-react-hook'
+import {useCallback} from 'react'
+import {useDispatch} from 'react-redux'
 import {resetRoot} from 'src/redux/reducer'
 
-export const useNukeRedux = () => {
-  const dispatch = rh.useDispatch()
+export function useNukeRedux() {
+  const dispatch = useDispatch()
 
-  return React.useCallback(() => {
+  return useCallback((): void => {
     dispatch(resetRoot())
   }, [dispatch])
 }

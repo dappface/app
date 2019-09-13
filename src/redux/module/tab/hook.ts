@@ -1,28 +1,21 @@
 import {useCallback, useState} from 'react'
-import {useDispatch, useMappedState} from 'redux-react-hook'
+import {useDispatch, useSelector} from 'react-redux'
 import {IBrowserManager, useDimensions} from 'src/hooks'
-import {IState as IAllState} from 'src/redux/module'
 import {browserAction, browserSelector} from 'src/redux/module/browser'
 import {entityAction, entitySelector, entityUtil} from 'src/redux/module/entity'
 import {ITabListManager, ITabManager} from 'src/redux/module/tab/type'
 
-export const useTabListManager = (
+export function useTabListManager(
   scrollTo: IBrowserManager['scrollTo'],
-): ITabListManager => {
+): ITabListManager {
   const [haltScrollCB, setHaltScrollCB] = useState(false)
   const {
     window: {width},
   } = useDimensions()
   const dispatch = useDispatch()
-  const mapState = useCallback(
-    (state: IAllState) => ({
-      activeTabIndex: browserSelector.getActiveTabIndex(state),
-      tabIds: browserSelector.getTabIds(state),
-      tabs: browserSelector.getTabs(state),
-    }),
-    [],
-  )
-  const {activeTabIndex, tabIds, tabs} = useMappedState(mapState)
+  const activeTabIndex = useSelector(browserSelector.getActiveTabIndex)
+  const tabIds = useSelector(browserSelector.getTabIds)
+  const tabs = useSelector(browserSelector.getTabs)
 
   const addTab = useCallback<ITabListManager['addTab']>(() => {
     const t = entityUtil.createTab()
@@ -118,14 +111,8 @@ export const useTabListManager = (
   }
 }
 
-export const useTabManager = (): ITabManager => {
-  const mapState = useCallback(
-    (state: IAllState) => ({
-      tabs: entitySelector.getTabs(state),
-    }),
-    [],
-  )
-  const {tabs} = useMappedState(mapState)
+export function useTabManager(): ITabManager {
+  const tabs = useSelector(entitySelector.getTabs)
   const dispatch = useDispatch()
 
   const setNavigatables = useCallback<ITabManager['setNavigatables']>(

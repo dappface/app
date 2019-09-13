@@ -2,8 +2,7 @@ import Fuse from 'fuse.js'
 import {ITokenCandidate} from 'lib/token-list.json'
 import {createContext, useCallback, useContext, useMemo, useState} from 'react'
 import {Navigation} from 'react-native-navigation'
-import {useMappedState} from 'redux-react-hook'
-import {IState} from 'src/redux/module'
+import {useSelector} from 'react-redux'
 import {tokenHook, tokenSelector} from 'src/redux/module/token'
 
 export const useTokenSearchManager = () =>
@@ -19,13 +18,7 @@ export interface ITokenSearchManager {
 export function useInitializedTokenSearchManager(
   componentId: string,
 ): ITokenSearchManager {
-  const mapState = useCallback(
-    (state: IState) => ({
-      initialCandidates: tokenSelector.getTokenCandidates(state),
-    }),
-    [],
-  )
-  const {initialCandidates} = useMappedState(mapState)
+  const initialCandidates = useSelector(tokenSelector.getTokenCandidates)
   const {addToken} = tokenHook.useTokenManager()
 
   const fuse = useMemo(

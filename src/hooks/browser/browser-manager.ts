@@ -9,14 +9,14 @@ import {
 } from 'react'
 import {FlatList} from 'react-native'
 import {WebView} from 'react-native-webview'
-import {useMappedState} from 'redux-react-hook'
-import {IState} from 'src/redux/module'
+import {useSelector} from 'react-redux'
 import {browserHook, browserSelector} from 'src/redux/module/browser'
 import {tabHook, tabType} from 'src/redux/module/tab'
 import validator from 'validator'
 
-export const useBrowserManager = () =>
-  useContext(BrowserManagerContext) as IBrowserManager
+export function useBrowserManager() {
+  return useContext(BrowserManagerContext) as IBrowserManager
+}
 
 export const BrowserManagerContext = createContext<IBrowserManager | undefined>(
   undefined,
@@ -39,15 +39,9 @@ export interface IBrowserManager {
 }
 
 export function useInitializedBrowserManager(): IBrowserManager {
-  const mapState = useCallback(
-    (state: IState) => ({
-      activeTabId: browserSelector.getActiveTabId(state),
-      searchUrl: browserSelector.getSearchUrl(state),
-      tabs: browserSelector.getTabs(state),
-    }),
-    [],
-  )
-  const {activeTabId, searchUrl, tabs} = useMappedState(mapState)
+  const activeTabId = useSelector(browserSelector.getActiveTabId)
+  const searchUrl = useSelector(browserSelector.getSearchUrl)
+  const tabs = useSelector(browserSelector.getTabs)
   const {setLoadingProgress} = tabHook.useTabManager()
   const setOpenRequest = browserHook.useSetOpenRequest()
 

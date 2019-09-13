@@ -1,9 +1,9 @@
 import {useCallback} from 'react'
-import {useDispatch} from 'redux-react-hook'
+import {useDispatch} from 'react-redux'
 import * as settingAction from 'src/redux/module/setting/action'
 import {ISettingManager} from 'src/redux/module/setting/type'
 
-export const useSettingManager = (): ISettingManager => {
+export function useSettingManager(): ISettingManager {
   const dispatch = useDispatch()
 
   const setCurrency: ISettingManager['setCurrency'] = useCallback(

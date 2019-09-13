@@ -4,14 +4,12 @@ import {
 } from 'dappface-inpage-provider'
 import sigUtil from 'eth-sig-util'
 import {Wallet} from 'ethers'
-import {useCallback} from 'react'
 import {Alert} from 'react-native'
 import {WebViewSharedProps} from 'react-native-webview/lib/WebViewTypes'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {useBottomAppBarManager} from 'src/hooks/bottom-app-bar'
 import {useBrowserManager} from 'src/hooks/browser/browser-manager'
 import {useWeb3} from 'src/hooks/web3'
-import {IState} from 'src/redux/module'
 import {accountHook, accountSelector} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {historyHook} from 'src/redux/module/history'
@@ -22,18 +20,12 @@ interface IMessageChannelManager {
   onMessage: WebViewSharedProps['onMessage']
 }
 
-export const useMessageChannelManager = (
+export function useMessageChannelManager(
   tabId: string,
-): IMessageChannelManager => {
-  const mapState = useCallback(
-    (state: IState) => ({
-      accounts: accountSelector.getAccounts(state),
-      addresses: accountSelector.getDefaultAccountAddresses(state),
-      network: settingSelector.getNetwork(state),
-    }),
-    [],
-  )
-  const {accounts, addresses, network} = useMappedState(mapState)
+): IMessageChannelManager {
+  const accounts = useSelector(accountSelector.getAccounts)
+  const addresses = useSelector(accountSelector.getDefaultAccountAddress)
+  const network = useSelector(settingSelector.getNetwork)
   const {openLink, respondData} = useBrowserManager()
   const {addHistory} = historyHook.useHistoryManager()
   const setSignRequest = accountHook.useSetSignRequest()

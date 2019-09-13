@@ -1,10 +1,9 @@
-import * as React from 'react'
+import React from 'react'
 import {Animated} from 'react-native'
 import {IconButton} from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {NavigationBarContainer} from 'src/components/screens/browser/bottom-app-bar/navigation-bar-container'
 import {useBottomAppBarManager, useBrowserManager} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {bookmarkHook} from 'src/redux/module/bookmark'
 import {browserSelector, browserType} from 'src/redux/module/browser'
 
@@ -14,30 +13,26 @@ interface IProps {
   position: Animated.Value
 }
 
-export const NavigationBar = ({isOpen, onMore, position}: IProps) => {
+export function NavigationBar({isOpen, onMore, position}: IProps) {
   const {closeBottomAppBar} = useBottomAppBarManager()
   const {
     goBack,
     goForward,
     tabListManager: {addTab},
   } = useBrowserManager()
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      bookmarkStatus: browserSelector.getBookmarkStatusFactory(isOpen)(state),
-      canGoBack: browserSelector.getCanGoBack(state),
-      canGoForward: browserSelector.getCanGoForward(state),
-    }),
-    [isOpen],
+  const bookmarkStatus = useSelector(
+    browserSelector.getBookmarkStatusFactory(isOpen),
   )
-  const {bookmarkStatus, canGoBack, canGoForward} = useMappedState(mapState)
+  const canGoBack = useSelector(browserSelector.getCanGoBack)
+  const canGoForward = useSelector(browserSelector.getCanGoForward)
   const {toggleBookmark} = bookmarkHook.useBookmarkManager()
 
-  const onPressAdd = () => {
+  function onPressAdd() {
     closeBottomAppBar()
     addTab()
   }
 
-  const onPressMore = () => {
+  function onPressMore() {
     closeBottomAppBar()
     onMore()
   }

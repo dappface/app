@@ -1,21 +1,14 @@
-import * as React from 'react'
+import React from 'react'
 import {FlatList, StyleSheet} from 'react-native'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {TabItem} from 'src/components/screens/browser/tab-list/tab-item'
 import {Color, Size} from 'src/const'
-import {IState} from 'src/redux/module'
 import {browserSelector} from 'src/redux/module/browser'
 import styled from 'styled-components/native'
 
-export const TabList = () => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      activeTabId: browserSelector.getActiveTabId(state),
-      tabs: browserSelector.getTabs(state),
-    }),
-    [],
-  )
-  const {activeTabId, tabs} = useMappedState(mapState)
+export function TabList() {
+  const activeTabId = useSelector(browserSelector.getActiveTabId)
+  const tabs = useSelector(browserSelector.getTabs)
 
   if (!tabs) {
     return null

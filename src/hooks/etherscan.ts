@@ -1,21 +1,14 @@
-import axios from 'axios'
-import * as React from 'react'
+import axios, {AxiosResponse} from 'axios'
+import {useCallback} from 'react'
+import {useSelector} from 'react-redux'
 import {ETHERSCAN_API_KEY} from 'react-native-dotenv'
-import {useMappedState} from 'redux-react-hook'
-import {IState} from 'src/redux/module'
 import {entityType} from 'src/redux/module/entity'
 import {settingSelector} from 'src/redux/module/setting'
 
-export const useFetchTransactions = () => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      etherscanApiUrl: settingSelector.getEtherscanApiUrl(state),
-    }),
-    [],
-  )
-  const {etherscanApiUrl} = useMappedState(mapState)
+export function useFetchTransactions(): FetchTransitions {
+  const etherscanApiUrl = useSelector(settingSelector.getEtherscanApiUrl)
 
-  return React.useCallback(
+  return useCallback(
     (a: entityType.IAccount) =>
       axios.get(etherscanApiUrl, {
         params: {
@@ -29,6 +22,10 @@ export const useFetchTransactions = () => {
     [etherscanApiUrl],
   )
 }
+
+type FetchTransitions = (
+  account: entityType.IAccount,
+) => Promise<AxiosResponse<any>>
 
 enum Module {
   Account = 'account',

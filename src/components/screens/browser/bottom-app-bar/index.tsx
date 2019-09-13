@@ -84,6 +84,7 @@ export function BottomAppBar({componentId}: IProps) {
           onPress={closeBottomAppBar}
           screenDimensions={screenDimensions}>
           <Animated.View
+            // eslint-disable-next-line react-native/no-inline-styles
             style={{
               backgroundColor: Color.MOSTLY_BLACK,
               position: 'absolute',

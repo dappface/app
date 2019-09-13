@@ -3,7 +3,7 @@ import * as React from 'react'
 import {View} from 'react-native'
 import {ActivityIndicator} from 'react-native-paper'
 import {WebView} from 'react-native-webview'
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 
 interface IProps {
   size?: number

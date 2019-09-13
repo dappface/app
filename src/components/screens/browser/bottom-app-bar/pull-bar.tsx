@@ -1,12 +1,17 @@
-import * as React from 'react'
-import {Color, Size} from 'src/const'
+import React from 'react'
+import {Color} from 'src/const'
+import {IDimensions, useDimensions} from 'src/hooks'
 import styled from 'styled-components/native'
 
-export const PullBar = () => (
-  <Container>
-    <Bar />
-  </Container>
-)
+export function PullBar() {
+  const {screen: screenDimensions} = useDimensions()
+
+  return (
+    <Container screenDimensions={screenDimensions}>
+      <Bar />
+    </Container>
+  )
+}
 
 const Bar = styled.View`
   height: 4;
@@ -15,10 +20,17 @@ const Bar = styled.View`
   background-color: ${Color.PRIMARY_500};
 `
 
-const Container = styled.View`
+interface IContainerProps {
+  screenDimensions: IDimensions['screen']
+}
+
+const Container = styled.View<IContainerProps>`
   align-items: center
   height: 16;
   justify-content: center;
   position: absolute;
-  width: ${Size.SCREEN.WIDTH};
+
+  ${({screenDimensions}) => `
+    width: ${screenDimensions.width};
+  `}
 `

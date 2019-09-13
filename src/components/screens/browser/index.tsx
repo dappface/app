@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {useCallback, useEffect} from 'react'
 import {FlatList, ScaledSize} from 'react-native'
 import Orientation from 'react-native-orientation'
 import {useMappedState} from 'redux-react-hook'
@@ -7,11 +7,17 @@ import {BottomAppBar} from 'src/components/screens/browser/bottom-app-bar'
 import {TabList} from 'src/components/screens/browser/tab-list'
 import {WebView} from 'src/components/screens/browser/web-view'
 import {DefaultTemplate} from 'src/components/templates'
-import {Size} from 'src/const'
-import {useBrowserManager, useDimensions, useOrientation} from 'src/hooks'
+import {
+  ISafeAreaPosition,
+  useBottomAppBarHeight,
+  useBrowserManager,
+  useDimensions,
+  useHasBezel,
+  useOrientation,
+  useSafeAreaPosition,
+} from 'src/hooks'
 import {IState} from 'src/redux/module'
 import {browserSelector} from 'src/redux/module/browser'
-import {deviceHelper} from 'src/utils'
 import styled from 'styled-components/native'
 
 export interface IProps {
@@ -19,11 +25,14 @@ export interface IProps {
 }
 
 export function Browser({componentId}: IProps) {
+  const bottomAppBarHeight = useBottomAppBarHeight()
   const {scrollTo, tabListManager, webViewListRef} = useBrowserManager()
+  const hasBezel = useHasBezel()
   const orientation = useOrientation()
   const {window} = useDimensions()
+  const safeAreaPosition = useSafeAreaPosition()
 
-  const mapState = React.useCallback(
+  const mapState = useCallback(
     (state: IState) => ({
       activeTabIndex: browserSelector.getActiveTabIndex(state),
       showAddressBar: browserSelector.getShowAddressBar(state),
@@ -33,23 +42,25 @@ export function Browser({componentId}: IProps) {
   )
   const {activeTabIndex, showAddressBar, tabs} = useMappedState(mapState)
 
-  const getItemLayout = (
+  function getItemLayout(
     _: any,
     index: number,
-  ): {length: number; offset: number; index: number} => ({
-    index,
-    length: window.width,
-    offset: window.width * index,
-  })
+  ): {length: number; offset: number; index: number} {
+    return {
+      index,
+      length: window.width,
+      offset: window.width * index,
+    }
+  }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (tabs.length > 0) {
       return
     }
     tabListManager.addTab()
   }, [tabListManager, tabs])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (activeTabIndex < 0) {
       return
     }
@@ -60,7 +71,7 @@ export function Browser({componentId}: IProps) {
 
   return (
     <DefaultTemplate>
-      <Container orientation={orientation}>
+      <Container hasBezel={hasBezel} orientation={orientation}>
         <TabList />
 
         {showAddressBar ? <AddressBar /> : null}
@@ -76,9 +87,12 @@ export function Browser({componentId}: IProps) {
           getItemLayout={getItemLayout}
           renderItem={({item}) => (
             <StyledWebView
+              bottomAppBarHeight={bottomAppBarHeight}
+              hasBezel={hasBezel}
               orientation={orientation}
-              window={window}
+              safeAreaPosition={safeAreaPosition}
               tab={item}
+              window={window}
             />
           )}
         />
@@ -92,35 +106,41 @@ export function Browser({componentId}: IProps) {
 const PORTRAIT = 'PORTRAIT'
 
 interface IContainerProps {
+  hasBezel: boolean
   orientation: Orientation.orientation
 }
 
 const Container = styled.View<IContainerProps>`
   flex: 1;
 
-  ${({orientation}) => {
+  ${({hasBezel, orientation}) => {
     if (orientation !== PORTRAIT) {
       return
     }
-    return deviceHelper.hasBezel() ? 'padding-top: 44;' : 'padding-top: 20;'
+    return hasBezel ? 'padding-top: 44;' : 'padding-top: 20;'
   }}
 `
 
 interface IStyledWebViewProps {
+  bottomAppBarHeight: number
+  hasBezel: boolean
   orientation: Orientation.orientation
+  safeAreaPosition: ISafeAreaPosition
   window: ScaledSize
 }
 
 const StyledWebView = styled(WebView)<IStyledWebViewProps>`
-  padding-bottom: ${Size.BOTTOM_APP_BAR.HEIGHT};
+  ${({bottomAppBarHeight}) => `
+    padding-bottom: ${bottomAppBarHeight};
+  `}
 
   ${({window}) => `
     width: ${window.width};
   `}
 
-  ${({orientation}) => `
+  ${({hasBezel, orientation, safeAreaPosition}) => `
     padding-horizontal: ${
-      deviceHelper.hasBezel() && orientation !== PORTRAIT ? Size.SCREEN.TOP : 0
+      hasBezel && orientation !== PORTRAIT ? safeAreaPosition.top : 0
     };
   `}
 `

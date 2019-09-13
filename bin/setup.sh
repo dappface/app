@@ -8,6 +8,5 @@ npm i
 bundle install
 (
   cd ios
-  rm -rf Pods
   pod install
 )

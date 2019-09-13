@@ -24,6 +24,7 @@
 		483F4582227ED09800A69823 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 483F457D227ED09800A69823 /* Roboto-Thin.ttf */; };
 		483F4583227ED09800A69823 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 483F457E227ED09800A69823 /* Roboto-Light.ttf */; };
 		483F4584227ED09800A69823 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 483F457F227ED09800A69823 /* Roboto-Regular.ttf */; };
+		5D3C7090232B169B00E0393E /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		A57DA5D3D88C98A4CA68B8D5 /* libPods-DappFaceTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61FF01F38D5A46EEAA9C87BD /* libPods-DappFaceTests.a */; };
 		A97DC680B7E1FB2A0E53F69B /* libPods-DappFace.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27714BEE8AB5F9C2EC183737 /* libPods-DappFace.a */; };
 		E54740F2B4155A7076BD5078 /* libPods-DappFace-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FEC5BCE1228BEE77CB89075 /* libPods-DappFace-tvOSTests.a */; };
@@ -91,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D3C7090232B169B00E0393E /* JavaScriptCore.framework in Frameworks */,
 				A57DA5D3D88C98A4CA68B8D5 /* libPods-DappFaceTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

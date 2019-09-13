@@ -1,5 +1,5 @@
+import {ApolloProvider} from '@apollo/react-hooks'
 import * as React from 'react'
-import {ApolloProvider as ApolloHooksProvider} from 'react-apollo-hooks'
 import {View} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import Orientation from 'react-native-orientation'
@@ -89,7 +89,7 @@ const wrapWithProvider = (Component: any, skipContext = false) => () => (
 
   return (
     <React.Suspense fallback={<Error />}>
-      <ApolloHooksProvider client={client}>
+      <ApolloProvider client={client}>
         <StoreContext.Provider value={store}>
           <PaperProvider theme={PaperTheme}>
             <PersistGate loading={null} persistor={persistor}>
@@ -101,7 +101,7 @@ const wrapWithProvider = (Component: any, skipContext = false) => () => (
             </PersistGate>
           </PaperProvider>
         </StoreContext.Provider>
-      </ApolloHooksProvider>
+      </ApolloProvider>
     </React.Suspense>
   )
 }

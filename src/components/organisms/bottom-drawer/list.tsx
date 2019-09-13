@@ -1,10 +1,9 @@
-import * as React from 'react'
+import React from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {Card} from 'react-native-paper'
 import {Option} from 'src/components/organisms/bottom-drawer/option'
 import {Color} from 'src/const'
-import {IDimensions, useDimensions} from 'src/hooks'
-import {deviceHelper} from 'src/utils'
+import {IDimensions, useDimensions, useHasBezel} from 'src/hooks'
 import styled from 'styled-components/native'
 
 interface IProps {
@@ -12,12 +11,14 @@ interface IProps {
   onClose: () => void
 }
 
-export const List = ({children, onClose}: IProps) => {
+export function List({children, onClose}: IProps) {
+  const hasBezel = useHasBezel()
   const dimensions = useDimensions()
+
   return (
     <TouchableWithoutFeedback onPress={onClose}>
       <Background dimensions={dimensions}>
-        <Container elevation={24} dimensions={dimensions}>
+        <Container elevation={24} dimensions={dimensions} hasBezel={hasBezel}>
           {children}
           <Cancel title='Cancel' iconName='md-close' onPress={onClose} />
         </Container>
@@ -40,6 +41,7 @@ const Background = styled.View<IBackgroundProps>`
 
 interface IContainerProps {
   dimensions: IDimensions
+  hasBezel: boolean
 }
 
 const Container = styled(Card)<IContainerProps>`
@@ -48,7 +50,8 @@ const Container = styled(Card)<IContainerProps>`
   background-color: ${Color.PRIMARY};
   width: ${({dimensions}) => dimensions.window.width};
 
-  ${deviceHelper.hasBezel() &&
+  ${({hasBezel}) =>
+    hasBezel &&
     `
     padding-bottom: 34;
   `}

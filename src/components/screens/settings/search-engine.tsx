@@ -26,25 +26,18 @@ export const SearchEngine = () => {
 
   return (
     <FlatList
-      data={Object.keys(SearchEngineEnum)}
+      data={Object.values(SearchEngineEnum)}
       keyExtractor={item => item}
       renderItem={({item}) => (
-        <Ripple
-          onPress={onSelectFactory(SearchEngineEnum[
-            item as any
-          ] as SearchEngineEnum)}>
+        <Ripple onPress={onSelectFactory(item)}>
           <List.Item
             left={() => (
               <RadioButton.Android
-                status={
-                  SearchEngineEnum[item as any] === activeSearchEngine
-                    ? 'checked'
-                    : 'unchecked'
-                }
+                status={item === activeSearchEngine ? 'checked' : 'unchecked'}
                 value={item}
               />
             )}
-            title={SearchEngines[SearchEngineEnum[item as any]].name}
+            title={SearchEngines[item].name}
           />
         </Ripple>
       )}

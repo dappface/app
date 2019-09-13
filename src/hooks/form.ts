@@ -45,7 +45,7 @@ export const useValidators = (): IValidators => {
     const maxGas = gasPrice.multipliedBy(
       (allValues as ISendFormValues).gasLimit,
     )
-    const maxTotal = maxGas.plus(amount)
+    const maxTotal = maxGas.plus(amount.toString())
 
     return balance.isLessThan(maxTotal) ? 'Insufficient funds' : undefined
   }

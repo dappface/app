@@ -71,7 +71,7 @@ export interface ITransaction {
   chainId: Network
   errorMessage?: string
   from: string
-  gasLimit: number
+  gasLimit?: number
   gasPrice: string
   hash: string
   nonce: number

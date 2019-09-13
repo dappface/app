@@ -1,36 +1,31 @@
-import * as React from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {FlatList} from 'react-native'
+import {useSelector} from 'react-redux'
 import {ActivityIndicator, Button, Caption, Card} from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
 import {Expanded, Padding} from 'src/components/atoms'
 import {TxItem} from 'src/components/screens/wallet/tx-item'
 import {etherscanHooks} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {accountSelector, accountType} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
+import {settingSelector} from 'src/redux/module/setting'
 import {web3Selector} from 'src/redux/module/web3'
 import styled from 'styled-components/native'
 
-export const RecentActivity = () => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      currentAccount: accountSelector.getCurrentAccount(
-        state,
-      ) as entityType.IAccount,
-      latestBlockNumber: web3Selector.getLatestBlockNumber(state),
-    }),
-    [],
-  )
-  const {currentAccount, latestBlockNumber} = useMappedState(mapState)
+export function RecentActivity() {
+  const currentAccount = useSelector(
+    accountSelector.getCurrentAccount,
+  ) as entityType.IAccount
+  const latestBlockNumber = useSelector(web3Selector.getLatestBlockNumber)
+  const networkId = useSelector(settingSelector.getNetwork)
 
-  const [showSize, setShowSize] = React.useState(DEFAULT_SHOW_SIZE)
-  const [transactions, setTransactions] = React.useState<Transactions>(
+  const [showSize, setShowSize] = useState(DEFAULT_SHOW_SIZE)
+  const [transactions, setTransactions] = useState<Transactions>(
     TransactionType.Loading,
   )
   const isMaxed = transactions.length === showSize
   const fetchTransactions = etherscanHooks.useFetchTransactions()
 
-  const onSeeMore = React.useCallback((): void => {
+  const onSeeMore = useCallback((): void => {
     const hiddenNum = transactions.length - showSize
     setShowSize(
       hiddenNum > DEFAULT_SHOW_SIZE
@@ -39,25 +34,36 @@ export const RecentActivity = () => {
     )
   }, [showSize, transactions.length])
 
-  const fetchTx = React.useCallback(async (): Promise<void> => {
+  const fetchTx = useCallback(async (): Promise<void> => {
     try {
       const res = await fetchTransactions(currentAccount)
-      const {result} = res.data
       setTransactions(
-        result.filter((item, i, arr) =>
-          arr[i - 1] ? item.hash !== arr[i - 1].hash : true,
-        ),
+        res.data.result
+          .filter((item, i, arr) =>
+            arr[i - 1] ? item.hash !== arr[i - 1].hash : true,
+          )
+          .map(item => ({
+            address: currentAccount.address,
+            chainId: networkId,
+            from: item.from,
+            gasPrice: item.gasPrice,
+            hash: item.hash,
+            nonce: parseInt(item.nonce, 10),
+            timeStamp: parseInt(item.timeStamp, 10),
+            to: item.to,
+            value: item.value,
+          })),
       )
     } catch (error) {
       setTransactions(TransactionType.FetchFailed)
     }
   }, [currentAccount, fetchTransactions])
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchTx()
   }, [fetchTx, latestBlockNumber])
 
-  React.useEffect(() => {
+  useEffect(() => {
     setShowSize(DEFAULT_SHOW_SIZE)
     setTransactions(TransactionType.Loading)
     fetchTx()

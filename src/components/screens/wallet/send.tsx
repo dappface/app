@@ -139,6 +139,7 @@ Fast: ${gasInfo.fast / 10} Gwei)`
             gasPrice: getGasPrice(),
             to,
           }}
+          // @ts-ignore
           render={({handleSubmit, pristine, submitting, invalid}) => (
             <View>
               <List.Section>

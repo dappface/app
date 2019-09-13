@@ -54,10 +54,7 @@ export function useInitializedBrowserManager(): IBrowserManager {
   const webViewListRef: IBrowserManager['webViewListRef'] = useRef(null)
   const webViewRefs: IBrowserManager['webViewRefs'] = useRef(
     tabs.reduce(
-      (
-        res: {[key: string]: RefObject<WebView | undefined>},
-        tab: tabType.ITab,
-      ) => ({
+      (res, tab) => ({
         ...res,
         [tab.id]: createRef(),
       }),
@@ -193,10 +190,7 @@ export function useInitializedBrowserManager(): IBrowserManager {
   useEffect(() => {
     // @ts-ignore
     webViewRefs.current = tabs.reduce(
-      (
-        res: {[key: string]: RefObject<WebView | undefined>},
-        tab: tabType.ITab,
-      ) => ({
+      (res, tab) => ({
         ...res,
         [tab.id]: createRef(),
       }),

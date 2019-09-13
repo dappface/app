@@ -25,6 +25,7 @@ export const Home = ({style}: IProps) => {
 
   const onRefresh = async (): Promise<void> => {
     setRefreshing(true)
+    // @ts-ignore
     await fetchMore({
       notifyOnNetworkStatusChange: true,
       updateQuery,
@@ -51,6 +52,7 @@ export const Home = ({style}: IProps) => {
     }
 
     setLoadingMore(true)
+    // @ts-ignore
     await fetchMore({
       notifyOnNetworkStatusChange: true,
       updateQuery,

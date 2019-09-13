@@ -1,21 +1,21 @@
 import {useCallback} from 'react'
-import {useDispatch} from 'redux-react-hook'
+import {useDispatch} from 'react-redux'
 import * as uiAction from 'src/redux/module/ui/action'
 import * as uiType from 'src/redux/module/ui/type'
 
-export const useSetBottomDrawer = () => {
+export function useSetBottomDrawer() {
   const dispatch = useDispatch()
   return useCallback(
-    (bottomDrawler?: uiType.IBottomDrawer) => {
+    (bottomDrawler?: uiType.IBottomDrawer): void => {
       dispatch(uiAction.setBottomDrawer(bottomDrawler))
     },
     [dispatch],
   )
 }
 
-export const useSnackbarManager = (): uiType.ISnackbarManager => {
+export function useSnackbarManager(): uiType.ISnackbarManager {
   const dispatch = useDispatch()
-  const notifyAddressCopied = useCallback(() => {
+  const notifyAddressCopied = useCallback((): void => {
     dispatch(
       uiAction.setSnackbarMessage({
         label: uiType.SnackbarLabel.Dismiss,

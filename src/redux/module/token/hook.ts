@@ -1,7 +1,6 @@
 import {useCallback} from 'react'
-import {useDispatch, useMappedState} from 'redux-react-hook'
+import {useDispatch, useSelector} from 'react-redux'
 import {BALANCE_OF} from 'src/const'
-import {IState as IAllState} from 'src/redux/module'
 import {accountSelector} from 'src/redux/module/account'
 import {
   entityAction,
@@ -11,17 +10,11 @@ import {
 } from 'src/redux/module/entity'
 import {ITokenManager} from 'src/redux/module/token/type'
 
-export const useTokenManager = () => {
-  const mapState = useCallback(
-    (state: IAllState) => ({
-      accounts: entitySelector.getAccounts(state),
-      currentAccount: accountSelector.getCurrentAccount(
-        state,
-      ) as entityType.IAccount,
-    }),
-    [],
-  )
-  const {accounts, currentAccount} = useMappedState(mapState)
+export function useTokenManager() {
+  const accounts = useSelector(entitySelector.getAccounts)
+  const currentAccount = useSelector(
+    accountSelector.getCurrentAccount,
+  ) as entityType.IAccount
   const dispatch = useDispatch()
 
   const addToken = useCallback<ITokenManager['addToken']>(

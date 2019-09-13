@@ -1,21 +1,14 @@
 import {useCallback} from 'react'
-import {useDispatch, useMappedState} from 'redux-react-hook'
-import {IState} from 'src/redux/module'
+import {useDispatch, useSelector} from 'react-redux'
 import {accountSelector} from 'src/redux/module/account'
 import {entityAction, entityType, entityUtil} from 'src/redux/module/entity'
 import {IHistoryManager} from 'src/redux/module/history/type'
 import {tabHook} from 'src/redux/module/tab'
 
 export function useHistoryManager(): IHistoryManager {
-  const mapState = useCallback(
-    (state: IState) => ({
-      defaultAccountEntity: accountSelector.getDefaultAccountEntity(
-        state,
-      ) as entityType.IAccount,
-    }),
-    [],
-  )
-  const {defaultAccountEntity} = useMappedState(mapState)
+  const defaultAccountEntity = useSelector(
+    accountSelector.getDefaultAccountEntity,
+  ) as entityType.IAccount
   const dispatch = useDispatch()
   const {setLatestHistoryId} = tabHook.useTabManager()
 

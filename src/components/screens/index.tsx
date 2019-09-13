@@ -1,11 +1,11 @@
 import {ApolloProvider} from '@apollo/react-hooks'
-import * as React from 'react'
+import React, {Suspense, useEffect} from 'react'
 import {View} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import Orientation from 'react-native-orientation'
 import {Provider as PaperProvider} from 'react-native-paper'
 import {PersistGate} from 'redux-persist/integration/react'
-import {StoreContext} from 'redux-react-hook'
+import {Provider} from 'react-redux'
 import {client} from 'src/apollo'
 import {Snackbar} from 'src/components/atoms'
 import {Browser} from 'src/components/screens/browser'
@@ -23,7 +23,7 @@ import {
 } from 'src/hooks'
 import {persistor, store} from 'src/redux/store'
 
-export function registerScreens() {
+export function registerScreens(): void {
   Navigation.registerComponent(Screen.BROWSER, wrapWithProvider(Browser))
   Navigation.registerComponent(
     Screen.SETTINGS.BACKUP.BASE,
@@ -80,30 +80,32 @@ export function registerScreens() {
   Navigation.registerComponent(Screen.LINKS, wrapWithProvider(Links))
 }
 
-const Error = () => <View />
+function Error() {
+  return <View />
+}
 
-const wrapWithProvider = (Component: any, skipContext = false) => () => (
-  props: any,
-) => {
-  useNavigationListenerEffect()
+function wrapWithProvider(Component: any, skipContext = false) {
+  return () => (props: any) => {
+    useNavigationListenerEffect()
 
-  return (
-    <React.Suspense fallback={<Error />}>
-      <ApolloProvider client={client}>
-        <StoreContext.Provider value={store}>
-          <PaperProvider theme={PaperTheme}>
-            <PersistGate loading={null} persistor={persistor}>
-              {skipContext ? (
-                <Component {...props} />
-              ) : (
-                <WithContext Component={Component} {...props} />
-              )}
-            </PersistGate>
-          </PaperProvider>
-        </StoreContext.Provider>
-      </ApolloProvider>
-    </React.Suspense>
-  )
+    return (
+      <Suspense fallback={<Error />}>
+        <ApolloProvider client={client}>
+          <Provider store={store}>
+            <PaperProvider theme={PaperTheme}>
+              <PersistGate loading={null} persistor={persistor}>
+                {skipContext ? (
+                  <Component {...props} />
+                ) : (
+                  <WithContext Component={Component} {...props} />
+                )}
+              </PersistGate>
+            </PaperProvider>
+          </Provider>
+        </ApolloProvider>
+      </Suspense>
+    )
+  }
 }
 
 function WithContext(props: any) {
@@ -130,7 +132,7 @@ function WithContext(props: any) {
 }
 
 function useNavigationListenerEffect() {
-  React.useEffect(() => {
+  useEffect(() => {
     const didAppearListener = Navigation.events().registerComponentDidAppearListener(
       ({componentName}) => {
         if (componentName !== Screen.BROWSER) {

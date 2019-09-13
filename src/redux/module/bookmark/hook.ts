@@ -1,28 +1,19 @@
 import {useCallback} from 'react'
-import {useDispatch, useMappedState} from 'redux-react-hook'
-import {IState as IAllState} from 'src/redux/module'
+import {useDispatch, useSelector} from 'react-redux'
 import {accountSelector} from 'src/redux/module/account'
 import * as bookmarkSelector from 'src/redux/module/bookmark/selector'
 import * as bookmarkType from 'src/redux/module/bookmark/type'
 import {entityAction, entityType, entityUtil} from 'src/redux/module/entity'
 import {historySelector} from 'src/redux/module/history'
 
-export const useBookmarkManager = (): bookmarkType.IBookmarkManager => {
-  const mapState = useCallback(
-    (state: IAllState) => ({
-      activeBookmark: bookmarkSelector.getActiveBookmark(state),
-      activeHistory: historySelector.getActiveHistory(
-        state,
-      ) as entityType.IHistory,
-      defaultAccountEntity: accountSelector.getDefaultAccountEntity(
-        state,
-      ) as entityType.IAccount,
-    }),
-    [],
-  )
-  const {activeBookmark, activeHistory, defaultAccountEntity} = useMappedState(
-    mapState,
-  )
+export function useBookmarkManager(): bookmarkType.IBookmarkManager {
+  const activeBookmark = useSelector(bookmarkSelector.getActiveBookmark)
+  const activeHistory = useSelector(
+    historySelector.getActiveHistory,
+  ) as entityType.IHistory
+  const defaultAccountEntity = useSelector(
+    accountSelector.getDefaultAccountEntity,
+  ) as entityType.IAccount
   const dispatch = useDispatch()
 
   const addBookmark = useCallback(() => {

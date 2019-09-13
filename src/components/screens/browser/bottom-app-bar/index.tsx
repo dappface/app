@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react'
 import {Animated, StatusBar} from 'react-native'
 import Interactable from 'react-native-interactable'
 import {Card} from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {NavigationBar} from 'src/components/screens/browser/bottom-app-bar/navigation-bar'
 import {PullBar} from 'src/components/screens/browser/bottom-app-bar/pull-bar'
 import {SignPrompt} from 'src/components/screens/browser/bottom-app-bar/sign-prompt'
@@ -16,7 +16,6 @@ import {
   useDimensions,
   useSafeAreaPosition,
 } from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {accountHook, accountSelector} from 'src/redux/module/account'
 import {uiHook, uiType} from 'src/redux/module/ui'
 import styled from 'styled-components/native'
@@ -32,13 +31,7 @@ export function BottomAppBar({componentId}: IProps) {
   const {screen: screenDimensions} = useDimensions()
   const safeAreaPosition = useSafeAreaPosition()
 
-  const mapState = useCallback(
-    (state: IState) => ({
-      signRequest: accountSelector.getSignRequest(state),
-    }),
-    [],
-  )
-  const {signRequest} = useMappedState(mapState)
+  const signRequest = useSelector(accountSelector.getSignRequest)
   const setSignRequest = accountHook.useSetSignRequest()
   const setBottomDrawer = uiHook.useSetBottomDrawer()
 

@@ -57,7 +57,7 @@ export function RecentActivity() {
     } catch (error) {
       setTransactions(TransactionType.FetchFailed)
     }
-  }, [currentAccount, fetchTransactions])
+  }, [currentAccount, fetchTransactions, networkId])
 
   useEffect(() => {
     fetchTx()

@@ -5,10 +5,9 @@ import {Wallet} from 'ethers'
 import moment from 'moment'
 import {useCallback} from 'react'
 import Reactotron from 'reactotron-react-native'
-import {useDispatch, useMappedState} from 'redux-react-hook'
+import {useDispatch, useSelector} from 'react-redux'
 import {AccountPath} from 'src/const'
 import {useWeb3} from 'src/hooks'
-import {IState as IAllState} from 'src/redux/module'
 import * as accountAction from 'src/redux/module/account/action'
 import * as accountSelector from 'src/redux/module/account/selector'
 import * as accountType from 'src/redux/module/account/type'
@@ -17,27 +16,21 @@ import {settingSelector} from 'src/redux/module/setting'
 import {exchangeRelay, randomBytesAsync} from 'src/utils'
 import Web3 from 'web3'
 
-export const useSetSignRequest = () => {
+export function useSetSignRequest() {
   const dispatch = useDispatch()
   return useCallback(
-    (params?: accountType.ISignRequest) => {
+    (params?: accountType.ISignRequest): void => {
       dispatch(accountAction.setSignRequest(params))
     },
     [dispatch],
   )
 }
 
-export const useFiatRateManager = () => {
-  const mapState = useCallback(
-    (state: IAllState) => ({
-      currency: settingSelector.getCurrency(state),
-    }),
-    [],
-  )
-  const {currency} = useMappedState(mapState)
+export function useFiatRateManager() {
+  const currency = useSelector(settingSelector.getCurrency)
   const dispatch = useDispatch()
 
-  const fetchFiatRate = useCallback(async () => {
+  const fetchFiatRate = useCallback(async (): Promise<void> => {
     try {
       const fiatRate = await exchangeRelay.getRate(currency)
       dispatch(accountAction.setFiatRate(fiatRate))
@@ -51,19 +44,13 @@ export const useFiatRateManager = () => {
   }
 }
 
-export const useFetchBalance = (web3: Web3) => {
-  const mapState = useCallback(
-    (state: IAllState) => ({
-      currencyDetails: settingSelector.getCurrencyDetails(state),
-      fiatRate: accountSelector.getFiatRate(state),
-    }),
-    [],
-  )
-  const {currencyDetails, fiatRate} = useMappedState(mapState)
+export function useFetchBalance(web3: Web3) {
+  const currencyDetails = useSelector(settingSelector.getCurrencyDetails)
+  const fiatRate = useSelector(accountSelector.getFiatRate)
   const dispatch = useDispatch()
 
   return useCallback(
-    async (account: entityType.IAccount) => {
+    async (account: entityType.IAccount): Promise<void> => {
       const wei = await web3.eth.getBalance(account.address)
       const ether = web3.utils.fromWei(wei, 'ether')
       const fiatBN = new BN(ether).multipliedBy(fiatRate)
@@ -83,22 +70,16 @@ export const useFetchBalance = (web3: Web3) => {
   )
 }
 
-export const useSignAndSendTransaction = () => {
+export function useSignAndSendTransaction() {
   const web3 = useWeb3()
-  const mapState = useCallback(
-    (state: IAllState) => ({
-      network: settingSelector.getNetwork(state),
-    }),
-    [],
-  )
-  const {network} = useMappedState(mapState)
+  const network = useSelector(settingSelector.getNetwork)
   const dispatch = useDispatch()
 
   return useCallback(
     async (
       a: entityType.IAccount,
       txParams: accountType.ITransactionParams,
-    ) => {
+    ): Promise<void> => {
       const nonce = await web3.eth.getTransactionCount(a.address)
       const rawTx = {
         chainId: network,
@@ -141,14 +122,10 @@ interface IAccountManager {
 }
 
 export function useAccountManager(): IAccountManager {
-  const mapState = useCallback(
-    (state: IAllState) => ({
-      accounts: accountSelector.getAccounts(state),
-      currentAccountAddress: accountSelector.getCurrentAccountAddress(state),
-    }),
-    [],
+  const accounts = useSelector(accountSelector.getAccounts)
+  const currentAccountAddress = useSelector(
+    accountSelector.getCurrentAccountAddress,
   )
-  const {accounts, currentAccountAddress} = useMappedState(mapState)
   const dispatch = useDispatch()
 
   const createAccount: IAccountManager['createAccount'] = useCallback(async () => {

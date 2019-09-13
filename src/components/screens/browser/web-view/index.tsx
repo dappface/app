@@ -6,11 +6,10 @@ import {
   WebViewError,
   WebViewSharedProps,
 } from 'react-native-webview/lib/WebViewTypes'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Error} from 'src/components/screens/browser/web-view/error'
 import {Home} from 'src/components/screens/browser/web-view/home'
 import {useBrowserManager, useMessageChannelManager} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {browserHook} from 'src/redux/module/browser'
 import {historyHook} from 'src/redux/module/history'
 import {settingSelector} from 'src/redux/module/setting'
@@ -21,15 +20,11 @@ export interface IProps {
   tab: tabType.ITab
 }
 
-export const WebView = ({style, tab}: IProps) => {
+export function WebView({style, tab}: IProps) {
   const {webViewRefs} = useBrowserManager()
-  const mapState = useCallback(
-    (state: IState) => ({
-      remoteNodeUrl: settingSelector.getRemoteNodeUrlFactory(false)(state),
-    }),
-    [],
+  const remoteNodeUrl = useSelector(
+    settingSelector.getRemoteNodeUrlFactory(false),
   )
-  const {remoteNodeUrl} = useMappedState(mapState)
   const {addHistory} = historyHook.useHistoryManager()
   const setOpenRequest = browserHook.useSetOpenRequest()
   const {setLoadingProgress, setNavigatables} = tabHook.useTabManager()

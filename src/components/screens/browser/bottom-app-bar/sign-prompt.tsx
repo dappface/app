@@ -1,8 +1,8 @@
-import * as React from 'react'
+import React, {useCallback} from 'react'
 import {Alert, View} from 'react-native'
 import {Button, Caption, Headline, Text} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {
   Blockie,
   Padding,
@@ -13,7 +13,6 @@ import {
 } from 'src/components/atoms'
 import {BiometryType, Size} from 'src/const'
 import {useBottomAppBarManager, useBrowserManager, useWeb3} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {
   accountHook,
   accountSelector,
@@ -22,16 +21,10 @@ import {
 import {walletHelper} from 'src/utils'
 import styled from 'styled-components/native'
 
-export const SignPrompt = () => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      signRequest: accountSelector.getSignRequest(
-        state,
-      ) as accountType.ISignRequest,
-    }),
-    [],
-  )
-  const {signRequest} = useMappedState(mapState)
+export function SignPrompt() {
+  const signRequest = useSelector(
+    accountSelector.getSignRequest,
+  ) as accountType.ISignRequest
   const setSignRerquest = accountHook.useSetSignRequest()
   const web3 = useWeb3()
   const browserManager = useBrowserManager()
@@ -47,7 +40,7 @@ export const SignPrompt = () => {
   const totalInEther = web3.utils.fromWei(totalInWei, 'ether')
   const valueInEther = web3.utils.fromWei(signRequest.value, 'ether')
 
-  const sign = React.useCallback(async () => {
+  const sign = useCallback(async () => {
     try {
       const biometryType = await TouchID.isSupported()
       if (

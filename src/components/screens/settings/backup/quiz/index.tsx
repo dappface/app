@@ -1,8 +1,8 @@
-import * as React from 'react'
+import React, {useCallback, useMemo} from 'react'
 import {Alert, View} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import {Button, Subheading} from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import shuffle from 'shuffle-array'
 import {CenteredColumn, Padding} from 'src/components/atoms'
 import {WordList} from 'src/components/organisms'
@@ -10,7 +10,6 @@ import {useWordListManager} from 'src/components/screens/settings/backup/quiz/ho
 import {WordPool} from 'src/components/screens/settings/backup/quiz/word-pool'
 import {ModalTemplate} from 'src/components/templates'
 import {Size} from 'src/const'
-import {IState} from 'src/redux/module'
 import {accountHook, accountSelector} from 'src/redux/module/account'
 
 interface IProps {
@@ -18,17 +17,11 @@ interface IProps {
   isModal?: boolean
 }
 
-export const Quiz = ({componentId, isModal = false}: IProps) => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      mnemonic: accountSelector.getMnemonic(state) as string,
-    }),
-    [],
-  )
-  const {mnemonic} = useMappedState(mapState)
+export function Quiz({componentId, isModal = false}: IProps) {
+  const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const {setIsBackedUp} = accountHook.useAccountManager()
 
-  const mnemonicList = React.useMemo(
+  const mnemonicList = useMemo(
     () => shuffle(mnemonic.split(' '), {copy: true}),
     [mnemonic],
   )
@@ -45,7 +38,7 @@ export const Quiz = ({componentId, isModal = false}: IProps) => {
     wordList,
   } = useWordListManager()
 
-  const onPressVerify = React.useCallback(() => {
+  const onPressVerify = useCallback(() => {
     if (mnemonic === wordList.join(' ')) {
       Alert.alert(
         'Your wallet is backed up!',

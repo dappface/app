@@ -1,26 +1,19 @@
-import * as React from 'react'
+import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
 import {Navigation} from 'react-native-navigation'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Item} from 'src/components/screens/links/item'
 import {NoItems} from 'src/components/screens/links/no-items'
 import {IListProps} from 'src/components/screens/links/type'
 import {useBrowserManager} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {bookmarkHook, bookmarkSelector} from 'src/redux/module/bookmark'
 
-export const BookmarkList = ({screenProps: {componentId}}: IListProps) => {
+export function BookmarkList({screenProps: {componentId}}: IListProps) {
   const {openLink} = useBrowserManager()
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      bookmarks: bookmarkSelector.getBookmarks(state),
-    }),
-    [],
-  )
-  const {bookmarks} = useMappedState(mapState)
+  const bookmarks = useSelector(bookmarkSelector.getBookmarks)
   const {removeBookmark} = bookmarkHook.useBookmarkManager()
 
-  const onPressFactory = React.useCallback(
+  const onPressFactory = useCallback(
     (url: string) => () => {
       openLink(url)
       Navigation.dismissModal(componentId)
@@ -28,7 +21,7 @@ export const BookmarkList = ({screenProps: {componentId}}: IListProps) => {
     [componentId, openLink],
   )
 
-  const onRemoveFactory = React.useCallback(
+  const onRemoveFactory = useCallback(
     (bookmarkId: string) => () => {
       removeBookmark(bookmarkId)
     },

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {useCallback} from 'react'
 import {Clipboard, View} from 'react-native'
 import {
   Button,
@@ -9,11 +9,10 @@ import {
   Subheading,
   Title,
 } from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Blockie, Row} from 'src/components/atoms'
 import {Color, Size} from 'src/const'
 import {useDimensions} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {accountSelector} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {uiHook} from 'src/redux/module/ui'
@@ -28,28 +27,24 @@ interface IProps {
   onPressSend: () => void
 }
 
-export const Item = ({
+export function Item({
   item,
   onPressBackup,
   onPressOption,
   onPressReceive,
   onPressSend,
-}: IProps) => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      defaultAccountAddress: accountSelector.getDefaultAccountAddress(state),
-      isBackedUp: accountSelector.getIsBackedUp(state),
-    }),
-    [],
+}: IProps) {
+  const defaultAccountAddress = useSelector(
+    accountSelector.getDefaultAccountAddress,
   )
-  const {defaultAccountAddress, isBackedUp} = useMappedState(mapState)
+  const isBackedUp = useSelector(accountSelector.getIsBackedUp)
   const {notifyAddressCopied} = uiHook.useSnackbarManager()
 
   const {
     window: {width},
   } = useDimensions()
 
-  const onPressCopy = React.useCallback(() => {
+  const onPressCopy = useCallback(() => {
     Clipboard.setString(item.address)
     notifyAddressCopied()
   }, [item.address, notifyAddressCopied])

@@ -1,20 +1,15 @@
-import * as React from 'react'
+import React from 'react'
 import {FlatList} from 'react-native'
 import {Card} from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Padding} from 'src/components/atoms'
 import {TxItem} from 'src/components/screens/wallet/tx-item'
-import {IState} from 'src/redux/module'
 import {accountSelector} from 'src/redux/module/account'
 
-export const FailedTx = () => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      failedTxs: accountSelector.getCurrentAccountFailedTransactions(state),
-    }),
-    [],
+export function FailedTx() {
+  const failedTxs = useSelector(
+    accountSelector.getCurrentAccountFailedTransactions,
   )
-  const {failedTxs} = useMappedState(mapState)
 
   if (failedTxs.length === 0) {
     return null

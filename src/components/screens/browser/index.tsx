@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {FlatList, ScaledSize} from 'react-native'
 import Orientation from 'react-native-orientation'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {AddressBar} from 'src/components/screens/browser/address-bar'
 import {BottomAppBar} from 'src/components/screens/browser/bottom-app-bar'
 import {TabList} from 'src/components/screens/browser/tab-list'
@@ -16,7 +16,6 @@ import {
   useOrientation,
   useSafeAreaPosition,
 } from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {browserSelector} from 'src/redux/module/browser'
 import styled from 'styled-components/native'
 
@@ -32,15 +31,9 @@ export function Browser({componentId}: IProps) {
   const {window} = useDimensions()
   const safeAreaPosition = useSafeAreaPosition()
 
-  const mapState = useCallback(
-    (state: IState) => ({
-      activeTabIndex: browserSelector.getActiveTabIndex(state),
-      showAddressBar: browserSelector.getShowAddressBar(state),
-      tabs: browserSelector.getTabs(state),
-    }),
-    [],
-  )
-  const {activeTabIndex, showAddressBar, tabs} = useMappedState(mapState)
+  const activeTabIndex = useSelector(browserSelector.getActiveTabIndex)
+  const showAddressBar = useSelector(browserSelector.getShowAddressBar)
+  const tabs = useSelector(browserSelector.getTabs)
 
   function getItemLayout(
     _: any,

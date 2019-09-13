@@ -1,14 +1,13 @@
-import * as React from 'react'
+import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
 import {Button, Caption, Card} from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Expanded, Padding} from 'src/components/atoms'
 import {
   IProps as IItemProps,
   Item,
 } from 'src/components/screens/wallet/token-list/item'
 import {pushTokenSearch} from 'src/navigation'
-import {IState} from 'src/redux/module'
 import {tokenSelector} from 'src/redux/module/token'
 import {uiHook, uiType} from 'src/redux/module/ui'
 import styled from 'styled-components/native'
@@ -17,21 +16,15 @@ export interface IProps {
   componentId: string
 }
 
-export const TokenList = ({componentId}: IProps) => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      tokens: tokenSelector.getCurrentAccountTokens(state),
-    }),
-    [],
-  )
-  const {tokens} = useMappedState(mapState)
+export function TokenList({componentId}: IProps) {
+  const tokens = useSelector(tokenSelector.getCurrentAccountTokens)
   const setBottomDrawer = uiHook.useSetBottomDrawer()
 
-  const onPressAdd = React.useCallback(() => {
+  const onPressAdd = useCallback(() => {
     pushTokenSearch(componentId)
   }, [componentId])
 
-  const onPressMoreFactory: IItemProps['onPressMoreFactory'] = React.useCallback(
+  const onPressMoreFactory: IItemProps['onPressMoreFactory'] = useCallback(
     t => () => {
       setBottomDrawer({
         payload: {token: t},

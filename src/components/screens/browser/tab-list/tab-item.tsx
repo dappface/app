@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {
   ActivityIndicator,
   IconButton,
@@ -7,11 +7,10 @@ import {
   TouchableRipple,
 } from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Padding} from 'src/components/atoms'
 import {Color, Size} from 'src/const'
 import {useBrowserManager} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {browserSelector} from 'src/redux/module/browser'
 import {tabType} from 'src/redux/module/tab'
 import {imageUtil} from 'src/utils'
@@ -21,35 +20,29 @@ export interface IProps {
   tab: tabType.ITab
 }
 
-export const TabItem = ({tab}: IProps) => {
+export function TabItem({tab}: IProps) {
   const {tabListManager} = useBrowserManager()
-  const hostname = React.useMemo(() => {
+  const hostname = useMemo(() => {
     if (!tab.url) {
       return
     }
     return tab.url.split('/')[2]
   }, [tab.url])
-  const title = React.useMemo(() => {
+  const title = useMemo(() => {
     if (!tab.title) {
       return hostname
     }
     return /^http(s)?:\/\//.test(tab.title) ? hostname : tab.title
   }, [hostname, tab.title])
-  const [favicon, setFavicon] = React.useState<string | undefined>(undefined)
+  const [favicon, setFavicon] = useState<string | undefined>(undefined)
 
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      activeTabId: browserSelector.getActiveTabId(state),
-    }),
-    [],
-  )
-  const {activeTabId} = useMappedState(mapState)
-  const isSelected = React.useMemo(() => tab.id === activeTabId, [
+  const activeTabId = useSelector(browserSelector.getActiveTabId)
+  const isSelected = useMemo(() => tab.id === activeTabId, [
     tab.id,
     activeTabId,
   ])
 
-  React.useEffect(() => {
+  useEffect(() => {
     ;(async () => {
       if (!tab.url) {
         return

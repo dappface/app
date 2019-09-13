@@ -6,8 +6,7 @@ import {
   useState,
 } from 'react'
 import Reactotron from 'reactotron-react-native'
-import * as rh from 'redux-react-hook'
-import {IState} from 'src/redux/module'
+import {useSelector} from 'react-redux'
 import {accountHook, accountSelector} from 'src/redux/module/account'
 import {settingSelector} from 'src/redux/module/setting'
 import {tokenHook, tokenSelector} from 'src/redux/module/token'
@@ -21,21 +20,12 @@ export const Web3Context = createContext<Web3 | undefined>(undefined)
 export const useInitializedWeb3 = (): Web3 | undefined => {
   const [connection, setConnection] = useState<ConnectionStatus | undefined>()
   const [web3, setWeb3] = useState<Web3>()
-  const mapState = useCallback(
-    (state: IState) => ({
-      accounts: accountSelector.getAccounts(state),
-      latestBlockNumber: web3Selector.getLatestBlockNumber(state),
-      remoteNodeUrl: settingSelector.getRemoteNodeUrlFactory(true)(state),
-      tokens: tokenSelector.getTokens(state),
-    }),
-    [],
+  const accounts = useSelector(accountSelector.getAccounts)
+  const latestBlockNumber = useSelector(web3Selector.getLatestBlockNumber)
+  const remoteNodeUrl = useSelector(
+    settingSelector.getRemoteNodeUrlFactory(true),
   )
-  const {
-    accounts,
-    latestBlockNumber,
-    remoteNodeUrl,
-    tokens,
-  } = rh.useMappedState(mapState)
+  const tokens = useSelector(tokenSelector.getTokens)
   const setLatestBlockNumber = web3Hook.useSetLatestBlockNumber()
   const {fetchFiatRate} = accountHook.useFiatRateManager()
   const fetchBalance = accountHook.useFetchBalance(web3 as Web3)

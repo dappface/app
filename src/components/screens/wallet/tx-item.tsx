@@ -1,13 +1,12 @@
 import moment from 'moment'
-import * as React from 'react'
+import React from 'react'
 import Ripple from 'react-native-material-ripple'
 import {Caption, IconButton, Subheading} from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Blockie, Padding} from 'src/components/atoms'
 import {Color} from 'src/const'
 import {useBottomAppBarManager, useBrowserManager, useWeb3} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {accountSelector, accountType} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {settingSelector} from 'src/redux/module/setting'
@@ -18,17 +17,11 @@ interface IProps {
   tx: accountType.ITransaction
 }
 
-export const TxItem = ({tx}: IProps) => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      currentAccount: accountSelector.getCurrentAccount(
-        state,
-      ) as entityType.IAccount,
-      etherscanUrl: settingSelector.getEtherscanUrl(state),
-    }),
-    [],
-  )
-  const {currentAccount, etherscanUrl} = useMappedState(mapState)
+export function TxItem({tx}: IProps) {
+  const currentAccount = useSelector(
+    accountSelector.getCurrentAccount,
+  ) as entityType.IAccount
+  const etherscanUrl = useSelector(settingSelector.getEtherscanUrl)
   const web3 = useWeb3()
   const {openLink} = useBrowserManager()
   const {closeBottomAppBar} = useBottomAppBarManager()

@@ -1,5 +1,5 @@
 import BN from 'bignumber.js'
-import * as React from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {Field, Form} from 'react-final-form'
 import {View} from 'react-native'
 import {
@@ -12,7 +12,7 @@ import {
   TextInput,
 } from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {
   Blockie,
   Expanded,
@@ -23,7 +23,6 @@ import {
 import {Color} from 'src/const'
 import {ISendFormValues, useValidators, useWeb3} from 'src/hooks'
 import {pushComfirmSend, showWalletScan} from 'src/navigation'
-import {IState} from 'src/redux/module'
 import {accountSelector, accountType} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {settingSelector} from 'src/redux/module/setting'
@@ -39,19 +38,13 @@ interface IGasInfo {
   safeLow: number
 }
 
-export const Send = ({componentId}: IProps) => {
+export function Send({componentId}: IProps) {
   const web3 = useWeb3()
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      currencyDetails: settingSelector.getCurrencyDetails(state),
-      currentAccount: accountSelector.getCurrentAccount(
-        state,
-      ) as entityType.IAccount,
-      fiatRate: accountSelector.getFiatRate(state),
-    }),
-    [],
-  )
-  const {currencyDetails, currentAccount, fiatRate} = useMappedState(mapState)
+  const currencyDetails = useSelector(settingSelector.getCurrencyDetails)
+  const currentAccount = useSelector(
+    accountSelector.getCurrentAccount,
+  ) as entityType.IAccount
+  const fiatRate = useSelector(accountSelector.getFiatRate)
   const {
     addressValidator,
     amountValidatorFactory,
@@ -59,9 +52,9 @@ export const Send = ({componentId}: IProps) => {
     required,
   } = useValidators()
 
-  const [gasInfo, setGasInfo] = React.useState<IGasInfo | null>(null)
-  const [showAdvancedOptions, setShowAdvancedOptions] = React.useState(false)
-  const [to, setTo] = React.useState('')
+  const [gasInfo, setGasInfo] = useState<IGasInfo | null>(null)
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false)
+  const [to, setTo] = useState('')
 
   const getAmountHelperText = (balance: string): string => {
     if (!balance) {
@@ -109,7 +102,7 @@ Fast: ${gasInfo.fast / 10} Gwei)`
     pushComfirmSend(componentId, {txParams})
   }
 
-  const amountInputRef = React.useRef<TextInput>(null)
+  const amountInputRef = useRef<TextInput>(null)
 
   const onSubmitEditingAmount = (): void => {
     if (!amountInputRef.current) {
@@ -118,7 +111,7 @@ Fast: ${gasInfo.fast / 10} Gwei)`
     amountInputRef.current.focus()
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     ;(async () => {
       try {
         const g = await gasStation.getGasInfo()

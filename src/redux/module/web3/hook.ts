@@ -1,5 +1,5 @@
 import {useCallback} from 'react'
-import {useDispatch} from 'redux-react-hook'
+import {useDispatch} from 'react-redux'
 import * as web3Action from 'src/redux/module/web3/action'
 
 export function useSetLatestBlockNumber() {

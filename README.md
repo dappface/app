@@ -32,6 +32,8 @@ $ npm run setup
 ```sh
 $ npm run ios
 $ npm run android
+
+$ npm run ios release:true # for Release build
 ```
 
 **Use different simulator**

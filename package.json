@@ -7,8 +7,6 @@
     "create-token-list": "node bin/token-list.js",
     "ios": "bundle exec fastlane ios dev",
     "ios:beta": "bundle exec fastlane ios beta",
-    "ios:device": "bundle exec fastlane ios dev device:true",
-    "ios:device:release": "bundle exec fastlane ios dev device:true release:true",
     "ios:certificates": "bundle exec fastlane ios certificates",
     "ios:register": "bundle exec fastlane ios register",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",

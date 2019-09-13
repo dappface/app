@@ -7,9 +7,9 @@ import {BottomAppBar} from 'src/components/screens/browser/bottom-app-bar'
 import {TabList} from 'src/components/screens/browser/tab-list'
 import {WebView} from 'src/components/screens/browser/web-view'
 import {DefaultTemplate} from 'src/components/templates'
-import {Size} from 'src/const'
 import {
   ISafeAreaPosition,
+  useBottomAppBarHeight,
   useBrowserManager,
   useDimensions,
   useHasBezel,
@@ -25,6 +25,7 @@ export interface IProps {
 }
 
 export function Browser({componentId}: IProps) {
+  const bottomAppBarHeight = useBottomAppBarHeight()
   const {scrollTo, tabListManager, webViewListRef} = useBrowserManager()
   const hasBezel = useHasBezel()
   const orientation = useOrientation()
@@ -86,9 +87,10 @@ export function Browser({componentId}: IProps) {
           getItemLayout={getItemLayout}
           renderItem={({item}) => (
             <StyledWebView
+              bottomAppBarHeight={bottomAppBarHeight}
               hasBezel={hasBezel}
               orientation={orientation}
-              saveAreaPosition={safeAreaPosition}
+              safeAreaPosition={safeAreaPosition}
               tab={item}
               window={window}
             />
@@ -120,6 +122,7 @@ const Container = styled.View<IContainerProps>`
 `
 
 interface IStyledWebViewProps {
+  bottomAppBarHeight: number
   hasBezel: boolean
   orientation: Orientation.orientation
   safeAreaPosition: ISafeAreaPosition
@@ -127,7 +130,9 @@ interface IStyledWebViewProps {
 }
 
 const StyledWebView = styled(WebView)<IStyledWebViewProps>`
-  padding-bottom: ${Size.BOTTOM_APP_BAR.HEIGHT};
+  ${({bottomAppBarHeight}) => `
+    padding-bottom: ${bottomAppBarHeight};
+  `}
 
   ${({window}) => `
     width: ${window.width};

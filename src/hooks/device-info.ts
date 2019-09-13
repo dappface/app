@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import DeviceInfo from 'react-native-device-info'
 
-const bezelModels = ['iPhone X', 'iPhone Xʀ']
+const bezeLesslModels = ['iPhone X', 'iPhone Xʀ']
 
 export function useHasBezel(): boolean {
   const [hasBezel, setHasBezel] = useState(true)
@@ -9,7 +9,7 @@ export function useHasBezel(): boolean {
   useEffect(() => {
     ;(async () => {
       const model = await DeviceInfo.getModel()
-      const result = bezelModels.includes(model)
+      const result = !bezeLesslModels.includes(model)
       setHasBezel(result)
     })()
   })

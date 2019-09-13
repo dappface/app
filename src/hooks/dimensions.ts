@@ -32,6 +32,17 @@ export function useSafeAreaPosition(): ISafeAreaPosition {
   }
 }
 
+export function useBottomAppBarHeight(): number {
+  const safeAreaPosition = useSafeAreaPosition()
+  return safeAreaPosition.bottom + 48
+}
+
+export function useBottomAppBarInitialTop(): number {
+  const bottomAppBarHeight = useBottomAppBarHeight()
+  const {screen: screenDimensions} = useDimensions()
+  return screenDimensions.height - bottomAppBarHeight
+}
+
 export interface IDimensions {
   screen: ScaledSize
   window: ScaledSize

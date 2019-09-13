@@ -7,6 +7,7 @@ import {Initialize} from 'src/components/screens/wallet/initialize'
 import {RecentActivity} from 'src/components/screens/wallet/recent-activity'
 import {TokenList} from 'src/components/screens/wallet/token-list'
 import {Color, Size} from 'src/const'
+import {useBottomAppBarHeight} from 'src/hooks'
 import {IState} from 'src/redux/module'
 import {accountSelector} from 'src/redux/module/account'
 import {settingSelector} from 'src/redux/module/setting'
@@ -25,6 +26,7 @@ export interface IProps {
 }
 
 export const Wallet = ({componentId}: IProps) => {
+  const bottomAppBarHeight = useBottomAppBarHeight()
   const mapState = React.useCallback(
     (state: IState) => ({
       isAccountExist: accountSelector.getIsAccountExist(state),
@@ -40,7 +42,7 @@ export const Wallet = ({componentId}: IProps) => {
   return (
     <Container>
       <StyledScrollView
-        contentContainerStyle={{paddingBottom: Size.BOTTOM_APP_BAR.HEIGHT}}>
+        contentContainerStyle={{paddingBottom: bottomAppBarHeight}}>
         <NetworkStatus>
           <Caption>{networkName}</Caption>
           <Caption>Latest Block: #{latestBlockNumber}</Caption>

@@ -16,6 +16,8 @@ export {useHasBezel} from './device-info'
 export {
   IDimensions,
   ISafeAreaPosition,
+  useBottomAppBarHeight,
+  useBottomAppBarInitialTop,
   useDimensions,
   useSafeAreaPosition,
 } from './dimensions'

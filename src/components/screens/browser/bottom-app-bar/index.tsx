@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react'
-import {Animated, StatusBar, StyleSheet} from 'react-native'
+import {Animated, StatusBar} from 'react-native'
 import Interactable from 'react-native-interactable'
 import {Card} from 'react-native-paper'
 import {useMappedState} from 'redux-react-hook'
@@ -7,10 +7,13 @@ import {NavigationBar} from 'src/components/screens/browser/bottom-app-bar/navig
 import {PullBar} from 'src/components/screens/browser/bottom-app-bar/pull-bar'
 import {SignPrompt} from 'src/components/screens/browser/bottom-app-bar/sign-prompt'
 import {Wallet} from 'src/components/screens/wallet'
-import {Color, Size, StatusBarStyle} from 'src/const'
+import {Color, StatusBarStyle} from 'src/const'
 import {
+  IDimensions,
+  useBottomAppBarInitialTop,
   useBottomAppBarManager,
   useBrowserManager,
+  useDimensions,
   useSafeAreaPosition,
 } from 'src/hooks'
 import {IState} from 'src/redux/module'
@@ -23,8 +26,10 @@ export interface IProps {
 }
 
 export function BottomAppBar({componentId}: IProps) {
+  const bottomAppBarInitialTop = useBottomAppBarInitialTop()
   const {bottomAppBarRef, closeBottomAppBar} = useBottomAppBarManager()
   const {respondData} = useBrowserManager()
+  const {screen: screenDimensions} = useDimensions()
   const safeAreaPosition = useSafeAreaPosition()
 
   const mapState = useCallback(
@@ -75,17 +80,13 @@ export function BottomAppBar({componentId}: IProps) {
     <>
       <StatusBar barStyle={statusBarStyle} />
       {isOpen ? (
-        <ShadowTouchable onPress={closeBottomAppBar}>
-          <Animated.View
-            style={[
-              styles.shadow,
-              {
-                opacity: position.interpolate({
-                  inputRange: [0, Size.BOTTOM_APP_BAR.INITIAL_TOP],
-                  outputRange: [1, 0],
-                }),
-              },
-            ]}
+        <ShadowTouchable
+          onPress={closeBottomAppBar}
+          screenDimensions={screenDimensions}>
+          <StyledAnimatedView
+            as={Animated.View}
+            bottomAppBarInitalTop={bottomAppBarInitialTop}
+            screenDimensions={screenDimensions}
           />
         </ShadowTouchable>
       ) : null}
@@ -93,23 +94,23 @@ export function BottomAppBar({componentId}: IProps) {
         alertAreas={[
           {
             id: 'basePosition',
-            influenceArea: {top: Size.BOTTOM_APP_BAR.INITIAL_TOP},
+            influenceArea: {top: bottomAppBarInitialTop},
           },
           {id: 'top', influenceArea: {top: safeAreaPosition.top + 1}},
         ]}
         animatedNativeDriver
         animatedValueY={position}
         boundaries={{top: safeAreaPosition.top}}
-        initialPosition={{y: Size.BOTTOM_APP_BAR.INITIAL_TOP}}
+        initialPosition={{y: bottomAppBarInitialTop}}
         onAlert={onAlert}
         ref={bottomAppBarRef}
         snapPoints={[
-          {y: Size.BOTTOM_APP_BAR.INITIAL_TOP},
-          {y: Size.SCREEN.HEIGHT / 2},
+          {y: bottomAppBarInitialTop},
+          {y: screenDimensions.height / 2},
           {y: safeAreaPosition.top},
         ]}
         verticalOnly>
-        <BottomSheet elevation={8}>
+        <BottomSheet elevation={8} screenDimensions={screenDimensions}>
           <NavigationBar isOpen={isOpen} onMore={onMore} position={position} />
           <PullBar />
           {signRequest ? <SignPrompt /> : <Wallet componentId={componentId} />}
@@ -121,26 +122,54 @@ export function BottomAppBar({componentId}: IProps) {
 
 const position = new Animated.Value(0)
 
-const styles = StyleSheet.create({
-  shadow: {
-    backgroundColor: Color.MOSTLY_BLACK,
-    height: Size.SCREEN.HEIGHT,
-    position: 'absolute',
-    width: Size.SCREEN.WIDTH,
-  },
-})
+interface IBottomSheetProps {
+  screenDimensions: IDimensions['screen']
+}
 
-const BottomSheet = styled(Card)`
+const BottomSheet = styled(Card)<IBottomSheetProps>`
   background-color: ${Color.PRIMARY};
   border-radius: 16;
-  height: ${Size.SCREEN.HEIGHT};
-  width: ${Size.SCREEN.WIDTH};
+  ${({screenDimensions}) => `
+    height: ${screenDimensions.height};
+    width: ${screenDimensions.width};
+  `}
 `
 
-const ShadowTouchable = styled.TouchableWithoutFeedback`
-  height: ${Size.SCREEN.HEIGHT};
+interface IShadowTouchableProps {
+  screenDimensions: IDimensions['screen']
+}
+
+const ShadowTouchable = styled.TouchableWithoutFeedback<IShadowTouchableProps>`
   position: absolute;
-  width: ${Size.SCREEN.WIDTH};
+
+  ${({screenDimensions}) => `
+    height: ${screenDimensions.height};
+    width: ${screenDimensions.width};
+  `}
+`
+
+interface IStyledAnimatedViewProps {
+  bottomAppBarInitialTop: number
+  screenDimensions: IDimensions['screen']
+}
+
+const StyledAnimatedView = styled.View<IStyledAnimatedViewProps>`
+  background-color: ${Color.MOSTLY_BLACK};
+  position: absolute;
+
+  ${({screenDimensions}) => `
+    height: ${screenDimensions.height};
+    width: ${screenDimensions.width};
+  `};
+
+  ${({bottomAppBarInitalTop}) => {
+    const opacity = position.interpolate({
+      inputRange: [0, bottomAppBarInitalTop],
+      outputRange: [1, 0],
+    })
+
+    return `opacity: ${opacity.__getValue()};`
+  }}
 `
 
 const StyledInteractableView = styled(Interactable.View)`

@@ -1,4 +1,5 @@
-import * as React from 'react'
+import React, {useMemo, useState} from 'react'
+import {useSelector} from 'react-redux'
 import {TextInputProps} from 'react-native'
 import {
   Caption,
@@ -7,27 +8,20 @@ import {
   IconButton,
   ProgressBar,
 } from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
 import {CenteredColumn, Padding} from 'src/components/atoms'
 import {Editor} from 'src/components/screens/browser/address-bar/editor'
 import {Color, Size} from 'src/const'
 import {useBrowserManager} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {browserSelector} from 'src/redux/module/browser'
 import styled from 'styled-components/native'
 
-export const AddressBar = () => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      isLoading: browserSelector.getIsLoading(state),
-      loadingProgress: browserSelector.getLoadingProgress(state),
-      url: browserSelector.getUrl(state),
-    }),
-    [],
-  )
-  const {isLoading, loadingProgress, url} = useMappedState(mapState)
+export function AddressBar() {
+  const isLoading = useSelector(browserSelector.getIsLoading)
+  const loadingProgress = useSelector(browserSelector.getLoadingProgress)
+  const url = useSelector(browserSelector.getUrl)
+
   const {onSearch, onStopLoading, onReload} = useBrowserManager()
-  const hostname = React.useMemo(() => {
+  const hostname = useMemo(() => {
     if (url === 'localhost') {
       return url
     }
@@ -36,7 +30,7 @@ export const AddressBar = () => {
     }
     return url.split('/')[2]
   }, [url])
-  const [isEditing, setIsEditing] = React.useState(false)
+  const [isEditing, setIsEditing] = useState(false)
 
   const onSubmitEditing: TextInputProps['onSubmitEditing'] = ({
     nativeEvent,

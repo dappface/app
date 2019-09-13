@@ -5,6 +5,7 @@ import {Navigation} from 'react-native-navigation'
 import Orientation from 'react-native-orientation'
 import {Provider as PaperProvider} from 'react-native-paper'
 import {PersistGate} from 'redux-persist/integration/react'
+import {Provider} from 'react-redux'
 import {client} from 'src/apollo'
 import {Snackbar} from 'src/components/atoms'
 import {Browser} from 'src/components/screens/browser'
@@ -20,7 +21,7 @@ import {
   useInitializedWeb3,
   Web3Context,
 } from 'src/hooks'
-import {persistor} from 'src/redux/store'
+import {persistor, store} from 'src/redux/store'
 
 export function registerScreens(): void {
   Navigation.registerComponent(Screen.BROWSER, wrapWithProvider(Browser))
@@ -90,15 +91,17 @@ function wrapWithProvider(Component: any, skipContext = false) {
     return (
       <Suspense fallback={<Error />}>
         <ApolloProvider client={client}>
-          <PaperProvider theme={PaperTheme}>
-            <PersistGate loading={null} persistor={persistor}>
-              {skipContext ? (
-                <Component {...props} />
-              ) : (
-                <WithContext Component={Component} {...props} />
-              )}
-            </PersistGate>
-          </PaperProvider>
+          <Provider store={store}>
+            <PaperProvider theme={PaperTheme}>
+              <PersistGate loading={null} persistor={persistor}>
+                {skipContext ? (
+                  <Component {...props} />
+                ) : (
+                  <WithContext Component={Component} {...props} />
+                )}
+              </PersistGate>
+            </PaperProvider>
+          </Provider>
         </ApolloProvider>
       </Suspense>
     )

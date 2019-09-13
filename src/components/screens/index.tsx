@@ -1,11 +1,10 @@
 import {ApolloProvider} from '@apollo/react-hooks'
-import * as React from 'react'
+import React, {Suspense, useEffect} from 'react'
 import {View} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import Orientation from 'react-native-orientation'
 import {Provider as PaperProvider} from 'react-native-paper'
 import {PersistGate} from 'redux-persist/integration/react'
-import {StoreContext} from 'redux-react-hook'
 import {client} from 'src/apollo'
 import {Snackbar} from 'src/components/atoms'
 import {Browser} from 'src/components/screens/browser'
@@ -21,9 +20,9 @@ import {
   useInitializedWeb3,
   Web3Context,
 } from 'src/hooks'
-import {persistor, store} from 'src/redux/store'
+import {persistor} from 'src/redux/store'
 
-export function registerScreens() {
+export function registerScreens(): void {
   Navigation.registerComponent(Screen.BROWSER, wrapWithProvider(Browser))
   Navigation.registerComponent(
     Screen.SETTINGS.BACKUP.BASE,
@@ -80,17 +79,17 @@ export function registerScreens() {
   Navigation.registerComponent(Screen.LINKS, wrapWithProvider(Links))
 }
 
-const Error = () => <View />
+function Error() {
+  return <View />
+}
 
-const wrapWithProvider = (Component: any, skipContext = false) => () => (
-  props: any,
-) => {
-  useNavigationListenerEffect()
+function wrapWithProvider(Component: any, skipContext = false) {
+  return () => (props: any) => {
+    useNavigationListenerEffect()
 
-  return (
-    <React.Suspense fallback={<Error />}>
-      <ApolloProvider client={client}>
-        <StoreContext.Provider value={store}>
+    return (
+      <Suspense fallback={<Error />}>
+        <ApolloProvider client={client}>
           <PaperProvider theme={PaperTheme}>
             <PersistGate loading={null} persistor={persistor}>
               {skipContext ? (
@@ -100,10 +99,10 @@ const wrapWithProvider = (Component: any, skipContext = false) => () => (
               )}
             </PersistGate>
           </PaperProvider>
-        </StoreContext.Provider>
-      </ApolloProvider>
-    </React.Suspense>
-  )
+        </ApolloProvider>
+      </Suspense>
+    )
+  }
 }
 
 function WithContext(props: any) {
@@ -130,7 +129,7 @@ function WithContext(props: any) {
 }
 
 function useNavigationListenerEffect() {
-  React.useEffect(() => {
+  useEffect(() => {
     const didAppearListener = Navigation.events().registerComponentDidAppearListener(
       ({componentName}) => {
         if (componentName !== Screen.BROWSER) {

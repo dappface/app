@@ -1,23 +1,16 @@
-import * as React from 'react'
+import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
 import Ripple from 'react-native-material-ripple'
 import {List, RadioButton} from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Currency as CurrencyEnum} from 'src/const'
-import {IState} from 'src/redux/module'
 import {settingHook, settingSelector} from 'src/redux/module/setting'
 
-export const Currency = () => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      activeItem: settingSelector.getCurrency(state),
-    }),
-    [],
-  )
-  const {activeItem} = useMappedState(mapState)
+export function Currency() {
+  const activeItem = useSelector(settingSelector.getCurrency)
   const {setCurrency} = settingHook.useSettingManager()
 
-  const onSelectFactory = React.useCallback(
+  const onSelectFactory = useCallback(
     (currency: CurrencyEnum) => () => {
       setCurrency(currency)
     },

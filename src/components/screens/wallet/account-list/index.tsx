@@ -1,11 +1,10 @@
-import * as React from 'react'
+import React, {useCallback, useEffect, useRef} from 'react'
 import {FlatList, NativeScrollEvent, NativeSyntheticEvent} from 'react-native'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Item} from 'src/components/screens/wallet/account-list/item'
 import {Size} from 'src/const'
 import {useDimensions} from 'src/hooks'
 import {pushReceive, pushSend, showBackup} from 'src/navigation'
-import {IState} from 'src/redux/module'
 import {accountHook, accountSelector} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {uiHook, uiType} from 'src/redux/module/ui'
@@ -15,43 +14,39 @@ export interface IProps {
   componentId: string
 }
 
-export const AccountList = ({componentId}: IProps) => {
-  const listRef = React.useRef<FlatList<entityType.IAccount> | null>(null)
+export function AccountList({componentId}: IProps) {
+  const listRef = useRef<FlatList<entityType.IAccount> | null>(null)
 
   const {
     window: {width},
   } = useDimensions()
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      accounts: accountSelector.getAccounts(state),
-      currentAccountIndex: accountSelector.getCurrentAccountIndex(state),
-      isBackedUp: accountSelector.getIsBackedUp(state),
-    }),
-    [],
+  const accounts = useSelector(accountSelector.getAccounts)
+  const currentAccountIndex = useSelector(
+    accountSelector.getCurrentAccountIndex,
   )
-  const {accounts, currentAccountIndex, isBackedUp} = useMappedState(mapState)
+  const isBackedUp = useSelector(accountSelector.getIsBackedUp)
   const {setCurrentAccountAddressByIndex} = accountHook.useAccountManager()
   const setBottomDrawer = uiHook.useSetBottomDrawer()
 
-  const onPressBackup = React.useCallback(() => {
+  const onPressBackup = useCallback(() => {
     showBackup()
   }, [])
 
-  const onPressOption = React.useCallback(() => {
+  const onPressOption = useCallback(() => {
     setBottomDrawer({
       type: uiType.BottomDrawerType.AccountOptions,
     })
   }, [setBottomDrawer])
 
-  const onPressReceive = React.useCallback(() => {
+  const onPressReceive = useCallback(() => {
     pushReceive(componentId)
   }, [componentId])
 
-  const onPressSend = React.useCallback(() => {
+  const onPressSend = useCallback(() => {
     pushSend(componentId)
   }, [componentId])
 
-  const onMomentumScrollEnd = React.useCallback(
+  const onMomentumScrollEnd = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       const offsetX = e.nativeEvent.contentOffset.x
       const newIndex = offsetX / width
@@ -63,7 +58,7 @@ export const AccountList = ({componentId}: IProps) => {
     [setCurrentAccountAddressByIndex, width],
   )
 
-  const getItemLayout = React.useCallback(
+  const getItemLayout = useCallback(
     (
       _: any,
       index: number,
@@ -75,11 +70,11 @@ export const AccountList = ({componentId}: IProps) => {
     [width],
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentAccountAddressByIndex(0)
   }, [setCurrentAccountAddressByIndex])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentAccountIndex < 0 || !listRef.current) {
       return
     }

@@ -1,14 +1,13 @@
 import {ITokenCandidate} from 'lib/token-list.json'
-import * as React from 'react'
+import React, {useEffect, useState} from 'react'
 import Ripple from 'react-native-material-ripple'
 import {Avatar, Colors, List} from 'react-native-paper'
 import Reactotron from 'reactotron-react-native'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {HorizontalPadding} from 'src/components/atoms'
 import {useTokenSearchManager} from 'src/components/screens/wallet/token-search/hooks'
 import {BALANCE_OF, Size} from 'src/const'
 import {useWeb3} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {accountSelector} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {imageUtil} from 'src/utils'
@@ -18,22 +17,16 @@ interface IProps {
   item: ITokenCandidate
 }
 
-export const Item = ({item}: IProps) => {
+export function Item({item}: IProps) {
   const web3 = useWeb3()
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      currentAccount: accountSelector.getCurrentAccount(
-        state,
-      ) as entityType.IAccount,
-    }),
-    [],
-  )
-  const {currentAccount} = useMappedState(mapState)
+  const currentAccount = useSelector(
+    accountSelector.getCurrentAccount,
+  ) as entityType.IAccount
   const {onSelectFactory} = useTokenSearchManager()
-  const [balance, setBalance] = React.useState('--')
-  const [imageSource, setImageSource] = React.useState('')
+  const [balance, setBalance] = useState('--')
+  const [imageSource, setImageSource] = useState('')
 
-  React.useEffect(() => {
+  useEffect(() => {
     ;(async () => {
       const b = await web3.eth.call({
         data: BALANCE_OF + currentAccount.address.slice(2),
@@ -43,7 +36,7 @@ export const Item = ({item}: IProps) => {
     })()
   }, [currentAccount.address, item.address, web3.eth])
 
-  React.useEffect(() => {
+  useEffect(() => {
     ;(async () => {
       try {
         const url = `https://raw.githubusercontent.com/TrustWallet/tokens/master/tokens/${item.address}.png`

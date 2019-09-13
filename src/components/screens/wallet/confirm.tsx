@@ -1,15 +1,14 @@
 import BN from 'bignumber.js'
-import * as React from 'react'
+import React, {useMemo} from 'react'
 import {Alert} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import {Button, Text} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Blockie} from 'src/components/atoms'
 import {BiometryType, Size} from 'src/const'
 import {useWeb3} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {
   accountHook,
   accountSelector,
@@ -25,22 +24,16 @@ export interface IProps {
   txParams: accountType.ITransactionParams
 }
 
-export const Confirm = ({componentId, txParams}: IProps) => {
+export function Confirm({componentId, txParams}: IProps) {
   const web3 = useWeb3()
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      currencyDetails: settingSelector.getCurrencyDetails(state),
-      currentAccount: accountSelector.getCurrentAccount(
-        state,
-      ) as entityType.IAccount,
-      fiatRate: accountSelector.getFiatRate(state),
-    }),
-    [],
-  )
-  const {currencyDetails, currentAccount, fiatRate} = useMappedState(mapState)
+  const currencyDetails = useSelector(settingSelector.getCurrencyDetails)
+  const currentAccount = useSelector(
+    accountSelector.getCurrentAccount,
+  ) as entityType.IAccount
+  const fiatRate = useSelector(accountSelector.getFiatRate)
   const signAndSendTx = accountHook.useSignAndSendTransaction()
 
-  const onPressSend = async () => {
+  async function onPressSend() {
     try {
       const biometryType = await TouchID.isSupported()
       if (
@@ -62,17 +55,17 @@ export const Confirm = ({componentId, txParams}: IProps) => {
     }
   }
 
-  const ether = React.useMemo(
-    () => web3.utils.fromWei(txParams.value, 'ether'),
-    [txParams.value, web3.utils],
-  )
+  const ether = useMemo(() => web3.utils.fromWei(txParams.value, 'ether'), [
+    txParams.value,
+    web3.utils,
+  ])
 
-  const maxGas = React.useMemo(
+  const maxGas = useMemo(
     () => new BN(txParams.gasLimit).multipliedBy(txParams.gasLimit),
     [txParams],
   )
 
-  const maxTotal = React.useMemo(
+  const maxTotal = useMemo(
     () =>
       web3.utils.fromWei(
         new BN(txParams.value).plus(maxGas).toString(),
@@ -81,7 +74,7 @@ export const Confirm = ({componentId, txParams}: IProps) => {
     [maxGas, txParams.value, web3.utils],
   )
 
-  const fiat = React.useMemo(
+  const fiat = useMemo(
     () =>
       new BN(fiatRate)
         .multipliedBy(ether)

@@ -1,27 +1,20 @@
-import * as React from 'react'
+import React, {useCallback} from 'react'
 import {Clipboard} from 'react-native'
 import {Button, Text} from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Padding, QRCode} from 'src/components/atoms'
-import {IState} from 'src/redux/module'
 import {accountSelector} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {uiHook} from 'src/redux/module/ui'
 import styled from 'styled-components/native'
 
-export const Receive = () => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      currentAccount: accountSelector.getCurrentAccount(
-        state,
-      ) as entityType.IAccount,
-    }),
-    [],
-  )
-  const {currentAccount} = useMappedState(mapState)
+export function Receive() {
+  const currentAccount = useSelector(
+    accountSelector.getCurrentAccount,
+  ) as entityType.IAccount
   const {notifyAddressCopied} = uiHook.useSnackbarManager()
 
-  const onPressCopy = React.useCallback(() => {
+  const onPressCopy = useCallback(() => {
     Clipboard.setString(currentAccount.address)
     notifyAddressCopied()
   }, [currentAccount.address, notifyAddressCopied])

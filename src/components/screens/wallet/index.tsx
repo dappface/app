@@ -1,6 +1,6 @@
-import * as React from 'react'
+import React from 'react'
 import {Caption} from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {AccountList} from 'src/components/screens/wallet/account-list'
 import {FailedTx} from 'src/components/screens/wallet/failed-tx'
 import {Initialize} from 'src/components/screens/wallet/initialize'
@@ -8,7 +8,6 @@ import {RecentActivity} from 'src/components/screens/wallet/recent-activity'
 import {TokenList} from 'src/components/screens/wallet/token-list'
 import {Color, Size} from 'src/const'
 import {useBottomAppBarHeight} from 'src/hooks'
-import {IState} from 'src/redux/module'
 import {accountSelector} from 'src/redux/module/account'
 import {settingSelector} from 'src/redux/module/setting'
 import {web3Selector} from 'src/redux/module/web3'
@@ -25,19 +24,11 @@ export interface IProps {
   componentId: string
 }
 
-export const Wallet = ({componentId}: IProps) => {
+export function Wallet({componentId}: IProps) {
   const bottomAppBarHeight = useBottomAppBarHeight()
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      isAccountExist: accountSelector.getIsAccountExist(state),
-      latestBlockNumber: web3Selector.getLatestBlockNumber(state),
-      networkName: settingSelector.getNetworkName(state),
-    }),
-    [],
-  )
-  const {isAccountExist, latestBlockNumber, networkName} = useMappedState(
-    mapState,
-  )
+  const isAccountExist = useSelector(accountSelector.getIsAccountExist)
+  const latestBlockNumber = useSelector(web3Selector.getLatestBlockNumber)
+  const networkName = useSelector(settingSelector.getNetworkName)
 
   return (
     <Container>

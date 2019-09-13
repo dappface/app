@@ -1,11 +1,10 @@
-import * as React from 'react'
+import React, {useCallback} from 'react'
 import {Navigation} from 'react-native-navigation'
 import {Colors, List} from 'react-native-paper'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {ModalTemplate} from 'src/components/templates'
 import * as Navigator from 'src/navigation'
 import {useNukeRedux} from 'src/redux'
-import {IState} from 'src/redux/module'
 import {accountSelector} from 'src/redux/module/account'
 import {settingSelector} from 'src/redux/module/setting'
 
@@ -18,45 +17,33 @@ export interface IProps {
   componentId: string
 }
 
-export const Settings = ({componentId}: IProps) => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      currency: settingSelector.getCurrency(state),
-      isBackedUp: accountSelector.getIsBackedUp(state),
-      mnemonic: accountSelector.getMnemonic(state),
-      network: settingSelector.getNetworkName(state),
-      searchEngine: settingSelector.getSearchEngineName(state),
-    }),
-    [],
-  )
-  const {
-    currency,
-    isBackedUp,
-    mnemonic,
-    network,
-    searchEngine,
-  } = useMappedState(mapState)
+export function Settings({componentId}: IProps) {
+  const currency = useSelector(settingSelector.getCurrency)
+  const isBackedUp = useSelector(accountSelector.getIsBackedUp)
+  const mnemonic = useSelector(accountSelector.getMnemonic)
+  const network = useSelector(settingSelector.getNetworkName)
+  const searchEngine = useSelector(settingSelector.getSearchEngine)
   const nukeRedux = useNukeRedux()
 
-  const onPressClearAll = React.useCallback(async (): Promise<void> => {
+  const onPressClearAll = useCallback(async (): Promise<void> => {
     await Navigation.dismissAllModals()
     await Navigator.goToBrowser()
     nukeRedux()
   }, [nukeRedux])
 
-  const onPressCurrency = React.useCallback((): void => {
+  const onPressCurrency = useCallback((): void => {
     Navigator.pushCurrencySetting(componentId)
   }, [componentId])
 
-  const onPressNetwork = React.useCallback((): void => {
+  const onPressNetwork = useCallback((): void => {
     Navigator.pushNetworkSetting(componentId)
   }, [componentId])
 
-  const onPressRecoveryPhrase = React.useCallback((): void => {
+  const onPressRecoveryPhrase = useCallback((): void => {
     Navigator.pushBackup(componentId)
   }, [componentId])
 
-  const onPressSearchEngine = React.useCallback((): void => {
+  const onPressSearchEngine = useCallback((): void => {
     Navigator.pushSearchEngineSetting(componentId)
   }, [componentId])
 

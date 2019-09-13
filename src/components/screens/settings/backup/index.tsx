@@ -1,15 +1,14 @@
-import * as React from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {Alert} from 'react-native'
 import {Navigation} from 'react-native-navigation'
 import {Button} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
-import {useMappedState} from 'redux-react-hook'
+import {useSelector} from 'react-redux'
 import {Padding} from 'src/components/atoms'
 import {WordList} from 'src/components/organisms'
 import {ModalTemplate} from 'src/components/templates'
 import {BiometryType, Screen, Size} from 'src/const'
 import {pushQuiz} from 'src/navigation'
-import {IState} from 'src/redux/module'
 import {accountSelector} from 'src/redux/module/account'
 
 export {Quiz} from 'src/components/screens/settings/backup/quiz'
@@ -19,17 +18,11 @@ export interface IProps {
   isModal?: boolean
 }
 
-export const Backup = ({componentId, isModal = false}: IProps) => {
-  const mapState = React.useCallback(
-    (state: IState) => ({
-      mnemonic: accountSelector.getMnemonic(state) as string,
-    }),
-    [],
-  )
-  const {mnemonic} = useMappedState(mapState)
-  const [mnemonicList, setMnemonicList] = React.useState<string[]>([])
+export function Backup({componentId, isModal = false}: IProps) {
+  const mnemonic = useSelector(accountSelector.getMnemonic) as string
+  const [mnemonicList, setMnemonicList] = useState<string[]>([])
 
-  const onPressUnlock = React.useCallback(async () => {
+  const onPressUnlock = useCallback(async () => {
     try {
       const biometryType = await TouchID.isSupported()
       if (
@@ -49,11 +42,11 @@ export const Backup = ({componentId, isModal = false}: IProps) => {
     }
   }, [mnemonic])
 
-  const onPressWrittenDown = React.useCallback(() => {
+  const onPressWrittenDown = useCallback(() => {
     pushQuiz(componentId, {isModal})
   }, [componentId, isModal])
 
-  React.useEffect(() => {
+  useEffect(() => {
     const listener = Navigation.events().registerComponentDidDisappearListener(
       ({componentName}) => {
         if (componentName !== Screen.SETTINGS.BACKUP.BASE) {
@@ -67,7 +60,7 @@ export const Backup = ({componentId, isModal = false}: IProps) => {
     }
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTimeout(() => {
       Alert.alert(
         'Screenshots are not secure',

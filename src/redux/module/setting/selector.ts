@@ -8,14 +8,13 @@ import {
   SearchEngine,
   SearchEngines,
 } from 'src/const'
-import {IState as IAllState} from 'src/redux/module'
+import {IState} from 'src/redux/module'
 
-export const getCurrency = (state: IAllState): Currency =>
-  state.setting.currency
+export const getCurrency = (state: IState): Currency => state.setting.currency
 
-export const getNetwork = (state: IAllState): Network => state.setting.network
+export const getNetwork = (state: IState): Network => state.setting.network
 
-export const getSearchEngine = (state: IAllState): SearchEngine =>
+export const getSearchEngine = (state: IState): SearchEngine =>
   state.setting.searchEngine
 
 export const getCurrencyDetails = createSelector(

@@ -1,4 +1,4 @@
-import {IState as IAllState} from 'src/redux/module'
+import {IState} from 'src/redux/module'
 
-export const getLatestBlockNumber = ({web3}: IAllState): number =>
+export const getLatestBlockNumber = ({web3}: IState): number =>
   web3.latestBlockNumber

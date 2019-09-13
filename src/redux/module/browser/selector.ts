@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect'
 import {SearchEngine, SearchEngines} from 'src/const'
-import {IState as IAllState} from 'src/redux/module'
+import {IState} from 'src/redux/module'
 import {accountSelector} from 'src/redux/module/account'
 import {bookmarkSelector} from 'src/redux/module/bookmark'
 import * as browserType from 'src/redux/module/browser/type'
@@ -8,13 +8,13 @@ import {entitySelector, entityType} from 'src/redux/module/entity'
 import {settingSelector} from 'src/redux/module/setting'
 import {tabType} from 'src/redux/module/tab'
 
-export const getActiveTabId = (state: IAllState): string | undefined =>
+export const getActiveTabId = (state: IState): string | undefined =>
   state.browser.activeTabId
 
-export const getTabIds = (state: IAllState): string[] => state.browser.tabIds
+export const getTabIds = (state: IState): string[] => state.browser.tabIds
 
 export const getOpenRequest = (
-  state: IAllState,
+  state: IState,
 ): browserType.IOpenRequest | undefined => state.browser.openRequest
 
 export const getActiveTabIndex = createSelector(

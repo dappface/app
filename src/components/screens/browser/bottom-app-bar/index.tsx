@@ -83,10 +83,17 @@ export function BottomAppBar({componentId}: IProps) {
         <ShadowTouchable
           onPress={closeBottomAppBar}
           screenDimensions={screenDimensions}>
-          <StyledAnimatedView
-            as={Animated.View}
-            bottomAppBarInitalTop={bottomAppBarInitialTop}
-            screenDimensions={screenDimensions}
+          <Animated.View
+            style={{
+              backgroundColor: Color.MOSTLY_BLACK,
+              position: 'absolute',
+              height: screenDimensions.height,
+              width: screenDimensions.width,
+              opacity: position.interpolate({
+                inputRange: [0, bottomAppBarInitialTop],
+                outputRange: [1, 0],
+              }),
+            }}
           />
         </ShadowTouchable>
       ) : null}
@@ -146,30 +153,6 @@ const ShadowTouchable = styled.TouchableWithoutFeedback<IShadowTouchableProps>`
     height: ${screenDimensions.height};
     width: ${screenDimensions.width};
   `}
-`
-
-interface IStyledAnimatedViewProps {
-  bottomAppBarInitialTop: number
-  screenDimensions: IDimensions['screen']
-}
-
-const StyledAnimatedView = styled.View<IStyledAnimatedViewProps>`
-  background-color: ${Color.MOSTLY_BLACK};
-  position: absolute;
-
-  ${({screenDimensions}) => `
-    height: ${screenDimensions.height};
-    width: ${screenDimensions.width};
-  `};
-
-  ${({bottomAppBarInitalTop}) => {
-    const opacity = position.interpolate({
-      inputRange: [0, bottomAppBarInitalTop],
-      outputRange: [1, 0],
-    })
-
-    return `opacity: ${opacity.__getValue()};`
-  }}
 `
 
 const StyledInteractableView = styled(Interactable.View)`

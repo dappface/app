@@ -1,30 +1,28 @@
 import {createSelector} from 'reselect'
-import {IState as IAllState} from 'src/redux/module'
+import {IState} from 'src/redux/module'
 import * as accountType from 'src/redux/module/account/type'
 import {entitySelector, entityType} from 'src/redux/module/entity'
 
-export const getCurrentAccountAddress = (
-  state: IAllState,
-): string | undefined => state.account.currentAccountAddress
+export const getCurrentAccountAddress = (state: IState): string | undefined =>
+  state.account.currentAccountAddress
 
-export const getDefaultAccountAddress = (
-  state: IAllState,
-): string | undefined => state.account.defaultAccountAddress
+export const getDefaultAccountAddress = (state: IState): string | undefined =>
+  state.account.defaultAccountAddress
 
 export const getFailedTransactions = (
-  state: IAllState,
+  state: IState,
 ): accountType.ITransactions => state.account.failedTransactions
 
-export const getFiatRate = (state: IAllState): string => state.account.fiatRate
+export const getFiatRate = (state: IState): string => state.account.fiatRate
 
-export const getIsBackedUp = (state: IAllState): boolean =>
+export const getIsBackedUp = (state: IState): boolean =>
   state.account.isBackedUp
 
-export const getMnemonic = (state: IAllState): string | undefined =>
+export const getMnemonic = (state: IState): string | undefined =>
   state.account.mnemonic
 
 export const getSignRequest = (
-  state: IAllState,
+  state: IState,
 ): accountType.ISignRequest | undefined => state.account.signRequest
 
 export const getIsAccountExist = createSelector(

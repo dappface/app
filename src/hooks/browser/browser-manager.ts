@@ -56,7 +56,7 @@ export function useInitializedBrowserManager(): IBrowserManager {
     ),
   )
 
-  const goBack: IBrowserManager['goBack'] = () => {
+  const goBack = useCallback<IBrowserManager['goBack']>(() => {
     if (!activeTabId || !webViewRefs.current) {
       return
     }
@@ -65,9 +65,9 @@ export function useInitializedBrowserManager(): IBrowserManager {
       return
     }
     r.goBack()
-  }
+  }, [activeTabId])
 
-  const goForward: IBrowserManager['goForward'] = () => {
+  const goForward = useCallback<IBrowserManager['goForward']>(() => {
     if (!activeTabId || !webViewRefs.current) {
       return
     }
@@ -76,18 +76,18 @@ export function useInitializedBrowserManager(): IBrowserManager {
       return
     }
     r.goForward()
-  }
+  }, [activeTabId])
 
-  const scrollTo: IBrowserManager['scrollTo'] = index => {
+  const scrollTo = useCallback<IBrowserManager['scrollTo']>(index => {
     if (!webViewListRef.current) {
       return
     }
     webViewListRef.current.scrollToIndex({index})
-  }
+  }, [])
 
   const tabListManager = tabHook.useTabListManager(scrollTo)
 
-  const onReload: IBrowserManager['onReload'] = () => {
+  const onReload = useCallback<IBrowserManager['onReload']>(() => {
     if (!activeTabId || !webViewRefs.current) {
       return
     }
@@ -96,7 +96,7 @@ export function useInitializedBrowserManager(): IBrowserManager {
       return
     }
     r.reload()
-  }
+  }, [activeTabId])
 
   const queryToUrl = useCallback(
     (query: string) => {
@@ -128,17 +128,18 @@ export function useInitializedBrowserManager(): IBrowserManager {
   )
 
   const openLink = useCallback<IBrowserManager['openLink']>(
-    async (url, openWithNewTab = false) => {
+    (url, openWithNewTab = false) => {
       let tab
       if (openWithNewTab) {
-        tab = await tabListManager.addTab()
+        tab = tabListManager.addTab()
       }
       setOpenRequest({
         tabId: tab ? tab.id : (activeTabId as string),
         url,
       })
     },
-    [activeTabId, setOpenRequest, tabListManager],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeTabId, setOpenRequest, tabListManager.addTab],
   )
 
   const onSearch = useCallback<IBrowserManager['onSearch']>(
@@ -149,7 +150,7 @@ export function useInitializedBrowserManager(): IBrowserManager {
     [openLink, queryToUrl],
   )
 
-  const onStopLoading: IBrowserManager['onStopLoading'] = () => {
+  const onStopLoading = useCallback<IBrowserManager['onStopLoading']>(() => {
     if (!activeTabId || !webViewRefs.current) {
       return
     }
@@ -159,27 +160,26 @@ export function useInitializedBrowserManager(): IBrowserManager {
     }
     setLoadingProgress(activeTabId, 0)
     r.stopLoading()
-  }
+  }, [activeTabId, setLoadingProgress])
 
-  const respondData: IBrowserManager['respondData'] = (
-    tabId,
-    callbackId,
-    data,
-  ) => {
-    if (!webViewRefs.current) {
-      return
-    }
-    const r = webViewRefs.current[tabId].current
-    if (!r) {
-      return
-    }
-    r.injectJavaScript(`
+  const respondData = useCallback<IBrowserManager['respondData']>(
+    (tabId, callbackId, data) => {
+      if (!webViewRefs.current) {
+        return
+      }
+      const r = webViewRefs.current[tabId].current
+      if (!r) {
+        return
+      }
+      r.injectJavaScript(`
       if (window.dappface) {
         window.dappface.respondData('${callbackId}', '${JSON.stringify(data)}');
       };
       true;
     `)
-  }
+    },
+    [],
+  )
 
   useEffect(() => {
     // @ts-ignore

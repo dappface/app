@@ -57,6 +57,7 @@ export function RecentActivity() {
     } catch (error) {
       setTransactions(TransactionType.FetchFailed)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAccount.address, fetchTransactions, networkId])
 
   useEffect(() => {

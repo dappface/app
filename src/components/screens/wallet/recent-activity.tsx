@@ -34,7 +34,7 @@ export function RecentActivity() {
     )
   }, [showSize, transactions.length])
 
-  const fetchTx = useCallback(async (): Promise<void> => {
+  const updateTx = useCallback(async (): Promise<void> => {
     try {
       const res = await fetchTransactions(currentAccount)
       setTransactions(
@@ -57,17 +57,16 @@ export function RecentActivity() {
     } catch (error) {
       setTransactions(TransactionType.FetchFailed)
     }
-  }, [currentAccount, fetchTransactions, networkId])
-
-  useEffect(() => {
-    fetchTx()
-  }, [fetchTx, latestBlockNumber])
+  }, [currentAccount.address, fetchTransactions, networkId])
 
   useEffect(() => {
     setShowSize(DEFAULT_SHOW_SIZE)
     setTransactions(TransactionType.Loading)
-    fetchTx()
-  }, [currentAccount.address, fetchTx])
+  }, [currentAccount.address])
+
+  useEffect(() => {
+    updateTx()
+  }, [currentAccount.address, latestBlockNumber, updateTx])
 
   const Content = () => {
     if (transactions === TransactionType.Loading) {
@@ -78,7 +77,7 @@ export function RecentActivity() {
       return (
         <Message>
           <Caption>Fetch failed.</Caption>
-          <Button icon='refresh' mode='outlined' onPress={fetchTx}>
+          <Button icon='refresh' mode='outlined' onPress={updateTx}>
             retry
           </Button>
         </Message>

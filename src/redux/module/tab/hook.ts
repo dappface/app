@@ -1,6 +1,7 @@
 import {useCallback, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {IBrowserManager, useDimensions} from 'src/hooks'
+import {IBrowserManager} from 'src/hooks/browser'
+import {useDimensions} from 'src/hooks/dimensions'
 import {browserAction, browserSelector} from 'src/redux/module/browser'
 import {entityAction, entitySelector, entityUtil} from 'src/redux/module/entity'
 import {ITabListManager, ITabManager} from 'src/redux/module/tab/type'

@@ -1,5 +1,5 @@
 import {useQuery} from '@apollo/react-hooks'
-import * as React from 'react'
+import React, {useState} from 'react'
 import {FlatList, ViewStyle} from 'react-native'
 import {feed} from 'src/apollo/modules'
 import {Post} from 'src/components/screens/browser/web-view/feed/post'
@@ -12,7 +12,7 @@ export interface IProps {
   style?: ViewStyle
 }
 
-export const Home = ({style}: IProps) => {
+export function Home({style}: IProps) {
   const {openLink} = useBrowserManager()
 
   const {data, error, fetchMore, loading} = useQuery(feed.GET_FEED, {
@@ -21,7 +21,7 @@ export const Home = ({style}: IProps) => {
     },
   })
 
-  const [refreshing, setRefreshing] = React.useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = async (): Promise<void> => {
     setRefreshing(true)
@@ -41,7 +41,7 @@ export const Home = ({style}: IProps) => {
     openLink(url, true)
   }
 
-  const [loadingMore, setLoadingMore] = React.useState(false)
+  const [loadingMore, setLoadingMore] = useState(false)
 
   const onEndReached = async () => {
     if (loadingMore) {

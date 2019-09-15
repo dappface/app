@@ -17,7 +17,7 @@ export const useWeb3 = () => useContext(Web3Context) as Web3
 
 export const Web3Context = createContext<Web3 | undefined>(undefined)
 
-export const useInitializedWeb3 = (): Web3 | undefined => {
+export function useInitializedWeb3(): Web3 | undefined {
   const [connection, setConnection] = useState<ConnectionStatus | undefined>()
   const [web3, setWeb3] = useState<Web3>()
   const accounts = useSelector(accountSelector.getAccounts)
@@ -115,14 +115,8 @@ export const useInitializedWeb3 = (): Web3 | undefined => {
     }
 
     accounts.map(fetchBalance)
-  }, [
-    accounts,
-    accounts.length,
-    fetchBalance,
-    latestBlockNumber,
-    remoteNodeUrl,
-    web3,
-  ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accounts.length, fetchBalance, latestBlockNumber, remoteNodeUrl, web3])
 
   useEffect(() => {
     if (!web3) {

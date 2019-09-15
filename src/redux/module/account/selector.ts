@@ -37,8 +37,7 @@ export const getAccounts = createSelector(
     accounts: entityType.IAccounts,
     defaultAccountAddress: string | undefined,
   ): entityType.IAccount[] =>
-    Object.keys(accounts)
-      .map(key => accounts[key])
+    Object.values(accounts)
       .sort((a, b) => {
         const pathA = a.path.split('/')
         const indexA = pathA[pathA.length - 1]

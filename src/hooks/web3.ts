@@ -116,7 +116,7 @@ export function useInitializedWeb3(): Web3 | undefined {
 
     accounts.map(fetchBalance)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchBalance, latestBlockNumber, remoteNodeUrl, web3])
+  }, [accounts.length, fetchBalance, latestBlockNumber, remoteNodeUrl, web3])
 
   useEffect(() => {
     if (!web3) {

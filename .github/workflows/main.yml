@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   lintcheck:
-    runs-on: macOS-10.14
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -14,7 +14,7 @@ jobs:
       - name: Run lint check
         run: npm run lint
   typecheck:
-    runs-on: macOS-10.14
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -24,7 +24,7 @@ jobs:
       - name: Run type check
         run: npm run typecheck
   test:
-    runs-on: macOS-10.14
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1

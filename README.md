@@ -13,8 +13,6 @@ Web3 compatible Mobile Browser with crypto news aggrigator and swipeable tabs.
 2. Install more tools
 
 ```sh
-$ brew install cocoapods
-$ pod repo update
 $ brew install imagemagick
 $ brew cask install react-native-debugger
 ```

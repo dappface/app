@@ -38,7 +38,7 @@ jobs:
         with:
           token: ${{secrets.CODECOV_TOKEN}}
   build:
-    runs-os: macOS-10.14
+    runs-on: macOS-10.14
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1

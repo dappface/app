@@ -30,8 +30,14 @@ platform :ios do
     )
 
     copy_env_files(app_env: APP_ENV)
+
     unless options[:skip_build]
       if options[:device]
+        match(
+          type: 'development',
+          app_identifier: APP_IDENTIFIER,
+          readonly: true
+        )
         run_on_device(
           app_identifier: APP_IDENTIFIER,
           release: options[:release]
@@ -52,17 +58,12 @@ platform :ios do
       :app_identifier
     )
 
-    # Validate
-    # ensure_git_branch(
-    #   branch: "beta/\\S+"
-    # )
-    ensure_git_status_clean
-    if options[:version_number].nil?
-      raise 'Missing version number: use version_number parameter'
+    if options[:version].nil?
+      raise 'Missing version number: use version parameter'
     end
 
     increment_version_number(
-      version_number: options[:version_number],
+      version_number: options[:version],
       xcodeproj: XCODEPROJ_PATH
     )
     increment_build_number(
@@ -71,11 +72,18 @@ platform :ios do
     )
     add_badge_with_shield(
       app_env: APP_ENV,
-      version_number: options[:version_number]
+      version_number: options[:version]
     )
     copy_env_files(app_env: APP_ENV)
+    match(
+      type: 'appstore',
+      app_identifier: APP_IDENTIFIER,
+      readonly: true
+    )
     archive(app_identifier: APP_IDENTIFIER)
-    pilot(skip_waiting_for_build_processing: true)
+    if options[:deploy]
+      pilot(skip_waiting_for_build_processing: true)
+    end
   end
 
   # desc 'Upload to AppStore'
@@ -101,10 +109,11 @@ platform :ios do
 
   desc 'Create certificates'
   lane :certificates do
-    match(app_identifier: 'com.dappface.app.dev')
+    match(app_identifier: 'com.dappface.app.dev', force: true)
     match(
       type: 'appstore',
-      app_identifier: ['com.dappface.app.beta', 'com.dappface.app']
+      app_identifier: ['com.dappface.app.beta', 'com.dappface.app'],
+      force: true
     )
   end
 
@@ -129,20 +138,21 @@ platform :ios do
   end
 
   private_lane :run_on_device do |options|
+    app_id = options[:app_identifier]
+    xcode_args =  create_xcode_args({
+      PRODUCT_BUNDLE_IDENTIFIER: app_id,
+      PROVISIONING_PROFILE_SPECIFIER: "match Development #{app_id}",
+      DEVELOPMENT_TEAM: ENV['sigh_com.dappface.app.dev_development_team-id'],
+      CODE_SIGN_IDENTITY: 'iPhone Developer'
+    })
     gym(
       scheme: PROJECT_NAME,
       configuration: options[:release] ? 'Release' : 'Debug',
       workspace: WORKSPACE_PATH,
       output_name: 'app',
       output_directory: "ios/build/#{PROJECT_NAME}",
-      xcargs: "PRODUCT_BUNDLE_IDENTIFIER=#{options[:app_identifier]}",
       export_method: 'development',
-      export_options: {
-        provisioningProfiles: {
-          "#{options[:app_identifier]}":
-            "match Development #{options[:app_identifier]}"
-        }
-      }
+      xcargs: xcode_args
     )
     install_on_device(
       ipa: "ios/build/#{PROJECT_NAME}/app.ipa"
@@ -161,19 +171,20 @@ platform :ios do
   end
 
   private_lane :archive do |options|
+    app_id = options[:app_identifier]
+    xcode_args =  create_xcode_args({
+      PRODUCT_BUNDLE_IDENTIFIER: app_id,
+      PROVISIONING_PROFILE_SPECIFIER: "match AppStore #{app_id}",
+      DEVELOPMENT_TEAM: ENV['sigh_com.dappface.app.beta_appstore_team-id'],
+      CODE_SIGN_IDENTITY: "iPhone Distribution"
+    })
     gym(
       clean: true,
       scheme: PROJECT_NAME,
       configuration: 'Release',
       workspace: WORKSPACE_PATH,
       export_method: 'app-store',
-      xcargs: "PRODUCT_BUNDLE_IDENTIFIER=#{options[:app_identifier]}",
-      export_options: {
-        provisioningProfile: {
-          "#{options[:app_ideintifier]}":
-            "match AppStore #{options[:app_ideintifier]}"
-        }
-      }
+      xcargs: xcode_args,
     )
   end
 
@@ -181,6 +192,12 @@ platform :ios do
     sh "(cd .. && \
       git checkout -- \
       ios/#{PROJECT_NAME}/Images.xcassets/ \
-      ios/#{PROJECT_NAME}/Info.plist)"
+      ios/#{PROJECT_NAME}*/Info.plist)"
   end
+end
+
+def create_xcode_args(args)
+  args.map do |k, v|
+    "#{k.to_s.shellescape}=#{v.shellescape}"
+  end.join(' ')
 end

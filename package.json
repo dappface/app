@@ -8,8 +8,6 @@
     "install:pod": "(cd ios && pod install)",
     "ios": "bundle exec fastlane ios dev",
     "ios:beta": "bundle exec fastlane ios beta",
-    "ios:certificates": "bundle exec fastlane ios certificates",
-    "ios:register": "bundle exec fastlane ios register",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "lint:ruby": "bundle exec rubocop",

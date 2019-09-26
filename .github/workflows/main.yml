@@ -37,3 +37,15 @@ jobs:
         uses: codecov/codecov-action@v1.0.2
         with:
           token: ${{secrets.CODECOV_TOKEN}}
+  build:
+    run-os: macOS-10.14
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.16.3'
+          - name: Setup ruby
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.4'
+      - run: bundle -v

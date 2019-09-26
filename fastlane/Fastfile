@@ -5,7 +5,7 @@ PROJECT_NAME = 'DappFace'
 platform :ios do
   XCODEPROJ_PATH = "ios/#{PROJECT_NAME}.xcodeproj"
   WORKSPACE_PATH = "ios/#{PROJECT_NAME}.xcworkspace"
-  DEFAULT_SIMULATOR = 'iPhone Xʀ'
+  DEFAULT_SIMULATOR = 'iPhone 11 Pro'
   SHIELD_SCALE = '0.7'
 
   desc 'Build debug on simulator or device'
@@ -14,14 +14,9 @@ platform :ios do
     APP_IDENTIFIER = CredentialsManager::AppfileConfig.try_fetch_value(
       :app_identifier
     )
-
-    version_number = get_version_number(
-      xcodeproj: XCODEPROJ_PATH,
-      target: PROJECT_NAME
-    )
     add_badge_with_shield(
       app_env: APP_ENV,
-      version_number: version_number
+      version: '0.0.0'
     )
     update_info_plist(
       xcodeproj: XCODEPROJ_PATH,
@@ -72,7 +67,7 @@ platform :ios do
     )
     add_badge_with_shield(
       app_env: APP_ENV,
-      version_number: options[:version]
+      version: options[:version]
     )
     copy_env_files(app_env: APP_ENV)
     match(
@@ -127,7 +122,7 @@ platform :ios do
 
   private_lane :add_badge_with_shield do |options|
     add_badge(
-      shield: "#{options[:app_env]}-#{options[:version_number]}-blue",
+      shield: "#{options[:app_env]}-#{options[:version]}-blue",
       shield_scale: SHIELD_SCALE,
       no_badge: true
     )

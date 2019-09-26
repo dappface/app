@@ -47,4 +47,11 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.6.x'
-      - run: bundle -v
+      - run: |
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        brew install imagemagick
+        brew unlink pango
+        brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/7cf3b63be191cb2ce4cd86f4406915128ec97432/Formula/pango.rb
+        brew switch pango 1.42.4_1
+      - run: npm run setup
+      - run: npm run ios:beta version:0.0.0

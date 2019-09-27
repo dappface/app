@@ -49,12 +49,6 @@ jobs:
           ruby-version: "2.6.x"
       - name: Setup
         env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-          RUNNER_CONTEXT: ${{ toJSON(runner) }}
-        run: |
-          echo "$JOB_CONTEXT"
-          echo "$STEPS_CONTEXT"
-          echo "$RUNNER_CONTEXT"
-        # run: npm run setup
+          IS_MACOS: ${{ runner.os == 'macOS' }}
+        run: npm run setup
       # - run: npm run ios:beta version:0.0.0

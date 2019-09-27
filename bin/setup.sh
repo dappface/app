@@ -6,17 +6,17 @@ set -o xtrace
 
 GOOGLE_CLOUD_SDK_VERSION='264.0.0'
 
-# if [ "${GITHUB_ACTIONS:-}" != 'build-ios' ]; then
-#   brew install imagemagick
+if "${IS_MACOS:-false}" ; then
+  brew install imagemagick
 
-#   curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
-#   tar -xzf "./google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
-#   ./google-cloud-sdk/install.sh
-#   ./google-cloud-sdk/bin/gcloud init
-#   gcloud kms -h
+  curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
+  tar -xzf "./google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
+  ./google-cloud-sdk/install.sh
+  ./google-cloud-sdk/bin/gcloud init
+  gcloud kms -h
 
-#   # Authenticate with gcloud
-# fi
+  # Authenticate with gcloud
+fi
 
 # npm i
 # bundle install

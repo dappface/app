@@ -6,23 +6,28 @@ set -o xtrace
 
 GOOGLE_CLOUD_SDK_VERSION='264.0.0'
 
-if [ "${GITHUB_WORKFLOW:-}" == 'CI' ]; then
-  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  brew install imagemagick
+echo "$GITHUB_ACTIONS"
+echo "$GITHUB_ACTION"
+echo "$GITHUB_WORKFLOW"
+pwd
+ls -la $GITHUB_WORKSPACE
 
-  curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
-  tar -xzf "./google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
-  ./google-cloud-sdk/install.sh
-  ./google-cloud-sdk/bin/gcloud init
-  gcloud kms -h
+# if [ "${GITHUB_ACTIONS:-}" != 'build-ios' ]; then
+#   brew install imagemagick
 
-  # Authenticate with gcloud
-fi
+#   curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
+#   tar -xzf "./google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
+#   ./google-cloud-sdk/install.sh
+#   ./google-cloud-sdk/bin/gcloud init
+#   gcloud kms -h
 
-npm i
-bundle install
-bundle exec pod repo update
-(
-  cd ios
-  bundle exec pod install
-)
+#   # Authenticate with gcloud
+# fi
+
+# npm i
+# bundle install
+# bundle exec pod repo update
+# (
+#   cd ios
+#   bundle exec pod install
+# )

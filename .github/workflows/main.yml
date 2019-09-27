@@ -48,4 +48,4 @@ jobs:
         with:
           ruby-version: "2.6.x"
       - run: npm run setup
-      - run: npm run ios:beta version:0.0.0
+      # - run: npm run ios:beta version:0.0.0

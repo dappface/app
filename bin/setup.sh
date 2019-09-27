@@ -6,12 +6,6 @@ set -o xtrace
 
 GOOGLE_CLOUD_SDK_VERSION='264.0.0'
 
-echo "$GITHUB_ACTIONS"
-echo "$GITHUB_ACTION"
-echo "$GITHUB_WORKFLOW"
-pwd
-ls -la $GITHUB_WORKSPACE
-
 # if [ "${GITHUB_ACTIONS:-}" != 'build-ios' ]; then
 #   brew install imagemagick
 

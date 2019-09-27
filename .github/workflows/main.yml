@@ -40,16 +40,17 @@ jobs:
   build:
     runs-on: macOS-10.14
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "10.16.3"
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: "2.6.x"
-      - run: |
-          /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-          brew -v
-          brew install imagemagick
-      - run: npm run setup
-      - run: npm run ios:beta version:0.0.0
+      - run: python --version
+      # - uses: actions/checkout@v1
+      # - uses: actions/setup-node@v1
+      #   with:
+      #     node-version: "10.16.3"
+      # - uses: actions/setup-ruby@v1
+      #   with:
+      #     ruby-version: "2.6.x"
+      # - run: |
+      #     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+      #     brew -v
+      #     brew install imagemagick
+      # - run: npm run setup
+      # - run: npm run ios:beta version:0.0.0

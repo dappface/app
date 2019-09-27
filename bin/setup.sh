@@ -12,6 +12,9 @@ if "${IS_MACOS:-false}" ; then
   curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
   tar -xzf "./google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
   ./google-cloud-sdk/install.sh
+  source ./google-cloud-sdk/completion.bash.inc
+  source ./google-cloud-sdk/path.bash.inc
+
   gcloud auth activate-service-account --key-file
   echo "$GOOGLE_CLOUD_KEY" | base64 --decode > "$HOME"/google-cloud-key.json
   gcloud auth activate-service-account --key-file=$HOME/google-cloud-key.json

@@ -16,14 +16,13 @@ if "${IS_MACOS:-false}" ; then
   source ./google-cloud-sdk/path.bash.inc
 
   echo "$GOOGLE_CLOUD_KEY" | base64 --decode > "$HOME"/google-cloud-key.json
-  gcloud auth activate-service-account --key-file=$HOME/google-cloud-key.json
-  gcloud kms -h
+  gcloud auth activate-service-account --key-file="$HOME"/google-cloud-key.json
 fi
 
-# npm i
-# bundle install
-# bundle exec pod repo update
-# (
-#   cd ios
-#   bundle exec pod install
-# )
+npm i
+bundle install
+bundle exec pod repo update
+(
+  cd ios
+  bundle exec pod install
+)

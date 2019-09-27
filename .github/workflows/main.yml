@@ -48,8 +48,8 @@ jobs:
         with:
           ruby-version: "2.6.x"
       - name: Setup
-        with:
-          is_macos: ${{ runner.os == 'macOS' }}
-          is_google_cloud_key: ${{ secrets.GOOGLE_CLOUD_KEY }}
+        env:
+          IS_MACOS: ${{ runner.os == 'macOS' }}
+          GOOGLE_CLOUD_KEY: ${{ secrets.GOOGLE_CLOUD_KEY }}
         run: npm run setup
       # - run: npm run ios:beta version:0.0.0

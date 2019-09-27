@@ -47,6 +47,6 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.6.x"
-      - name: "Setup for iOS"
+      - name: Setup for iOS
         run: npm run setup
       # - run: npm run ios:beta version:0.0.0

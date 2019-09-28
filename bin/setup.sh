@@ -14,8 +14,6 @@ if "${IS_MACOS:-false}" ; then
   CLOUDSDK_CORE_DISABLE_PROMPTS=1 ./google-cloud-sdk/install.sh
   echo ::add-path::./google-cloud-sdk/bin
   echo "$GOOGLE_CLOUD_KEY" | base64 --decode > "$HOME"/google-cloud-key.json
-
-  sudo xcode-select -s /Applications/Xcode_11.app
 fi
 
 npm i

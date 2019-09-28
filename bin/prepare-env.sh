@@ -4,6 +4,11 @@ set -o errexit
 set -o nounset
 set -o xtrace
 
+if "${IS_MACOS:-false}" ; then
+  source ./google-cloud-sdk/completion.bash.inc
+  source ./google-cloud-sdk/path.bash.inc
+fi
+
 if [[ ${APP_ENV} == 'prd' ]] ; then
   export PROJECT_NAME='dappface-prd-v2'
 elif [[ ${APP_ENV} == 'beta' ]] ; then

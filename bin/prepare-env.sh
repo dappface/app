@@ -4,9 +4,8 @@ set -o errexit
 set -o nounset
 set -o xtrace
 
-if "${IS_MACOS:-false}" ; then
-  source ./google-cloud-sdk/completion.bash.inc
-  source ./google-cloud-sdk/path.bash.inc
+if "${GITHUB_ACTIONS:-false}" ; then
+  gcloud auth activate-service-account --key-file="$HOME"/google-cloud-key.json
 fi
 
 if [[ ${APP_ENV} == 'prd' ]] ; then

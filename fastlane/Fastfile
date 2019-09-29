@@ -180,6 +180,7 @@ platform :ios do
       workspace: WORKSPACE_PATH,
       export_method: 'app-store',
       xcargs: xcode_args,
+      verbose: true,
     )
   end
 

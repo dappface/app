@@ -24,7 +24,4 @@ bundle exec pod repo update
 (
   cd ios
   bundle exec pod install
-
-  # [TODO] Remove
-  sed -i '' '5s/$/set -x/' ./Pods/Target\ Support\ Files/Pods-DappFace/Pods-DappFace-resources.sh
 )

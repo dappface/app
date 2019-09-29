@@ -45,7 +45,7 @@ jobs:
       - name: Setup env file
         env:
           APP_ENV: dev
-        run: ./bin/prepare-env.sh
+        run: ./bin/setup-env.sh
       - name: Install dependencies
         run: npm i
       - name: Test

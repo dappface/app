@@ -38,7 +38,7 @@ platform :ios do
       app_identifier: APP_IDENTIFIER
     )
 
-    copy_env_files(app_env: APP_ENV)
+    setup_env_files(app_env: APP_ENV)
 
     unless options[:skip_build]
       if options[:device]
@@ -85,7 +85,7 @@ platform :ios do
       app_env: APP_ENV,
       version: options[:version]
     )
-    copy_env_files(app_env: APP_ENV)
+    setup_env_files(app_env: APP_ENV)
     match(
       type: 'appstore',
       app_identifier: APP_IDENTIFIER,
@@ -155,8 +155,8 @@ platform :ios do
     )
   end
 
-  private_lane :copy_env_files do |options|
-    sh "(cd .. && APP_ENV=#{options[:app_env]} bin/prepare-env.sh)"
+  private_lane :setup_env_files do |options|
+    sh "(cd .. && APP_ENV=#{options[:app_env]} bin/setup-env.sh)"
   end
 
   private_lane :run_on_device do |options|

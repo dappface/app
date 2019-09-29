@@ -6,71 +6,71 @@ jobs:
   lintcheck:
     runs-on: ubuntu-18.04
     steps:
-      - name: Checkout Source Code
+      - name: Checkout source code
         uses: actions/checkout@v1
-      - name: Switch Node Version
+      - name: Switch node version
         uses: actions/setup-node@v1
         with:
           node-version: "10.16.3"
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm i
-      - name: Check Lint Error
+      - name: Check lint error
         run: npm run lint
   typecheck:
     runs-on: ubuntu-18.04
     steps:
-      - name: Checkout Source Code
+      - name: Checkout source code
         uses: actions/checkout@v1
-      - name: Switch Node Version
+      - name: Switch node version
         uses: actions/setup-node@v1
         with:
           node-version: "10.16.3"
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm i
-      - name: Check Type Error
+      - name: Check type error
         run: npm run typecheck
   test:
     runs-on: ubuntu-18.04
     steps:
-      - name: Checkout Source Code
+      - name: Checkout source code
         uses: actions/checkout@v1
-      - name: Switch Node Version
+      - name: Switch node version
         uses: actions/setup-node@v1
         with:
           node-version: "10.16.3"
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm i
-      - name: Setup Google Cloud
+      - name: Setup google cloud
         uses: actions/gcloud/auth@master
         env:
           GCLOUD_AUTH: ${{ secrets.GOOGLE_CLOUD_KEY }}
-      - name: Setup Env File
+      - name: Setup env file
         env:
           APP_ENV: dev
           run: ./bin/prepare-env.sh
       - name: Test
         run: npm run test
-      - name: Upload Coverage Report
+      - name: Upload coverage report
         uses: codecov/codecov-action@v1.0.2
         with:
           token: ${{secrets.CODECOV_TOKEN}}
   build-ios:
     runs-on: macOS-10.14
     steps:
-      - name: Checkout Source Code
+      - name: Checkout source code
         uses: actions/checkout@v1
-      - name: Switch Node Version
+      - name: Switch node version
         uses: actions/setup-node@v1
         with:
           node-version: "10.16.3"
-      - name: Switch Ruby Version
+      - name: Switch ruby version
         uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.6.x"
-      - name: Install Dependencies
+      - name: Install dependencies
         env:
           IS_MACOS: ${{ runner.os == 'macOS' }}
           GOOGLE_CLOUD_KEY: ${{ secrets.GOOGLE_CLOUD_KEY }}
         run: npm run setup
-      - name: Build iOS App
+      - name: Build ios app
         run: npm run ios:beta version:0.0.0

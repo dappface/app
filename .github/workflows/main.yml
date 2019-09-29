@@ -47,7 +47,7 @@ jobs:
       - name: Setup env file
         env:
           APP_ENV: dev
-          run: ./bin/prepare-env.sh
+        run: ./bin/prepare-env.sh
       - name: Test
         run: npm run test
       - name: Upload coverage report

@@ -16,10 +16,10 @@ if [ ! -z "${GOOGLE_CLOUD_KEY:-}" ] ; then
   tar -xzf "./google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
   CLOUDSDK_CORE_DISABLE_PROMPTS=1 ./google-cloud-sdk/install.sh
 
-  echo ::add-path::./google-cloud-sdk/bin
-
   echo "$GOOGLE_CLOUD_KEY" | base64 --decode > "$HOME"/google-cloud-key.json
-  gcloud auth activate-service-account --key-file="$HOME"/google-cloud-key.json
+  ./google-cloud-sdk/bin/gcloud auth activate-service-account --key-file="$HOME"/google-cloud-key.json
+
+  echo ::add-path::./google-cloud-sdk/bin
 fi
 
 npm i

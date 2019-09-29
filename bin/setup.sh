@@ -16,6 +16,9 @@ if "${IS_MACOS:-false}" ; then
   echo "$GOOGLE_CLOUD_KEY" | base64 --decode > "$HOME"/google-cloud-key.json
 
   sudo xcode-select -s /Applications/Xcode_11.app
+
+  # [TODO] Remove
+  sed -i '' '5s/$/set -x/' .ios/Pods/Target\ Support\ Files/Pods-DappFace/Pods-DappFace-resources.sh
 fi
 
 npm i

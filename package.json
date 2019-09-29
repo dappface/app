@@ -5,6 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "create-token-list": "node bin/token-list.js",
+    "install:all": "bin/install.sh",
     "install:pod": "(cd ios && bundle exec pod install)",
     "ios": "bundle exec fastlane ios dev",
     "ios:beta": "bundle exec fastlane ios beta",
@@ -16,7 +17,6 @@
     "reinstall": "bin/reinstall.sh",
     "start": "react-native start",
     "start:fresh": "npm run reinstall && npm start -- --reset-cache",
-    "setup": "bin/setup.sh",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "typecheck": "tsc"

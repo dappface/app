@@ -22,7 +22,7 @@ $ brew cask install react-native-debugger
 ```sh
 $ git clone git@github.com:LukeSugiura/dappface.git
 $ cd ./dappface
-$ npm run setup
+$ npm run install:all
 ```
 
 ## 📱 Running on Simulator

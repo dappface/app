@@ -7,7 +7,6 @@ set -o xtrace
 GOOGLE_CLOUD_SDK_VERSION='264.0.0'
 
 if "${IS_MACOS:-false}" ; then
-  brew install watchman
   brew install imagemagick
 
   curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"

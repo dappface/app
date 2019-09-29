@@ -38,8 +38,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "10.16.3"
-      - name: Install dependencies
-        run: npm i
       - name: Setup google cloud
         uses: actions/gcloud/auth@master
         env:
@@ -48,6 +46,8 @@ jobs:
         env:
           APP_ENV: dev
         run: ./bin/prepare-env.sh
+      - name: Install dependencies
+        run: npm i
       - name: Test
         run: npm run test
       - name: Upload coverage report

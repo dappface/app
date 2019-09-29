@@ -4,7 +4,8 @@ set -o errexit
 set -o nounset
 set -o xtrace
 
-if "${GITHUB_ACTIONS:-false}" ; then
+if [ ! -z "${GOOGLE_CLOUD_KEY:-}" ] ; then
+  echo "$GOOGLE_CLOUD_KEY" | base64 --decode > "$HOME"/google-cloud-key.json
   gcloud auth activate-service-account --key-file="$HOME"/google-cloud-key.json
 fi
 

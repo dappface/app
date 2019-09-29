@@ -6,50 +6,63 @@ jobs:
   lintcheck:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - name: Checkout Source Code
+        uses: actions/checkout@v1
+      - name: Switch Node Version
+        uses: actions/setup-node@v1
         with:
           node-version: "10.16.3"
-      - run: npm i
-      - name: Run lint check
+      - name: Install Dependencies
+        run: npm i
+      - name: Check Lint Error
         run: npm run lint
   typecheck:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - name: Checkout Source Code
+        uses: actions/checkout@v1
+      - name: Switch Node Version
+        uses: actions/setup-node@v1
         with:
           node-version: "10.16.3"
-      - run: npm i
-      - name: Run type check
+      - name: Install Dependencies
+        run: npm i
+      - name: Check Type Error
         run: npm run typecheck
   test:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - name: Checkout Source Code
+        uses: actions/checkout@v1
+      - name: Switch Node Version
+        uses: actions/setup-node@v1
         with:
           node-version: "10.16.3"
-      - run: npm i
-      - name: Run test
+      - name: Install Dependencies
+        run: npm i
+      - name: Test
         run: npm run test
-      - name: Upload coverage report
+      - name: Upload Coverage Report
         uses: codecov/codecov-action@v1.0.2
         with:
           token: ${{secrets.CODECOV_TOKEN}}
   build-ios:
     runs-on: macOS-10.14
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - name: Checkout Source Code
+        uses: actions/checkout@v1
+      - name: Switch Node Version
+        uses: actions/setup-node@v1
         with:
           node-version: "10.16.3"
-      - uses: actions/setup-ruby@v1
+      - name: Switch Ruby Version
+        uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.6.x"
-      - name: Setup
+      - name: Install Dependencies
         env:
           IS_MACOS: ${{ runner.os == 'macOS' }}
           GOOGLE_CLOUD_KEY: ${{ secrets.GOOGLE_CLOUD_KEY }}
         run: npm run setup
-      - run: npm run ios:beta version:0.0.0
+      - name: Build iOS App
+        run: npm run ios:beta version:0.0.0

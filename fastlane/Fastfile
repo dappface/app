@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'securerandom'
+
 PROJECT_NAME = 'DappFace'
 
 platform :ios do
@@ -7,6 +9,18 @@ platform :ios do
   WORKSPACE_PATH = "ios/#{PROJECT_NAME}.xcworkspace"
   DEFAULT_SIMULATOR = 'iPhone 11 Pro'
   SHIELD_SCALE = '0.7'
+  KEYCHAIN_NAME = 'build_keychain'
+  KEYCHAIN_PASSWORD = SecureRandom.hex
+
+  before_all do
+    create_keychain(
+      name: KEYCHAIN_NAME,
+      unlock: true,
+      timeout: false,
+      lock_when_sleeps: true,
+      password: KEYCHAIN_PASSWORD
+    )
+  end
 
   desc 'Build debug on simulator or device'
   lane :dev do |options|
@@ -31,7 +45,9 @@ platform :ios do
         match(
           type: 'development',
           app_identifier: APP_IDENTIFIER,
-          readonly: true
+          readonly: true,
+          keychain_name: KEYCHAIN_NAME,
+          keychain_password: KEYCHAIN_PASSWORD
         )
         run_on_device(
           app_identifier: APP_IDENTIFIER,
@@ -73,7 +89,9 @@ platform :ios do
     match(
       type: 'appstore',
       app_identifier: APP_IDENTIFIER,
-      readonly: true
+      readonly: true,
+      keychain_name: KEYCHAIN_NAME,
+      keychain_password: KEYCHAIN_PASSWORD
     )
     archive(app_identifier: APP_IDENTIFIER)
     if options[:deploy]
@@ -98,17 +116,26 @@ platform :ios do
     register_devices(devices: device_hash)
     match(
       app_identifier: APP_IDENTIFIER,
-      force: true
+      force: true,
+      keychain_name: KEYCHAIN_NAME,
+      keychain_password: KEYCHAIN_PASSWORD
     )
   end
 
   desc 'Create certificates'
   lane :certificates do
-    match(app_identifier: 'com.dappface.app.dev', force: true)
+    match(
+      app_identifier: 'com.dappface.app.dev',
+      force: true,
+      keychain_name: KEYCHAIN_NAME,
+      keychain_password: KEYCHAIN_PASSWORD
+    )
     match(
       type: 'appstore',
       app_identifier: ['com.dappface.app.beta', 'com.dappface.app'],
-      force: true
+      force: true,
+      keychain_name: KEYCHAIN_NAME,
+      keychain_password: KEYCHAIN_PASSWORD
     )
   end
 
@@ -147,7 +174,7 @@ platform :ios do
       output_name: 'app',
       output_directory: "ios/build/#{PROJECT_NAME}",
       export_method: 'development',
-      xcargs: xcode_args
+      xcargs: xcode_args,
     )
     install_on_device(
       ipa: "ios/build/#{PROJECT_NAME}/app.ipa"
@@ -189,6 +216,7 @@ platform :ios do
       git checkout -- \
       ios/#{PROJECT_NAME}/Images.xcassets/ \
       ios/#{PROJECT_NAME}*/Info.plist)"
+    delete_keychain(name: KEYCHAIN_NAME)
   end
 end
 

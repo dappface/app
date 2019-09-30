@@ -41,13 +41,21 @@ platform :ios do
     )
   end
 
+  after_all do |_, options|
+    reset unless options[:skip_build]
+  end
+
+  error do |_, _, options|
+    reset unless options[:skip_build]
+  end
+
   desc 'Build App'
   lane :build do |options|
     DEFAULT_APP_ENV = 'dev'
     DEFAULT_PROFILE_TYPE = 'adhoc'
     DEFAULT_CERTIFICATE_TYPE = CERTIFICATE_TYPE[:distribution]
     DEFAULT_CONFIGURATION = CONFIGURATION[:release]
-    app_env = options[:app_env].lowercase || DEFAULT_APP_ENV
+    app_env = options[:app_env].downcase || DEFAULT_APP_ENV
     app_identifier = APP_IDENTIFIER[app_env.to_sym]
     profile_type = options[:profile_type] || DEFAULT_PROFILE_TYPE
     profile_type_name = PROFILE_TYPE_NAME[profile_type.to_sym]
@@ -58,6 +66,10 @@ platform :ios do
     version = get_version_number(
       xcodeproj: XCODEPROJ_PATH,
       target: PROJECT_NAME
+    )
+    increment_build_number(
+      build_number: Time.now.getutc.strftime('%Y%m%d%H%M'),
+      xcodeproj: XCODEPROJ_PATH
     )
     add_badge_with_shield(
       app_env: app_env,
@@ -101,8 +113,8 @@ platform :ios do
     DEFAULT_APP_ENV = 'dev'
     DEFAULT_CONFIGURATION = CONFIGURATION[:debug]
     DEFAULT_SIMULATOR = 'iPhone 11 Pro'
-    app_env = options[:app_env].lowercase || DEFAULT_APP_ENV
-    configuration = CONFIGURATION[options[:configuration].to_s.lowercase.to_sym] || DEFAULT_CONFIGURATION
+    app_env = options[:app_env].downcase || DEFAULT_APP_ENV
+    configuration = CONFIGURATION[options[:configuration].to_s.downcase.to_sym] || DEFAULT_CONFIGURATION
 
     if options[:device]
       build(
@@ -144,86 +156,14 @@ platform :ios do
     )
   end
 
-  desc 'Build debug on simulator or device'
-  lane :dev do |options|
-    APP_ENV = 'dev'
-    APP_IDENTIFIER = CredentialsManager::AppfileConfig.try_fetch_value(
-      :app_identifier
-    )
-    add_badge_with_shield(
-      app_env: APP_ENV,
-      version: '0.0.0'
-    )
-    update_info_plist(
-      xcodeproj: XCODEPROJ_PATH,
-      plist_path: 'DappFace/Info.plist',
-      app_identifier: APP_IDENTIFIER
-    )
-
-    setup_env_files(app_env: APP_ENV)
-
-    unless options[:skip_build]
-      if options[:device]
-        match(
-          type: 'development',
-          app_identifier: APP_IDENTIFIER,
-          readonly: true,
-          keychain_name: KEYCHAIN_NAME,
-          keychain_password: KEYCHAIN_PASSWORD
-        )
-        run_on_device(
-          app_identifier: APP_IDENTIFIER,
-          release: options[:release]
-        )
-      else
-        run_on_simulator(
-          simulator: options[:simulator],
-          release: options[:release]
-        )
-      end
-    end
-  end
-
   desc 'Upload to TestFlight'
-  lane :beta do |options|
-    APP_ENV = 'beta'
-    APP_IDENTIFIER = CredentialsManager::AppfileConfig.try_fetch_value(
-      :app_identifier
+  lane :upload_beta do |options|
+    build(
+      app_env: 'beta',
+      profile_type: 'appstore'
     )
-
-    if options[:version].nil?
-      raise 'Missing version number: use version parameter'
-    end
-
-    increment_version_number(
-      version_number: options[:version],
-      xcodeproj: XCODEPROJ_PATH
-    )
-    increment_build_number(
-      build_number: Time.now.getutc.strftime('%Y%m%d%H%M'),
-      xcodeproj: XCODEPROJ_PATH
-    )
-    add_badge_with_shield(
-      app_env: APP_ENV,
-      version: options[:version]
-    )
-    setup_env_files(app_env: APP_ENV)
-    match(
-      type: 'appstore',
-      app_identifier: APP_IDENTIFIER,
-      readonly: true,
-      keychain_name: KEYCHAIN_NAME,
-      keychain_password: KEYCHAIN_PASSWORD
-    )
-    archive(app_identifier: APP_IDENTIFIER)
-    if options[:deploy]
-      pilot(skip_waiting_for_build_processing: true)
-    end
+    pilot(skip_waiting_for_build_processing: true)
   end
-
-  # desc 'Upload to AppStore'
-  # lane :prd do
-  # end
 
   desc 'Register new devices'
   lane :register do
@@ -262,14 +202,6 @@ platform :ios do
     )
   end
 
-  after_all do |_, options|
-    reset unless options[:skip_build]
-  end
-
-  error do |_, _, options|
-    reset unless options[:skip_build]
-  end
-
   private_lane :add_badge_with_shield do |options|
     SHIELD_SCALE = '0.7'
     add_badge(
@@ -282,25 +214,6 @@ platform :ios do
   private_lane :setup_env_files do |options|
     sh(
       "(cd .. && APP_ENV=#{options[:app_env]} bin/setup-env.sh)"
-    )
-  end
-
-  private_lane :archive do |options|
-    app_id = options[:app_identifier]
-    xcode_args =  create_xcode_args({
-      PRODUCT_BUNDLE_IDENTIFIER: app_id,
-      PROVISIONING_PROFILE_SPECIFIER: "match AppStore #{app_id}",
-      DEVELOPMENT_TEAM: ENV['sigh_com.dappface.app.beta_appstore_team-id'],
-      CODE_SIGN_IDENTITY: "iPhone Distribution"
-    })
-    gym(
-      clean: true,
-      scheme: PROJECT_NAME,
-      configuration: 'Release',
-      workspace: WORKSPACE_PATH,
-      export_method: 'app-store',
-      xcargs: xcode_args,
-      verbose: true,
     )
   end
 

@@ -26,14 +26,9 @@ Build App
 fastlane ios install
 ```
 Install App
-### ios dev
+### ios upload_beta
 ```
-fastlane ios dev
-```
-Build debug on simulator or device
-### ios beta
-```
-fastlane ios beta
+fastlane ios upload_beta
 ```
 Upload to TestFlight
 ### ios register

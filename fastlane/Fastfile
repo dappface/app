@@ -81,7 +81,7 @@ platform :ios do
       app_identifier: app_identifier
     )
 
-    setup_env_files(app_env: app_identifier)
+    setup_env_files(app_env: app_env)
 
     match(
       type: profile_type,
@@ -144,7 +144,7 @@ platform :ios do
       app_identifier: app_identifier
     )
 
-    setup_env_files(app_env: app_identifier)
+    setup_env_files(app_env: app_env)
 
     sh (
       "(

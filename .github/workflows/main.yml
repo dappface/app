@@ -27,7 +27,7 @@ jobs:
           ruby-version: "2.6.x"
       - name: Install dependencies
         run: |
-          gem install bundler
+          apt-get install libcurl4-openssl-dev
           bundle install
       - name: Check lint error
         run: npm run lint:ruby

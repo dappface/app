@@ -25,17 +25,23 @@ $ cd ./dappface
 $ npm run install:all
 ```
 
-## 📱 Running on Simulator
+## 📱 Run
 
 ```sh
 $ npm run ios
 $ npm run android
 
-$ npm run ios release:true # for Release build
+$ npm run ios configuration:release # for Release build
 ```
 
 **Use different simulator**
 
 ```sh
-$ SIMULATOR='iPhone X' npm run ios
+$ npm run ios simulator:iPhone\ 11
+```
+
+**Install on device**
+
+```sh
+$ npm run ios device:true
 ```

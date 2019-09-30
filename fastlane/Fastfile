@@ -55,12 +55,12 @@ platform :ios do
     DEFAULT_PROFILE_TYPE = 'adhoc'
     DEFAULT_CERTIFICATE_TYPE = CERTIFICATE_TYPE[:distribution]
     DEFAULT_CONFIGURATION = CONFIGURATION[:release]
-    app_env = options[:app_env].downcase || DEFAULT_APP_ENV
+    app_env = options[:app_env] || DEFAULT_APP_ENV
     app_identifier = APP_IDENTIFIER[app_env.to_sym]
     profile_type = options[:profile_type] || DEFAULT_PROFILE_TYPE
     profile_type_name = PROFILE_TYPE_NAME[profile_type.to_sym]
-    certificate_type = CERTIFICATE_TYPE[options[:certificate_type].to_s.downcase.to_sym] || DEFAULT_CERTIFICATE_TYPE
-    configuration = CONFIGURATION[options[:configuration].to_s.downcase.to_sym] || DEFAULT_CONFIGURATION
+    certificate_type = CERTIFICATE_TYPE[options[:certificate_type].to_s.to_sym] || DEFAULT_CERTIFICATE_TYPE
+    configuration = CONFIGURATION[options[:configuration].to_s.to_sym] || DEFAULT_CONFIGURATION
     export_method = EXPORT_METHOD[profile_type.to_sym]
 
     version = get_version_number(
@@ -113,13 +113,13 @@ platform :ios do
     DEFAULT_APP_ENV = 'dev'
     DEFAULT_CONFIGURATION = CONFIGURATION[:debug]
     DEFAULT_SIMULATOR = 'iPhone 11 Pro'
-    app_env = options[:app_env].downcase || DEFAULT_APP_ENV
-    configuration = CONFIGURATION[options[:configuration].to_s.downcase.to_sym] || DEFAULT_CONFIGURATION
+    app_env = options[:app_env] || DEFAULT_APP_ENV
+    configuration = CONFIGURATION[options[:configuration].to_s.to_sym] || DEFAULT_CONFIGURATION
 
     if options[:device]
       build(
         app_env: app_env,
-        configuration: configuration
+        configuration: configuration.downcase
       )
       sh(
         "npx ios-deploy --bundle ../ios/build/#{PROJECT_NAME}/app.ipa"
@@ -218,10 +218,15 @@ platform :ios do
   end
 
   private_lane :reset do
-    sh "(cd .. && \
-      git checkout -- \
-      ios/#{PROJECT_NAME}/Images.xcassets/ \
-      ios/#{PROJECT_NAME}*/Info.plist)"
+    sh (
+      "(
+        cd .. && \
+        git checkout -- \
+        ios/#{PROJECT_NAME}/Images.xcassets/ \
+        ios/#{PROJECT_NAME}*/Info.plist \
+        #{XCODEPROJ_PATH}/project.pbxproj
+      )"
+    )
     delete_keychain(name: KEYCHAIN_NAME)
   end
 end

@@ -6,7 +6,6 @@
     "android": "react-native run-android",
     "create-token-list": "node bin/token-list.js",
     "install:all": "bin/install.sh",
-    "install:gem": "bundle install",
     "install:pod": "(cd ios && bundle exec pod install)",
     "ios": "bundle exec fastlane ios install",
     "ios:build": "bundle exec fastlane ios build",

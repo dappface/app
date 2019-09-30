@@ -39,8 +39,10 @@ jobs:
         with:
           node-version: "10.16.3"
       - name: Setup google cloud
+        env:
+          GOOGLE_CLOUD_KEY: ${{ secrets.GOOGLE_CLOUD_KEY }}
         run: |
-          echo ${{ secrets.GOOGLE_CLOUD_KEY }} | base64 --decode > "$HOME"/google-cloud-key.json
+          echo "$GOOGLE_CLOUD_KEY" | base64 --decode > "$HOME"/google-cloud-key.json
           gcloud auth activate-service-account --key-file="$HOME"/google-cloud-key.json
       - name: Setup env file
         env:
@@ -70,9 +72,11 @@ jobs:
       - name: Setup mac dependencies
         env:
           GOOGLE_CLOUD_SDK_VERSION: "264.0.0"
+          GOOGLE_CLOUD_KEY: ${{ secrets.GOOGLE_CLOUD_KEY }}
         run: |
           brew install imagemagick
           sudo xcode-select -s /Applications/Xcode_11.app
+
           curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
           tar -xzf "./google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
           CLOUDSDK_CORE_DISABLE_PROMPTS=1 ./google-cloud-sdk/install.sh

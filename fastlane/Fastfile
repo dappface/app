@@ -11,6 +11,27 @@ platform :ios do
   SHIELD_SCALE = '0.7'
   KEYCHAIN_NAME = 'build_keychain'
   KEYCHAIN_PASSWORD = SecureRandom.hex
+  APP_IDENTIFIER = {
+    dev: 'com.dappface.app.dev',
+    beta: 'com.dappface.app.beta',
+    prd: 'com.dappface.app'
+  }
+  CONFIGURATION = {
+    debug: 'Debug',
+    release: 'Release'
+  }
+  CERTIFICATE_TYPE = {
+    development: 'Development',
+    distribution: 'Distribution'
+  }
+  PROFILE_TYPE_NAME = {
+    adhoc: 'AdHoc',
+    appstore: 'AppStore'
+  }
+  EXPORT_METHOD = {
+    adhoc: 'ad-hoc',
+    appstore: 'app-store'
+  }
 
   before_all do
     create_keychain(
@@ -19,6 +40,61 @@ platform :ios do
       timeout: false,
       lock_when_sleeps: true,
       password: KEYCHAIN_PASSWORD
+    )
+  end
+
+  desc 'Build'
+  lane :build do |options|
+    DEFAULT_APP_ENV = 'dev'
+    DEFAULT_PROFILE_TYPE = 'adhoc'
+    DEFAULT_CERTIFICATE_TYPE = CERTIFICATE_TYPE[:distribution]
+    DEFAULT_CONFIGURATION = CONFIGURATION[:release]
+    app_env = options[:app_env] || DEFAULT_APP_ENV
+    app_identifier = APP_IDENTIFIER[app_env.to_sym]
+    profile_type = options[:profile_type] || DEFAULT_PROFILE_TYPE
+    profile_type_name = PROFILE_TYPE_NAME[profile_type.to_sym]
+    certificate_type = CERTIFICATE_TYPE[options[:certificate_type].to_s.to_sym] || DEFAULT_CERTIFICATE_TYPE
+    configuration = CONFIGURATION[options[:configuration].to_s.to_sym] || DEFAULT_CONFIGURATION
+    export_method = EXPORT_METHOD[profile_type.to_sym]
+
+    version = get_version_number(
+      xcodeproj: XCODEPROJ_PATH,
+      target: PROJECT_NAME
+    )
+    add_badge_with_shield(
+      app_env: app_env,
+      version: version
+    )
+    update_info_plist(
+      xcodeproj: XCODEPROJ_PATH,
+      plist_path: 'DappFace/Info.plist',
+      app_identifier: app_identifier
+    )
+
+    setup_env_files(app_env: app_identifier)
+
+    match(
+      type: profile_type,
+      app_identifier: app_identifier,
+      readonly: true,
+      keychain_name: KEYCHAIN_NAME,
+      keychain_password: KEYCHAIN_PASSWORD
+    )
+
+    xcode_args =  create_xcode_args({
+      PRODUCT_BUNDLE_IDENTIFIER: app_identifier,
+      PROVISIONING_PROFILE_SPECIFIER: "match #{profile_type_name} #{app_identifier}",
+      DEVELOPMENT_TEAM: ENV["sigh_#{app_identifier}_#{profile_type}_team-id"],
+      CODE_SIGN_IDENTITY: "iPhone #{certificate_type}"
+    })
+    gym(
+      scheme: PROJECT_NAME,
+      configuration: configuration,
+      workspace: WORKSPACE_PATH,
+      output_name: 'app',
+      output_directory: "ios/build/#{PROJECT_NAME}",
+      export_method: export_method,
+      xcargs: xcode_args,
     )
   end
 
@@ -125,14 +201,15 @@ platform :ios do
   desc 'Create certificates'
   lane :certificates do
     match(
-      app_identifier: 'com.dappface.app.dev',
+      type: 'adhoc',
+      app_identifier: [APP_IDENTIFIER[:dev], APP_IDENTIFIER[:beta], APP_IDENTIFIER[:prd]],
       force: true,
       keychain_name: KEYCHAIN_NAME,
       keychain_password: KEYCHAIN_PASSWORD
     )
     match(
       type: 'appstore',
-      app_identifier: ['com.dappface.app.beta', 'com.dappface.app'],
+      app_identifier: [APP_IDENTIFIER[:beta], APP_IDENTIFIER[:prd]],
       force: true,
       keychain_name: KEYCHAIN_NAME,
       keychain_password: KEYCHAIN_PASSWORD

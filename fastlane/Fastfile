@@ -13,25 +13,25 @@ platform :ios do
     dev: 'com.dappface.app.dev',
     beta: 'com.dappface.app.beta',
     prd: 'com.dappface.app'
-  }
+  }.freeze
   CONFIGURATION = {
     debug: 'Debug',
     release: 'Release'
-  }
+  }.freeze
   CERTIFICATE_TYPE = {
     development: 'Development',
     distribution: 'Distribution'
-  }
+  }.freeze
   PROFILE_TYPE_NAME = {
     adhoc: 'AdHoc',
     appstore: 'AppStore'
-  }
+  }.freeze
   EXPORT_METHOD = {
     adhoc: 'ad-hoc',
     appstore: 'app-store'
-  }
+  }.freeze
 
-  before_all do |lane|
+  before_all do
     create_keychain(
       name: KEYCHAIN_NAME,
       unlock: true,
@@ -59,8 +59,12 @@ platform :ios do
     app_identifier = APP_IDENTIFIER[app_env.to_sym]
     profile_type = options[:profile_type] || DEFAULT_PROFILE_TYPE
     profile_type_name = PROFILE_TYPE_NAME[profile_type.to_sym]
-    certificate_type = CERTIFICATE_TYPE[options[:certificate_type].to_s.to_sym] || DEFAULT_CERTIFICATE_TYPE
-    configuration = CONFIGURATION[options[:configuration].to_s.to_sym] || DEFAULT_CONFIGURATION
+    certificate_type =
+      CERTIFICATE_TYPE[options[:certificate_type].to_s.to_sym] ||
+      DEFAULT_CERTIFICATE_TYPE
+    configuration =
+      CONFIGURATION[options[:configuration].to_s.to_sym] ||
+      DEFAULT_CONFIGURATION
     export_method = EXPORT_METHOD[profile_type.to_sym]
 
     version = get_version_number(
@@ -91,12 +95,13 @@ platform :ios do
       keychain_password: KEYCHAIN_PASSWORD
     )
 
-    xcode_args =  create_xcode_args({
+    xcode_args = create_xcode_args(
       PRODUCT_BUNDLE_IDENTIFIER: app_identifier,
-      PROVISIONING_PROFILE_SPECIFIER: "match #{profile_type_name} #{app_identifier}",
+      PROVISIONING_PROFILE_SPECIFIER:
+        "match #{profile_type_name} #{app_identifier}",
       DEVELOPMENT_TEAM: ENV["sigh_#{app_identifier}_#{profile_type}_team-id"],
       CODE_SIGN_IDENTITY: "iPhone #{certificate_type}"
-    })
+    )
     gym(
       scheme: PROJECT_NAME,
       configuration: configuration,
@@ -104,7 +109,7 @@ platform :ios do
       output_name: 'app',
       output_directory: "ios/build/#{PROJECT_NAME}",
       export_method: export_method,
-      xcargs: xcode_args,
+      xcargs: xcode_args
     )
   end
 
@@ -114,16 +119,16 @@ platform :ios do
     DEFAULT_CONFIGURATION = CONFIGURATION[:debug]
     DEFAULT_SIMULATOR = 'iPhone 11 Pro'
     app_env = options[:app_env] || DEFAULT_APP_ENV
-    configuration = CONFIGURATION[options[:configuration].to_s.to_sym] || DEFAULT_CONFIGURATION
+    configuration =
+      CONFIGURATION[options[:configuration].to_s.to_sym] ||
+      DEFAULT_CONFIGURATION
 
     if options[:device]
       build(
         app_env: app_env,
         configuration: configuration.downcase
       )
-      sh(
-        "npx ios-deploy --bundle ../ios/build/#{PROJECT_NAME}/app.ipa"
-      )
+      sh "npx ios-deploy --bundle ../ios/build/#{PROJECT_NAME}/app.ipa"
       next
     end
 
@@ -146,18 +151,18 @@ platform :ios do
 
     setup_env_files(app_env: app_env)
 
-    sh (
-      "(
+    sh "
+      (
         cd .. && \
           npx react-native run-ios \
             --simulator='#{simulator}' \
             --configuration='#{configuration}'
-      )"
-    )
+      )
+    "
   end
 
   desc 'Upload to TestFlight'
-  lane :upload_beta do |options|
+  lane :upload_beta do
     build(
       app_env: 'beta',
       profile_type: 'appstore'
@@ -188,7 +193,8 @@ platform :ios do
   lane :certificates do
     match(
       type: 'adhoc',
-      app_identifier: [APP_IDENTIFIER[:dev], APP_IDENTIFIER[:beta], APP_IDENTIFIER[:prd]],
+      app_identifier:
+        [APP_IDENTIFIER[:dev], APP_IDENTIFIER[:beta], APP_IDENTIFIER[:prd]],
       force: true,
       keychain_name: KEYCHAIN_NAME,
       keychain_password: KEYCHAIN_PASSWORD
@@ -212,21 +218,24 @@ platform :ios do
   end
 
   private_lane :setup_env_files do |options|
-    sh(
-      "(cd .. && APP_ENV=#{options[:app_env]} bin/setup-env.sh)"
-    )
+    sh "
+      (
+        cd ..
+        APP_ENV=#{options[:app_env]} bin/setup-env.sh
+      )
+    "
   end
 
   private_lane :reset do
-    sh (
-      "(
+    sh "
+      (
         cd .. && \
         git checkout -- \
         ios/#{PROJECT_NAME}/Images.xcassets/ \
         ios/#{PROJECT_NAME}*/Info.plist \
         #{XCODEPROJ_PATH}/project.pbxproj
-      )"
-    )
+      )
+    "
     delete_keychain(name: KEYCHAIN_NAME)
   end
 end

@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  lintcheck:
+  lintcheck-js:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout source code
@@ -16,6 +16,19 @@ jobs:
         run: npm i
       - name: Check lint error
         run: npm run lint
+  lintcheck-ruby:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+      - name: Switch ruby version
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.6.x"
+      - name: Install dependencies
+        run: npm run install:gem
+      - name: Check lint error
+        run: npm run lint:ruby
   typecheck:
     runs-on: ubuntu-18.04
     steps:

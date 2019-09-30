@@ -1,3 +1,5 @@
+[![Build Status][build-status-svg]][build-status-link]
+
 # DAPPFACE
 
 🚧 **This app is in an early development stage. Bugs and major refactoring are expected.**
@@ -45,3 +47,6 @@ $ npm run ios simulator:iPhone\ 11
 ```sh
 $ npm run ios device:true
 ```
+
+[build-status-svg]: https://github.com/dappface/app/workflows/Build/badge.svg
+[build-status-link]: https://github.com/dappface/app/actions

@@ -86,6 +86,6 @@ jobs:
 
           echo ::add-path::./google-cloud-sdk/bin
       - name: Install dependencies
-        run: npm run setup
+        run: npm run install:all
       - name: Build ios app
         run: npm run ios:beta version:0.0.0

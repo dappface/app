@@ -59,7 +59,7 @@ buck-out/
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
-gc_keys.json
+google-cloud-key.json
 
 # coverage
 coverage/

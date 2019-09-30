@@ -13,8 +13,6 @@ Web3 compatible Mobile Browser with crypto news aggrigator and swipeable tabs.
 2. Install more tools
 
 ```sh
-$ brew install cocoapods
-$ pod repo update
 $ brew install imagemagick
 $ brew cask install react-native-debugger
 ```
@@ -24,7 +22,7 @@ $ brew cask install react-native-debugger
 ```sh
 $ git clone git@github.com:LukeSugiura/dappface.git
 $ cd ./dappface
-$ npm run setup
+$ npm run install:all
 ```
 
 ## 📱 Running on Simulator

@@ -1,12 +1,14 @@
-import * as React from 'react'
-import {Field, Form} from 'react-final-form'
-import {Keyboard, View} from 'react-native'
+import {validateMnemonic} from 'bip39'
+import {Formik} from 'formik'
+import React, {useCallback, useEffect, useMemo} from 'react'
+import {Keyboard} from 'react-native'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {Navigation} from 'react-native-navigation'
 import {Button, Caption, HelperText, TextInput, Title} from 'react-native-paper'
 import {HorizontalPadding, Padding, VerticalPadding} from 'src/components/atoms'
 import {NavigationEvent} from 'src/const'
-import {useValidators} from 'src/hooks'
 import {pushAccountSelector} from 'src/navigation'
+import * as yup from 'yup'
 
 export {
   AccountSelector,
@@ -16,10 +18,8 @@ export interface IProps {
   componentId: string
 }
 
-export const Import = ({componentId}: IProps) => {
-  const {mnemonicValidator} = useValidators()
-
-  const onSubmit = React.useCallback(
+export function Import({componentId}: IProps) {
+  const onSubmit = useCallback(
     ({mnemonic}: {mnemonic: string}) => {
       const trimed = mnemonic.trim()
       pushAccountSelector(componentId, {mnemonic: trimed})
@@ -27,7 +27,20 @@ export const Import = ({componentId}: IProps) => {
     [componentId],
   )
 
-  React.useEffect(() => {
+  const validationSchema = useMemo(
+    () =>
+      yup.object({
+        mnemonic: yup
+          .string()
+          .required()
+          .test('mnemonic', 'Mnemonic is invalid', value =>
+            validateMnemonic(value.trim()),
+          ),
+      }),
+    [],
+  )
+
+  useEffect(() => {
     const listener = Navigation.events().registerNavigationButtonPressedListener(
       ({buttonId}) => {
         if (buttonId !== NavigationEvent.CancelImport) {
@@ -43,52 +56,52 @@ export const Import = ({componentId}: IProps) => {
   }, [componentId])
 
   return (
-    <Form
-      onSubmit={onSubmit as any}
-      // @ts-ignore
-      render={({handleSubmit, pristine, submitting}) => (
-        <View>
+    <Formik
+      initialValues={{mnemonic: ''}}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}>
+      {({
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isValid,
+        touched,
+        values,
+      }) => (
+        <KeyboardAwareScrollView>
           <HorizontalPadding>
             <VerticalPadding>
               <Title>By Recovery Phrase</Title>
               <Caption>Separate each word with a single space</Caption>
             </VerticalPadding>
 
-            <Field
-              name='mnemonic'
-              validate={mnemonicValidator}
-              render={({input, meta}) => (
-                <>
-                  <TextInput
-                    {...(input as any)}
-                    autoCapitalize='none'
-                    autoCorrect={false}
-                    autoFocus
-                    label='Recovery Phrase'
-                    mode='outlined'
-                    multiline
-                    placeholder='ability bachelor cabin damage...'
-                  />
-                  {meta.touched && meta.error ? (
-                    <HelperText type='error'>{meta.error}</HelperText>
-                  ) : (
-                    <HelperText>12 or 24 words</HelperText>
-                  )}
-                </>
-              )}
+            <TextInput
+              onChangeText={handleChange('mnemonic')}
+              onBlur={handleBlur('mnemonic')}
+              autoCapitalize='none'
+              autoCorrect={false}
+              autoFocus
+              label='Recovery Phrase'
+              mode='outlined'
+              multiline
+              placeholder='ability bachelor cabin damage...'
+              value={values.mnemonic}
             />
+            {touched.mnemonic && errors.mnemonic ? (
+              <HelperText type='error'>{errors.mnemonic}</HelperText>
+            ) : (
+              <HelperText>12 or 24 words</HelperText>
+            )}
           </HorizontalPadding>
 
           <Padding>
-            <Button
-              disabled={pristine || submitting}
-              mode='contained'
-              onPress={handleSubmit as any}>
+            <Button disabled={!isValid} mode='contained' onPress={handleSubmit}>
               Next
             </Button>
           </Padding>
-        </View>
+        </KeyboardAwareScrollView>
       )}
-    />
+    </Formik>
   )
 }

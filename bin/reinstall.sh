@@ -17,5 +17,5 @@ rm -rf $TMPDIR/react*
 rm -rf $TMPDIR/metro*
 rm -rf $TMPDIR/haste-*
 
-npm run setup
+npm run install:all
 

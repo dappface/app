@@ -1,6 +1,6 @@
 import BN from 'bignumber.js'
 import {Formik, FieldValidator, useFormikContext, useField} from 'formik'
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {
   Button,
@@ -41,80 +41,54 @@ interface IGasInfo {
 
 export function Send({componentId}: IProps) {
   const web3 = useWeb3()
-  const currencyDetails = useSelector(settingSelector.getCurrencyDetails)
   const currentAccount = useSelector(
     accountSelector.getCurrentAccount,
   ) as entityType.IAccount
-  const fiatRate = useSelector(accountSelector.getFiatRate)
-
-  const [gasInfo, setGasInfo] = useState<IGasInfo | null>(null)
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false)
   const [to, setTo] = useState('')
-
-  const getAmountHelperText = (balance: string): string => {
-    if (!balance) {
-      return 'Required'
-    }
-
-    return `≈ ${new BN(balance)
-      .multipliedBy(fiatRate)
-      .toFormat(currencyDetails.decimalDigits)} ${currencyDetails.code}`
-  }
-
-  const getGasPrice = (): string => {
-    if (!gasInfo) {
-      return '41'
-    }
-    return new BN(gasInfo.average).dividedBy(10).toString()
-  }
-
-  const getGasPriceHelperText = (): string => {
-    if (!gasInfo) {
-      return ''
-    }
-
-    return `Recommendations (\
-Safe Lowest: ${gasInfo.safeLow / 10} Gwei, \
-Standard: ${gasInfo.average / 10} Gwei, \
-Fast: ${gasInfo.fast / 10} Gwei)`
-  }
-  const onPressScan = (): void => {
-    showWalletScan({setTo})
-  }
-
-  const onSubmit = async (values: ISendFormValues): Promise<void> => {
-    const amount = new BN(web3.utils.toWei(values.amount, 'ether'))
-    const gasPrice = new BN(web3.utils.toWei(values.gasPrice, 'Gwei'))
-    const gasLimit = new BN(values.gasLimit)
-    const txParams: accountType.ITransactionParams = {
-      gasLimit: gasLimit.toNumber(),
-      gasPrice: gasPrice.toString(),
-      to: values.to,
-      value: amount.toString(),
-    }
-
-    pushComfirmSend(componentId, {txParams})
-  }
+  const {
+    recommendedGasPrice,
+    helperText: gasPriceHelperText,
+  } = useGasPriceInfo()
 
   const amountInputRef = useRef<TextInput>()
+  const gasLimitInputRef = useRef<TextInput>()
+  const gasPriceInputRef = useRef<TextInput>()
 
-  const onSubmitEditingAmount = (): void => {
+  const handleSubmitEditingTo = useCallback((): void => {
     if (!amountInputRef.current) {
       return
     }
     amountInputRef.current.focus()
-  }
-
-  useEffect(() => {
-    ;(async () => {
-      try {
-        const g = await gasStation.getGasInfo()
-        setGasInfo(g)
-      } catch (error) {
-        // [TODO]
-      }
-    })()
   }, [])
+
+  const handlePressScan = useCallback((): void => {
+    showWalletScan({setTo})
+  }, [])
+
+  const handleSubmitEditingGasLimit = useCallback((): void => {
+    if (!gasPriceInputRef.current) {
+      return
+    }
+    gasPriceInputRef.current.focus()
+  }, [])
+
+  const onSubmit = useCallback(
+    (values: ISendFormValues): void => {
+      const amount = new BN(web3.utils.toWei(values.amount, 'ether'))
+      const gasPrice = new BN(web3.utils.toWei(values.gasPrice, 'Gwei'))
+      const gasLimit = new BN(values.gasLimit)
+      const txParams: accountType.ITransactionParams = {
+        gasLimit: gasLimit.toNumber(),
+        gasPrice: gasPrice.toString(),
+        to: values.to,
+        value: amount.toString(),
+      }
+
+      pushComfirmSend(componentId, {txParams})
+    },
+    [componentId, web3.utils],
+  )
 
   return (
     <Formik
@@ -122,10 +96,10 @@ Fast: ${gasInfo.fast / 10} Gwei)`
         to,
         amount: '',
         gasLimit: '21000',
-        gasPrice: getGasPrice(),
+        gasPrice: recommendedGasPrice,
       }}
-      onSubmit={() => {}}>
-      {({handleSubmit, isValid}) => (
+      onSubmit={onSubmit}>
+      {({handleSubmit}) => (
         <KeyboardAwareScrollView>
           <List.Section>
             <Row>
@@ -141,21 +115,21 @@ Fast: ${gasInfo.fast / 10} Gwei)`
                 validate={value => (value === '' ? 'Required' : undefined)}
                 autoFocus
                 returnKeyType='next'
-                onSubmitEditing={onSubmitEditingAmount}
+                onSubmitEditing={handleSubmitEditingTo}
               />
-              <IconButton icon='crop-free' onPress={onPressScan} size={24} />
+              <IconButton
+                icon='crop-free'
+                onPress={handlePressScan}
+                size={24}
+              />
             </Row>
 
             <HorizontalPadding>
               <Row>
-                <TextField
-                  name='amount'
-                  label='Amount'
-                  placeholder='3.14'
-                  helperText={getAmountHelperText}
-                  keyboardType='numeric'
-                  returnKeyType={showAdvancedOptions ? 'next' : 'go'}
-                  ref={amountInputRef}
+                <AmountTextField
+                  showAdvancedOptions={showAdvancedOptions}
+                  gasLimitInputRef={gasLimitInputRef}
+                  ref={amountInputRef as React.RefObject<TextInput>}
                 />
                 <HorizontalPadding>
                   <Subheading>ETH</Subheading>
@@ -186,16 +160,20 @@ Fast: ${gasInfo.fast / 10} Gwei)`
                     placeholder='21000'
                     helperText='Required'
                     keyboardType='numeric'
-                    returnKeyType={'next'}
+                    returnKeyType='next'
+                    ref={gasLimitInputRef}
+                    onSubmitEditing={handleSubmitEditingGasLimit}
                   />
                   <Row>
                     <TextField
                       name='gasPrice'
                       label='Gas Price'
-                      placeholder={getGasPrice()}
-                      helperText={getGasPriceHelperText()}
+                      placeholder={recommendedGasPrice}
+                      helperText={gasPriceHelperText}
                       keyboardType='numeric'
-                      returnKeyType={'go'}
+                      returnKeyType='go'
+                      ref={gasPriceInputRef}
+                      onSubmitEditing={handleSubmit}
                     />
                     <HorizontalPadding>
                       <Subheading>Gwei</Subheading>
@@ -212,6 +190,116 @@ Fast: ${gasInfo.fast / 10} Gwei)`
         </KeyboardAwareScrollView>
       )}
     </Formik>
+  )
+}
+
+function RecipientBlockie() {
+  const [field, meta] = useField('to')
+  return meta.error || field.value === '' ? (
+    <Ionicons
+      name='md-contact'
+      size={24}
+      color={Color.TEXT.BLACK_MEDIUM_EMPHASIS}
+    />
+  ) : (
+    <Blockie address={field.value} size='small' />
+  )
+}
+
+interface IAmountTextFieldProps {
+  showAdvancedOptions: boolean
+  gasLimitInputRef: React.MutableRefObject<TextInput | undefined>
+}
+
+const AmountTextField = React.forwardRef<TextInput, IAmountTextFieldProps>(
+  ({showAdvancedOptions, gasLimitInputRef}, ref) => {
+    const fiatRate = useSelector(accountSelector.getFiatRate)
+    const currencyDetails = useSelector(settingSelector.getCurrencyDetails)
+    const {handleSubmit} = useFormikContext()
+    const [field] = useField('amount')
+
+    const helperText = useMemo((): string => {
+      if (!field.value) {
+        return 'Required'
+      }
+
+      return `≈ ${new BN(field.value)
+        .multipliedBy(fiatRate)
+        .toFormat(currencyDetails.decimalDigits)} ${currencyDetails.code}`
+    }, [fiatRate, currencyDetails, field])
+
+    const handleSubmitEditing = useCallback((): void => {
+      if (!gasLimitInputRef.current || !showAdvancedOptions) {
+        handleSubmit()
+        return
+      }
+      gasLimitInputRef.current.focus()
+    }, [showAdvancedOptions, handleSubmit])
+
+    return (
+      <TextField
+        name='amount'
+        label='Amount'
+        placeholder='3.14'
+        helperText={helperText}
+        keyboardType='numeric'
+        returnKeyType={showAdvancedOptions ? 'next' : 'go'}
+        ref={ref}
+        onSubmitEditing={handleSubmitEditing}
+      />
+    )
+  },
+)
+
+interface IGasPriceInfo {
+  recommendedGasPrice: string
+  helperText: string
+}
+
+const useGasPriceInfo = (): IGasPriceInfo => {
+  const [gasInfo, setGasInfo] = useState<IGasInfo | null>(null)
+
+  const recommendedGasPrice = useMemo(
+    () => (gasInfo ? new BN(gasInfo.safeLow).dividedBy(10).toString() : '41'),
+    [gasInfo],
+  )
+
+  const helperText = useMemo(() => {
+    if (!gasInfo) {
+      return 'Fetching recommendations'
+    }
+    const safeLow = new BN(gasInfo.safeLow).dividedBy(10).toString()
+    const average = new BN(gasInfo.average).dividedBy(10).toString()
+    const fast = new BN(gasInfo.fast).dividedBy(10).toString()
+    return `Recommendations (\
+Safe Lowest: ${safeLow} Gwei, \
+Standard: ${average} Gwei, \
+Fast: ${fast} Gwei)`
+  }, [gasInfo])
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const info = await gasStation.getGasInfo()
+        setGasInfo(info)
+      } catch (error) {
+        // [TODO]
+      }
+    })()
+  }, [])
+
+  return {
+    recommendedGasPrice,
+    helperText,
+  }
+}
+
+function Submit() {
+  const {handleSubmit, isValid} = useFormikContext()
+  return (
+    <Button disabled={!isValid} mode='contained' onPress={handleSubmit}>
+      next
+    </Button>
   )
 }
 
@@ -250,25 +338,3 @@ const TextField = React.forwardRef(
     )
   },
 )
-
-function Submit() {
-  const {handleSubmit, isValid} = useFormikContext()
-  return (
-    <Button disabled={!isValid} mode='contained' onPress={handleSubmit}>
-      next
-    </Button>
-  )
-}
-
-function RecipientBlockie() {
-  const [field, meta] = useField('to')
-  return meta.error || field.value === '' ? (
-    <Ionicons
-      name='md-contact'
-      size={24}
-      color={Color.TEXT.BLACK_MEDIUM_EMPHASIS}
-    />
-  ) : (
-    <Blockie address={field.value} size='small' />
-  )
-}

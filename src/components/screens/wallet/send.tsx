@@ -21,13 +21,14 @@ import {
   Padding,
   Row,
 } from 'src/components/atoms'
-import {Color} from 'src/const'
+import {Color, Size} from 'src/const'
 import {ISendFormValues, useWeb3} from 'src/hooks'
 import {pushComfirmSend, showWalletScan} from 'src/navigation'
 import {accountSelector, accountType} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {settingSelector} from 'src/redux/module/setting'
 import {gasStation} from 'src/utils'
+import styled from 'styled-components/native'
 
 export interface IProps {
   componentId: string
@@ -107,10 +108,8 @@ export function Send({componentId}: IProps) {
       {({handleSubmit}) => (
         <KeyboardAwareScrollView>
           <List.Section>
-            <Row>
-              <HorizontalPadding>
-                <RecipientBlockie />
-              </HorizontalPadding>
+            <AlignTopRow>
+              <RecipientBlockie />
               <TextField
                 name='to'
                 label='Recipient address'
@@ -122,25 +121,25 @@ export function Send({componentId}: IProps) {
                 returnKeyType='next'
                 onSubmitEditing={focusAmount}
               />
-              <IconButton
-                icon='crop-free'
-                onPress={handlePressScan}
-                size={24}
-              />
-            </Row>
-
-            <HorizontalPadding>
-              <Row>
-                <AmountTextField
-                  showAdvancedOptions={showAdvancedOptions}
-                  focusGasLimit={focusGasLimit}
-                  ref={amountInputRef as React.RefObject<TextInput>}
+              <SubInfoContainer>
+                <IconButton
+                  icon='crop-free'
+                  onPress={handlePressScan}
+                  size={24}
                 />
-                <HorizontalPadding>
-                  <Subheading>ETH</Subheading>
-                </HorizontalPadding>
-              </Row>
-            </HorizontalPadding>
+              </SubInfoContainer>
+            </AlignTopRow>
+
+            <RowWithUnit>
+              <AmountTextField
+                showAdvancedOptions={showAdvancedOptions}
+                focusGasLimit={focusGasLimit}
+                ref={amountInputRef as React.RefObject<TextInput>}
+              />
+              <SubInfoContainer>
+                <Subheading>ETH</Subheading>
+              </SubInfoContainer>
+            </RowWithUnit>
           </List.Section>
 
           <List.Section>
@@ -156,9 +155,9 @@ export function Send({componentId}: IProps) {
               </HorizontalPadding>
             </Row>
 
-            <HorizontalPadding>
-              {showAdvancedOptions && (
-                <>
+            {showAdvancedOptions && (
+              <>
+                <HorizontalPadding>
                   <TextField
                     name='gasLimit'
                     label='Gas Limit'
@@ -169,24 +168,24 @@ export function Send({componentId}: IProps) {
                     ref={gasLimitInputRef}
                     onSubmitEditing={focusGasPrice}
                   />
-                  <Row>
-                    <TextField
-                      name='gasPrice'
-                      label='Gas Price'
-                      placeholder={recommendedGasPrice}
-                      helperText={gasPriceHelperText}
-                      keyboardType='numeric'
-                      returnKeyType='go'
-                      ref={gasPriceInputRef}
-                      onSubmitEditing={handleSubmit}
-                    />
-                    <HorizontalPadding>
-                      <Subheading>Gwei</Subheading>
-                    </HorizontalPadding>
-                  </Row>
-                </>
-              )}
-            </HorizontalPadding>
+                </HorizontalPadding>
+                <RowWithUnit>
+                  <TextField
+                    name='gasPrice'
+                    label='Gas Price'
+                    placeholder={recommendedGasPrice}
+                    helperText={gasPriceHelperText}
+                    keyboardType='numeric'
+                    returnKeyType='go'
+                    ref={gasPriceInputRef}
+                    onSubmitEditing={handleSubmit}
+                  />
+                  <SubInfoContainer>
+                    <Subheading>Gwei</Subheading>
+                  </SubInfoContainer>
+                </RowWithUnit>
+              </>
+            )}
           </List.Section>
 
           <Padding>
@@ -198,16 +197,36 @@ export function Send({componentId}: IProps) {
   )
 }
 
+const AlignTopRow = styled(Row)`
+  align-items: flex-start;
+`
+
+const RowWithUnit = styled(AlignTopRow)`
+  padding-left: ${Size.MARGIN_16};
+`
+
+const SubInfoContainer = styled.View`
+  width: 54;
+  height: 64;
+  align-items: center;
+  justify-content: center;
+  top: 4;
+`
+
 function RecipientBlockie() {
   const [field, meta] = useField('to')
-  return meta.error || field.value === '' ? (
-    <Ionicons
-      name='md-contact'
-      size={24}
-      color={Color.TEXT.BLACK_MEDIUM_EMPHASIS}
-    />
-  ) : (
-    <Blockie address={field.value} size='small' />
+  return (
+    <SubInfoContainer>
+      {meta.error || field.value === '' ? (
+        <Ionicons
+          name='md-contact'
+          size={26}
+          color={Color.TEXT.BLACK_MEDIUM_EMPHASIS}
+        />
+      ) : (
+        <Blockie address={field.value} size={22} />
+      )}
+    </SubInfoContainer>
   )
 }
 

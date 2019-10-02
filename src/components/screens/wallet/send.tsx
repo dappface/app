@@ -55,22 +55,27 @@ export function Send({componentId}: IProps) {
   const gasLimitInputRef = useRef<TextInput>()
   const gasPriceInputRef = useRef<TextInput>()
 
-  const handleSubmitEditingTo = useCallback((): void => {
+  const focusAmount = useCallback(() => {
     if (!amountInputRef.current) {
       return
     }
     amountInputRef.current.focus()
   }, [])
-
-  const handlePressScan = useCallback((): void => {
-    showWalletScan({setTo})
+  const focusGasLimit = useCallback(() => {
+    if (!gasLimitInputRef.current) {
+      return
+    }
+    gasLimitInputRef.current.focus()
   }, [])
-
-  const handleSubmitEditingGasLimit = useCallback((): void => {
+  const focusGasPrice = useCallback(() => {
     if (!gasPriceInputRef.current) {
       return
     }
     gasPriceInputRef.current.focus()
+  }, [])
+
+  const handlePressScan = useCallback((): void => {
+    showWalletScan({setTo})
   }, [])
 
   const onSubmit = useCallback(
@@ -115,7 +120,7 @@ export function Send({componentId}: IProps) {
                 validate={value => (value === '' ? 'Required' : undefined)}
                 autoFocus
                 returnKeyType='next'
-                onSubmitEditing={handleSubmitEditingTo}
+                onSubmitEditing={focusAmount}
               />
               <IconButton
                 icon='crop-free'
@@ -128,7 +133,7 @@ export function Send({componentId}: IProps) {
               <Row>
                 <AmountTextField
                   showAdvancedOptions={showAdvancedOptions}
-                  gasLimitInputRef={gasLimitInputRef}
+                  focusGasLimit={focusGasLimit}
                   ref={amountInputRef as React.RefObject<TextInput>}
                 />
                 <HorizontalPadding>
@@ -162,7 +167,7 @@ export function Send({componentId}: IProps) {
                     keyboardType='numeric'
                     returnKeyType='next'
                     ref={gasLimitInputRef}
-                    onSubmitEditing={handleSubmitEditingGasLimit}
+                    onSubmitEditing={focusGasPrice}
                   />
                   <Row>
                     <TextField
@@ -208,11 +213,12 @@ function RecipientBlockie() {
 
 interface IAmountTextFieldProps {
   showAdvancedOptions: boolean
-  gasLimitInputRef: React.MutableRefObject<TextInput | undefined>
+  focusGasLimit: () => void
 }
 
 const AmountTextField = React.forwardRef<TextInput, IAmountTextFieldProps>(
-  ({showAdvancedOptions, gasLimitInputRef}, ref) => {
+  // eslint-disable-next-line react/prop-types
+  ({showAdvancedOptions, focusGasLimit}, ref) => {
     const fiatRate = useSelector(accountSelector.getFiatRate)
     const currencyDetails = useSelector(settingSelector.getCurrencyDetails)
     const {handleSubmit} = useFormikContext()
@@ -229,12 +235,12 @@ const AmountTextField = React.forwardRef<TextInput, IAmountTextFieldProps>(
     }, [fiatRate, currencyDetails, field])
 
     const handleSubmitEditing = useCallback((): void => {
-      if (!gasLimitInputRef.current || !showAdvancedOptions) {
+      if (!showAdvancedOptions) {
         handleSubmit()
         return
       }
-      gasLimitInputRef.current.focus()
-    }, [showAdvancedOptions, handleSubmit])
+      focusGasLimit()
+    }, [showAdvancedOptions, handleSubmit, focusGasLimit])
 
     return (
       <TextField

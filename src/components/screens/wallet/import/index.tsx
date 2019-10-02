@@ -29,13 +29,17 @@ export function Import({componentId}: IProps) {
 
   const validationSchema = useMemo(
     () =>
-      yup.object({
+      yup.object().shape({
         mnemonic: yup
           .string()
           .required()
-          .test('mnemonic', 'Mnemonic is invalid', value =>
-            validateMnemonic(value.trim()),
-          ),
+          .test('mnemonic', 'Mnemonic is invalid', value => {
+            try {
+              return validateMnemonic(value.trim())
+            } catch {
+              return true
+            }
+          }),
       }),
     [],
   )

@@ -6,8 +6,7 @@ set -o xtrace
 
 npm i
 bundle install
-bundle exec pod repo update
 (
   cd ios
-  bundle exec pod install
+  bundle exec pod install --repo-update
 )

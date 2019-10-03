@@ -1,12 +1,16 @@
-import * as React from 'react'
-import {Field, Form} from 'react-final-form'
-import {Keyboard, View} from 'react-native'
+import {Formik} from 'formik'
+import React, {useCallback, useEffect, useMemo} from 'react'
+import {Keyboard} from 'react-native'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {Navigation} from 'react-native-navigation'
-import {Button, Caption, HelperText, TextInput, Title} from 'react-native-paper'
+import {Caption, Title} from 'react-native-paper'
+
 import {HorizontalPadding, Padding, VerticalPadding} from 'src/components/atoms'
+import {FormField} from 'src/components/molecules'
 import {NavigationEvent} from 'src/const'
-import {useValidators} from 'src/hooks'
 import {pushAccountSelector} from 'src/navigation'
+import {Submit} from './submit'
+import {validateMnemonic} from './validator'
 
 export {
   AccountSelector,
@@ -16,18 +20,23 @@ export interface IProps {
   componentId: string
 }
 
-export const Import = ({componentId}: IProps) => {
-  const {mnemonicValidator} = useValidators()
+export function Import({componentId}: IProps) {
+  const initialValues = useMemo<IValues>(
+    () => ({
+      mnemonic: '',
+    }),
+    [],
+  )
 
-  const onSubmit = React.useCallback(
-    ({mnemonic}: {mnemonic: string}) => {
+  const onSubmit = useCallback(
+    ({mnemonic}: IValues) => {
       const trimed = mnemonic.trim()
       pushAccountSelector(componentId, {mnemonic: trimed})
     },
     [componentId],
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     const listener = Navigation.events().registerNavigationButtonPressedListener(
       ({buttonId}) => {
         if (buttonId !== NavigationEvent.CancelImport) {
@@ -43,52 +52,32 @@ export const Import = ({componentId}: IProps) => {
   }, [componentId])
 
   return (
-    <Form
-      onSubmit={onSubmit as any}
-      // @ts-ignore
-      render={({handleSubmit, pristine, submitting}) => (
-        <View>
-          <HorizontalPadding>
-            <VerticalPadding>
-              <Title>By Recovery Phrase</Title>
-              <Caption>Separate each word with a single space</Caption>
-            </VerticalPadding>
+    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+      <KeyboardAwareScrollView>
+        <HorizontalPadding>
+          <VerticalPadding>
+            <Title>By Recovery Phrase</Title>
+            <Caption>Separate each word with a single space</Caption>
+          </VerticalPadding>
 
-            <Field
-              name='mnemonic'
-              validate={mnemonicValidator}
-              render={({input, meta}) => (
-                <>
-                  <TextInput
-                    {...(input as any)}
-                    autoCapitalize='none'
-                    autoCorrect={false}
-                    autoFocus
-                    label='Recovery Phrase'
-                    mode='outlined'
-                    multiline
-                    placeholder='ability bachelor cabin damage...'
-                  />
-                  {meta.touched && meta.error ? (
-                    <HelperText type='error'>{meta.error}</HelperText>
-                  ) : (
-                    <HelperText>12 or 24 words</HelperText>
-                  )}
-                </>
-              )}
-            />
-          </HorizontalPadding>
+          <FormField
+            autoFocus
+            helperText='12 or 24 words'
+            label='Recovery Phrase'
+            name='mnemonic'
+            placeholder='ability bachelor cabin damage...'
+            validate={validateMnemonic}
+          />
+        </HorizontalPadding>
 
-          <Padding>
-            <Button
-              disabled={pristine || submitting}
-              mode='contained'
-              onPress={handleSubmit as any}>
-              Next
-            </Button>
-          </Padding>
-        </View>
-      )}
-    />
+        <Padding>
+          <Submit />
+        </Padding>
+      </KeyboardAwareScrollView>
+    </Formik>
   )
+}
+
+interface IValues {
+  mnemonic: ''
 }

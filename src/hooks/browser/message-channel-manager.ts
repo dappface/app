@@ -103,7 +103,7 @@ export function useMessageChannelManager(
           value: data.payload.txParams.value,
         }
         const wallet = new Wallet(a.privKey)
-        const signedTx = await wallet.sign(rawTx)
+        const signedTx = await wallet.signTransaction(rawTx)
         respondData(tabId, data.payload.callbackId, signedTx)
         break
       }

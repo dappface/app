@@ -12,7 +12,6 @@ import {
 
 import {Expanded, HorizontalPadding, Padding, Row} from 'src/components/atoms'
 import {FormField} from 'src/components/molecules'
-import {ISendFormValues} from 'src/hooks'
 import {pushComfirmSend, showWalletScan} from 'src/navigation'
 import {accountType} from 'src/redux/module/account'
 import {useGasPriceInfo} from './hooks'
@@ -21,6 +20,7 @@ import {AlignTopRow, RowWithUnit, SubInfoContainer} from './shared'
 import {Submit} from './submit'
 import {AmountFormField} from './amount-form-field'
 import {
+  IValues,
   useValidateForm,
   validateTo,
   validateGasLimit,
@@ -39,7 +39,7 @@ export function Send({componentId}: IProps) {
     recommendedGasPrice,
     helperText: gasPriceHelperText,
   } = useGasPriceInfo()
-  const initialValues = useMemo(
+  const initialValues = useMemo<IValues>(
     () => ({
       to,
       amount: '',
@@ -77,7 +77,7 @@ export function Send({componentId}: IProps) {
   }, [])
 
   const onSubmit = useCallback(
-    (values: ISendFormValues): void => {
+    (values: IValues): void => {
       const txParams: accountType.ITransactionParams = {
         gasLimit: Number(values.gasLimit),
         gasPrice: ethersUtils.parseUnits(values.gasPrice, 'gwei').toString(),

@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux'
 import {accountSelector} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 
-interface IValues {
+export interface IValues {
   to: string
   amount: string
   gasLimit: string

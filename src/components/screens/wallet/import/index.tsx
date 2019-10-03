@@ -21,19 +21,19 @@ export interface IProps {
 }
 
 export function Import({componentId}: IProps) {
-  const onSubmit = useCallback(
-    ({mnemonic}: {mnemonic: string}) => {
-      const trimed = mnemonic.trim()
-      pushAccountSelector(componentId, {mnemonic: trimed})
-    },
-    [componentId],
-  )
-
-  const initialValues = useMemo(
+  const initialValues = useMemo<IValues>(
     () => ({
       mnemonic: '',
     }),
     [],
+  )
+
+  const onSubmit = useCallback(
+    ({mnemonic}: IValues) => {
+      const trimed = mnemonic.trim()
+      pushAccountSelector(componentId, {mnemonic: trimed})
+    },
+    [componentId],
   )
 
   useEffect(() => {
@@ -76,4 +76,8 @@ export function Import({componentId}: IProps) {
       </KeyboardAwareScrollView>
     </Formik>
   )
+}
+
+interface IValues {
+  mnemonic: ''
 }

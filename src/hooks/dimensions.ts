@@ -28,7 +28,7 @@ export function useSafeAreaPosition(): ISafeAreaPosition {
 
   return {
     top: 44,
-    bottom: hasBezel ? 34 : 0,
+    bottom: hasBezel ? 0 : 34,
   }
 }
 

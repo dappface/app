@@ -51,7 +51,7 @@ const Container = styled(Card)<IContainerProps>`
   width: ${({dimensions}) => dimensions.window.width};
 
   ${({hasBezel}) =>
-    hasBezel &&
+    !hasBezel &&
     `
     padding-bottom: 34;
   `}

@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react'
+import React, {useEffect, useCallback, useState} from 'react'
 import {Animated, StatusBar} from 'react-native'
 import Interactable from 'react-native-interactable'
 import {Card} from 'react-native-paper'
@@ -68,6 +68,10 @@ export function BottomAppBar({componentId}: IProps) {
       type: uiType.BottomDrawerType.BrowserOptions,
     })
   }, [setBottomDrawer])
+
+  useEffect(() => {
+    closeBottomAppBar()
+  }, [bottomAppBarInitialTop, closeBottomAppBar])
 
   return (
     <>

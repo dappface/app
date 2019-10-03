@@ -110,7 +110,7 @@ const Container = styled.View<IContainerProps>`
     if (orientation !== PORTRAIT) {
       return
     }
-    return hasBezel ? 'padding-top: 44;' : 'padding-top: 20;'
+    return !hasBezel ? 'padding-top: 44;' : 'padding-top: 20;'
   }}
 `
 
@@ -133,7 +133,7 @@ const StyledWebView = styled(WebView)<IStyledWebViewProps>`
 
   ${({hasBezel, orientation, safeAreaPosition}) => `
     padding-horizontal: ${
-      hasBezel && orientation !== PORTRAIT ? safeAreaPosition.top : 0
+      !hasBezel && orientation !== PORTRAIT ? safeAreaPosition.top : 0
     };
   `}
 `

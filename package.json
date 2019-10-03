@@ -47,7 +47,6 @@
     "graphql": "^14.5.5",
     "graphql-tag": "^2.10.1",
     "https-browserify": "~1.0.0",
-    "lint": "^0.7.0",
     "moment": "^2.24.0",
     "node-libs-browser": "^2.2.0",
     "pluralize": "^8.0.0",

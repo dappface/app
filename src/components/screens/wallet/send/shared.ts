@@ -18,5 +18,3 @@ export const SubInfoContainer = styled.View`
   justify-content: center;
   top: 4;
 `
-
-export type HelperTextType = string | ((value: string) => string)

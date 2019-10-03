@@ -11,6 +11,7 @@ import {
 } from 'react-native-paper'
 
 import {Expanded, HorizontalPadding, Padding, Row} from 'src/components/atoms'
+import {FormField} from 'src/components/molecules'
 import {ISendFormValues} from 'src/hooks'
 import {pushComfirmSend, showWalletScan} from 'src/navigation'
 import {accountType} from 'src/redux/module/account'
@@ -18,7 +19,7 @@ import {useGasPriceInfo} from './hooks'
 import {RecipientBlockie} from './receipient-blockie'
 import {AlignTopRow, RowWithUnit, SubInfoContainer} from './shared'
 import {Submit} from './submit'
-import {TextField, AmountTextField} from './text-field'
+import {AmountFormField} from './amount-form-field'
 import {
   useValidateForm,
   validateTo,
@@ -95,7 +96,7 @@ export function Send({componentId}: IProps) {
           <List.Section>
             <AlignTopRow>
               <RecipientBlockie />
-              <TextField
+              <FormField
                 autoFocus
                 helperText='Required'
                 label='Recipient address'
@@ -116,7 +117,7 @@ export function Send({componentId}: IProps) {
             </AlignTopRow>
 
             <RowWithUnit>
-              <AmountTextField
+              <AmountFormField
                 focusGasLimit={focusGasLimit}
                 ref={amountInputRef as React.RefObject<TextInput>}
                 showAdvancedOptions={showAdvancedOptions}
@@ -143,7 +144,7 @@ export function Send({componentId}: IProps) {
             {showAdvancedOptions && (
               <>
                 <HorizontalPadding>
-                  <TextField
+                  <FormField
                     helperText='Required'
                     keyboardType='numeric'
                     label='Gas Limit'
@@ -156,7 +157,7 @@ export function Send({componentId}: IProps) {
                   />
                 </HorizontalPadding>
                 <RowWithUnit>
-                  <TextField
+                  <FormField
                     helperText={gasPriceHelperText}
                     keyboardType='numeric'
                     label='Gas Price'

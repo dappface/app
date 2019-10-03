@@ -1,8 +1,8 @@
 import BN from 'bignumber.js'
 import {useEffect, useMemo, useState} from 'react'
 
+import {HelperTextType} from 'src/components/molecules'
 import {gasStation} from 'src/utils'
-import {HelperTextType} from './shared'
 
 interface IGasInfo {
   average: number

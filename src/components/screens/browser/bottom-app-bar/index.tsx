@@ -71,7 +71,7 @@ export function BottomAppBar({componentId}: IProps) {
 
   useEffect(() => {
     closeBottomAppBar()
-  }, [bottomAppBarInitialTop])
+  }, [bottomAppBarInitialTop, closeBottomAppBar])
 
   return (
     <>

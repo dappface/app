@@ -90,7 +90,7 @@ export function useSignAndSendTransaction() {
         value: web3.utils.toHex(txParams.value),
       }
       const wallet = new Wallet(a.privKey)
-      const signedTx = await wallet.sign(rawTx)
+      const signedTx = await wallet.signTransaction(rawTx)
 
       web3.eth.sendSignedTransaction(signedTx).on('error', error => {
         const failedTransaction: accountType.ITransaction = {

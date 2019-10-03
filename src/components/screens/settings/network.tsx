@@ -20,7 +20,7 @@ export function Network() {
   const candidates = useMemo(
     () =>
       Object.keys(NetworkEnum)
-        .map(val => parseInt(val, 10))
+        .map(val => Number(val))
         .filter(val => !Number.isNaN(val)),
     [],
   )

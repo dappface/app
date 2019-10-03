@@ -1,5 +1,5 @@
 import makeBlockie from 'ethereum-blockies-base64'
-import * as React from 'react'
+import React from 'react'
 import styled from 'styled-components/native'
 
 type Size = number | 'small' | 'medium' | 'large' | void
@@ -10,7 +10,7 @@ interface IProps {
   size?: Size
 }
 
-export const Blockie = ({style, address, size}: IProps) => {
+export function Blockie({style, address, size}: IProps) {
   return (
     <StyledImage
       style={style}
@@ -20,7 +20,7 @@ export const Blockie = ({style, address, size}: IProps) => {
   )
 }
 
-const getSize = ({size}: {size: Size}): number => {
+function getSize({size}: {size: Size}): number {
   if (typeof size === 'number') {
     return size
   }

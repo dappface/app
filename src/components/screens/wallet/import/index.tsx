@@ -1,14 +1,16 @@
-import {validateMnemonic} from 'bip39'
 import {Formik} from 'formik'
 import React, {useCallback, useEffect, useMemo} from 'react'
 import {Keyboard} from 'react-native'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {Navigation} from 'react-native-navigation'
-import {Button, Caption, HelperText, TextInput, Title} from 'react-native-paper'
+import {Caption, Title} from 'react-native-paper'
+
 import {HorizontalPadding, Padding, VerticalPadding} from 'src/components/atoms'
+import {FormField} from 'src/components/molecules'
 import {NavigationEvent} from 'src/const'
 import {pushAccountSelector} from 'src/navigation'
-import * as yup from 'yup'
+import {Submit} from './submit'
+import {validateMnemonic} from './validator'
 
 export {
   AccountSelector,
@@ -27,20 +29,10 @@ export function Import({componentId}: IProps) {
     [componentId],
   )
 
-  const validationSchema = useMemo(
-    () =>
-      yup.object().shape({
-        mnemonic: yup
-          .string()
-          .required()
-          .test('mnemonic', 'Mnemonic is invalid', value => {
-            try {
-              return validateMnemonic(value.trim())
-            } catch {
-              return true
-            }
-          }),
-      }),
+  const initialValues = useMemo(
+    () => ({
+      mnemonic: '',
+    }),
     [],
   )
 
@@ -60,52 +52,28 @@ export function Import({componentId}: IProps) {
   }, [componentId])
 
   return (
-    <Formik
-      initialValues={{mnemonic: ''}}
-      onSubmit={onSubmit}
-      validationSchema={validationSchema}>
-      {({
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        isValid,
-        touched,
-        values,
-      }) => (
-        <KeyboardAwareScrollView>
-          <HorizontalPadding>
-            <VerticalPadding>
-              <Title>By Recovery Phrase</Title>
-              <Caption>Separate each word with a single space</Caption>
-            </VerticalPadding>
+    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+      <KeyboardAwareScrollView>
+        <HorizontalPadding>
+          <VerticalPadding>
+            <Title>By Recovery Phrase</Title>
+            <Caption>Separate each word with a single space</Caption>
+          </VerticalPadding>
 
-            <TextInput
-              onChangeText={handleChange('mnemonic')}
-              onBlur={handleBlur('mnemonic')}
-              autoCapitalize='none'
-              autoCorrect={false}
-              autoFocus
-              label='Recovery Phrase'
-              mode='outlined'
-              multiline
-              placeholder='ability bachelor cabin damage...'
-              value={values.mnemonic}
-            />
-            {touched.mnemonic && errors.mnemonic ? (
-              <HelperText type='error'>{errors.mnemonic}</HelperText>
-            ) : (
-              <HelperText>12 or 24 words</HelperText>
-            )}
-          </HorizontalPadding>
+          <FormField
+            autoFocus
+            helperText='12 or 24 words'
+            label='Recovery Phrase'
+            name='mnemonic'
+            placeholder='ability bachelor cabin damage...'
+            validate={validateMnemonic}
+          />
+        </HorizontalPadding>
 
-          <Padding>
-            <Button disabled={!isValid} mode='contained' onPress={handleSubmit}>
-              Next
-            </Button>
-          </Padding>
-        </KeyboardAwareScrollView>
-      )}
+        <Padding>
+          <Submit />
+        </Padding>
+      </KeyboardAwareScrollView>
     </Formik>
   )
 }

@@ -1,4 +1,4 @@
-import {FieldValidator, useField} from 'formik'
+import {FieldValidator, useFormikContext, useField} from 'formik'
 import React from 'react'
 import {HelperText, TextInput, TextInputProps} from 'react-native-paper'
 
@@ -14,6 +14,7 @@ interface IFormFieldProps extends TextInputProps {
 
 export const FormField = React.forwardRef(
   ({name, validate, helperText, ...textInputProps}: IFormFieldProps, ref) => {
+    const {handleSubmit} = useFormikContext()
     const [field, meta] = useField({name, validate})
     return (
       <Expanded.View>
@@ -24,8 +25,10 @@ export const FormField = React.forwardRef(
           mode='outlined'
           onBlur={field.onBlur(name)}
           onChangeText={field.onChange(name)}
+          onSubmitEditing={textInputProps.onSubmitEditing || handleSubmit}
           // @ts-ignore
           ref={ref}
+          returnKeyType={textInputProps.returnKeyType || 'go'}
           value={field.value}
         />
         {meta.touched && meta.error ? (

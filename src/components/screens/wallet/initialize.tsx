@@ -4,7 +4,6 @@ import {Button, Headline} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
 import {CenteredColumn, HorizontalPadding} from 'src/components/atoms'
 import {BiometryType, Size} from 'src/const'
-import {showImportAccounts} from 'src/navigation'
 import {accountHook} from 'src/redux/module/account'
 import styled from 'styled-components/native'
 

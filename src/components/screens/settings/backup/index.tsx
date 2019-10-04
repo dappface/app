@@ -8,7 +8,6 @@ import {Padding} from 'src/components/atoms'
 import {WordList} from 'src/components/organisms'
 import {ModalTemplate} from 'src/components/templates'
 import {BiometryType, Screen, Size} from 'src/const'
-import {pushQuiz} from 'src/navigation'
 import {accountSelector} from 'src/redux/module/account'
 
 export {Quiz} from 'src/components/screens/settings/backup/quiz'

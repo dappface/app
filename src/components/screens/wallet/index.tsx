@@ -20,7 +20,7 @@ export {Scan} from 'src/components/screens/wallet/scan'
 export {Send} from 'src/components/screens/wallet/send'
 export {TokenSearch} from 'src/components/screens/wallet/token-search'
 
-export interface IProps {
+interface IProps {
   componentId: string
 }
 

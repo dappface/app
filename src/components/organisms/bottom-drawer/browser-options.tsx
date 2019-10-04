@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {List} from 'src/components/organisms/bottom-drawer/list'
 import {Option} from 'src/components/organisms/bottom-drawer/option'
-import {showLinks, showSettings} from 'src/navigation'
 import {uiHook} from 'src/redux/module/ui'
 
 export const BrowserOptions = () => {

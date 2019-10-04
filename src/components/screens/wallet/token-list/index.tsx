@@ -7,7 +7,6 @@ import {
   IProps as IItemProps,
   Item,
 } from 'src/components/screens/wallet/token-list/item'
-import {pushTokenSearch} from 'src/navigation'
 import {tokenSelector} from 'src/redux/module/token'
 import {uiHook, uiType} from 'src/redux/module/ui'
 import styled from 'styled-components/native'

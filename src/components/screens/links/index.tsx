@@ -1,12 +1,11 @@
-import * as React from 'react'
-import {
-  createAppContainer,
-  createMaterialTopTabNavigator,
-} from 'react-navigation'
-import {BookmarkList} from 'src/components/screens/links/bookmark-list'
-import {HistoryList} from 'src/components/screens/links/history-list'
+import React from 'react'
+import {createAppContainer} from 'react-navigation'
+import {createMaterialTopTabNavigator} from 'react-navigation-tabs'
+
 import {ModalTemplate} from 'src/components/templates'
 import {Color} from 'src/const'
+import {BookmarkList} from './bookmark-list'
+import {HistoryList} from './history-list'
 
 const TabNavigator = createMaterialTopTabNavigator(
   {

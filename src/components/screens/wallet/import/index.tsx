@@ -8,7 +8,6 @@ import {Caption, Title} from 'react-native-paper'
 import {HorizontalPadding, Padding, VerticalPadding} from 'src/components/atoms'
 import {FormField} from 'src/components/molecules'
 import {NavigationEvent} from 'src/const'
-import {pushAccountSelector} from 'src/navigation'
 import {Submit} from './submit'
 import {validateMnemonic} from './validator'
 

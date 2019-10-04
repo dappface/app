@@ -12,7 +12,6 @@ import {
 
 import {Expanded, HorizontalPadding, Padding, Row} from 'src/components/atoms'
 import {FormField} from 'src/components/molecules'
-import {pushComfirmSend, showWalletScan} from 'src/navigation'
 import {accountType} from 'src/redux/module/account'
 import {useGasPriceInfo} from './hooks'
 import {RecipientBlockie} from './receipient-blockie'

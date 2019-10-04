@@ -3,7 +3,6 @@ import {Navigation} from 'react-native-navigation'
 import {Colors, List} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import {ModalTemplate} from 'src/components/templates'
-import * as Navigator from 'src/navigation'
 import {useNukeRedux} from 'src/redux'
 import {accountSelector} from 'src/redux/module/account'
 import {settingSelector} from 'src/redux/module/setting'
@@ -13,7 +12,7 @@ export {Currency} from 'src/components/screens/settings/currency'
 export {Network} from 'src/components/screens/settings/network'
 export {SearchEngine} from 'src/components/screens/settings/search-engine'
 
-export interface IProps {
+interface IProps {
   componentId: string
 }
 

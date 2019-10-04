@@ -19,7 +19,7 @@ import {
 import {browserSelector} from 'src/redux/module/browser'
 import styled from 'styled-components/native'
 
-export interface IProps {
+interface IProps {
   componentId: string
 }
 

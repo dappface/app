@@ -51,7 +51,7 @@ cannot be recovered without it.`,
           {
             onPress: () => {
               setIsBackedUp(true)
-              navigation.popToPop()
+              navigation.popToTop()
             },
             text: 'Got it',
           },

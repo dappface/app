@@ -1,6 +1,6 @@
+import * as Links from './links'
 import * as Settings from './settings'
-export {Settings}
+import * as Wallet from './wallet'
+export {Links, Settings, Wallet}
 
 export * from './browser'
-export * from './links'
-export * from './wallet'

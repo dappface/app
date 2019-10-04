@@ -1,24 +1,25 @@
+import {useNavigation} from '@react-navigation/core'
 import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
-import {Navigation} from 'react-native-navigation'
 import {useSelector} from 'react-redux'
-import {Item} from 'src/components/screens/links/item'
-import {NoItems} from 'src/components/screens/links/no-items'
-import {IListProps} from 'src/components/screens/links/type'
+
 import {useBrowserManager} from 'src/hooks'
 import {historyHook, historySelector} from 'src/redux/module/history'
+import {Item} from './item'
+import {NoItems} from './no-items'
 
-export function HistoryList({screenProps: {componentId}}: IListProps) {
+export function HistoryScreen() {
   const {openLink} = useBrowserManager()
   const histories = useSelector(historySelector.getHistories)
   const {removeHistory} = historyHook.useHistoryManager()
+  const navigation = useNavigation()
 
   const onPressFactory = useCallback(
     (url: string) => () => {
       openLink(url)
-      Navigation.dismissModal(componentId)
+      navigation.popToTop()
     },
-    [componentId, openLink],
+    [navigation, openLink],
   )
 
   const onRemoveFactory = useCallback(

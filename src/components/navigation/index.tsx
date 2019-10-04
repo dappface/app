@@ -2,8 +2,11 @@ import {NavigationNativeContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 
-import {Color, ScreenName} from 'src/const'
-import {BrowserScreen, Settings} from './screens'
+import {ScreenName} from 'src/const'
+import {BrowserScreen} from '../screens'
+import {LinksTabNavigation} from './links-tab'
+import {SettingsStackNavigation} from './settings-stack'
+import {defaultScreenOptions} from './shared'
 
 export function Navigation() {
   return (
@@ -12,7 +15,7 @@ export function Navigation() {
         initialRouteName={ScreenName.BrowserScreen}
         mode='modal'
         screenOptions={{
-          ...DEFAULT_SCREEN_OPTIONS,
+          ...defaultScreenOptions,
           header: null,
         }}>
         <RootStack.Screen
@@ -21,63 +24,21 @@ export function Navigation() {
         />
 
         <RootStack.Screen
-          name={ScreenName.SettingsStackScreen}
-          component={SettingsStackScreen}
+          name={ScreenName.LinksTabNavigation}
+          component={LinksTabNavigation}
+          options={navigation => ({header: navigation.navigation.header})}
+        />
+
+        <RootStack.Screen
+          name={ScreenName.SettingsStackNavigation}
+          component={SettingsStackNavigation}
         />
       </RootStack.Navigator>
     </NavigationNativeContainer>
   )
 }
 
-function SettingsStackScreen() {
-  return (
-    <SettingsStack.Navigator
-      initialRouteName={ScreenName.SettingsScreen}
-      screenOptions={DEFAULT_SCREEN_OPTIONS}>
-      <SettingsStack.Screen
-        name={ScreenName.SettingsScreen}
-        component={Settings.SettingsScreen}
-      />
-
-      <SettingsStack.Screen
-        name={ScreenName.SettingsNetworkScreen}
-        component={Settings.NetworkScreen}
-      />
-
-      <SettingsStack.Screen
-        name={ScreenName.SettingsCurrencyScreen}
-        component={Settings.CurrencyScreen}
-      />
-
-      <SettingsStack.Screen
-        name={ScreenName.SettingsSearchEngineScreen}
-        component={Settings.SearchEngineScreen}
-      />
-
-      <SettingsStack.Screen
-        name={ScreenName.SettingsBackupScreen}
-        component={Settings.BackupScreen}
-      />
-
-      <SettingsStack.Screen
-        name={ScreenName.SettingsBackupQuizScreen}
-        component={Settings.QuizScreen}
-      />
-    </SettingsStack.Navigator>
-  )
-}
-
 const RootStack = createStackNavigator()
-const SettingsStack = createStackNavigator()
-const DEFAULT_SCREEN_OPTIONS = {
-  cardStyle: {backgroundColor: Color.WHITE},
-  headerStyle: {
-    shadowOpacity: 0,
-    elevation: 0,
-  },
-  headerBackTitleVisible: false,
-  headerTintColor: Color.SECONDARY,
-}
 
 // export const initNavigation = async (): Promise<void> => {
 //   const backButtonIcon = await Ionicons.getImageSource('md-arrow-back', 24)

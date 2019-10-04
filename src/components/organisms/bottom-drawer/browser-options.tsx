@@ -15,12 +15,12 @@ export function BrowserOptions() {
   }, [setBottomDrawer])
 
   const onPressLinks = useCallback(() => {
-    navigation.navigate(ScreenName.SettingsBackupScreen)
+    navigation.navigate(ScreenName.LinksTabNavigation)
     setBottomDrawer()
   }, [navigation, setBottomDrawer])
 
   const onPressSettings = useCallback(() => {
-    navigation.navigate(ScreenName.SettingsStackScreen)
+    navigation.navigate(ScreenName.SettingsStackNavigation)
     setBottomDrawer()
   }, [navigation, setBottomDrawer])
 

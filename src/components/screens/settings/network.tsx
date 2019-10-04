@@ -29,6 +29,7 @@ export function NetworkScreen() {
     <FlatList
       data={candidates}
       keyExtractor={item => item.toString()}
+      extraData={activeItem}
       renderItem={({item}) => (
         <Ripple onPress={onSelectFactory(item)}>
           <List.Item

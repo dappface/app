@@ -5,6 +5,8 @@ export enum ScreenName {
   SettingsNetworkScreen = 'Network',
   SettingsCurrencyScreen = 'Currency',
   SettingsSearchEngineScreen = 'Search Engine',
+  SettingsBackupScreen = 'Backup',
+  SettingsBackupQuizScreen = 'Quiz',
 }
 
 export const Screen = {

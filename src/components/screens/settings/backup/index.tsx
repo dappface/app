@@ -1,13 +1,14 @@
+import {useNavigation} from '@react-navigation/core'
 import React, {useCallback, useEffect, useState} from 'react'
 import {Alert} from 'react-native'
-import {Navigation} from 'react-native-navigation'
 import {Button} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
 import {useSelector} from 'react-redux'
+
 import {Padding} from 'src/components/atoms'
 import {WordList} from 'src/components/organisms'
 import {ModalTemplate} from 'src/components/templates'
-import {BiometryType, Screen, Size} from 'src/const'
+import {BiometryType, ScreenName, Size} from 'src/const'
 import {accountSelector} from 'src/redux/module/account'
 
 export {QuizScreen} from 'src/components/screens/settings/backup/quiz'
@@ -20,6 +21,7 @@ export interface IProps {
 export function BackupScreen({componentId, isModal = false}: IProps) {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const [mnemonicList, setMnemonicList] = useState<string[]>([])
+  const navigation = useNavigation()
 
   const onPressUnlock = useCallback(async () => {
     try {
@@ -42,22 +44,8 @@ export function BackupScreen({componentId, isModal = false}: IProps) {
   }, [mnemonic])
 
   const onPressWrittenDown = useCallback(() => {
-    pushQuiz(componentId, {isModal})
-  }, [componentId, isModal])
-
-  useEffect(() => {
-    const listener = Navigation.events().registerComponentDidDisappearListener(
-      ({componentName}) => {
-        if (componentName !== Screen.SETTINGS.BACKUP.BASE) {
-          return
-        }
-        setMnemonicList([])
-      },
-    )
-    return () => {
-      listener.remove()
-    }
-  }, [])
+    navigation.navigate(ScreenName.SettingsBackupQuizScreen)
+  }, [navigation, isModal])
 
   useEffect(() => {
     setTimeout(() => {
@@ -72,7 +60,7 @@ You can make a safe backup with physical paper and a pen.`,
   }, [])
 
   return (
-    <ModalTemplate componentId={componentId} disabled={!isModal} text='cancel'>
+    <ModalTemplate disabled={!isModal} text='cancel'>
       <Padding verticalSize={Size.MARGIN_8}>
         <WordList words={mnemonicList} />
       </Padding>

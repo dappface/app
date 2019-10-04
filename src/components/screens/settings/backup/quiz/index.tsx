@@ -1,16 +1,17 @@
+import {useNavigation} from '@react-navigation/core'
 import React, {useCallback, useMemo} from 'react'
 import {Alert, View} from 'react-native'
-import {Navigation} from 'react-native-navigation'
 import {Button, Subheading} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import shuffle from 'shuffle-array'
+
 import {CenteredColumn, Padding} from 'src/components/atoms'
 import {WordList} from 'src/components/organisms'
-import {useWordListManager} from 'src/components/screens/settings/backup/quiz/hooks'
-import {WordPool} from 'src/components/screens/settings/backup/quiz/word-pool'
 import {ModalTemplate} from 'src/components/templates'
 import {Size} from 'src/const'
 import {accountHook, accountSelector} from 'src/redux/module/account'
+import {useWordListManager} from './hooks'
+import {WordPool} from './word-pool'
 
 interface IProps {
   componentId: string
@@ -20,6 +21,7 @@ interface IProps {
 export function QuizScreen({componentId, isModal = false}: IProps) {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const {setIsBackedUp} = accountHook.useAccountManager()
+  const navigation = useNavigation()
 
   const mnemonicList = useMemo(
     () => shuffle(mnemonic.split(' '), {copy: true}),
@@ -49,7 +51,7 @@ cannot be recovered without it.`,
           {
             onPress: () => {
               setIsBackedUp(true)
-              Navigation.popToRoot(componentId)
+              navigation.popToPop()
             },
             text: 'Got it',
           },
@@ -65,7 +67,7 @@ Please review your backup and try again. `,
         [{text: 'OK', onPress: clear}],
       )
     }
-  }, [clear, componentId, mnemonic, setIsBackedUp, wordList])
+  }, [clear, componentId, mnemonic, navigation, setIsBackedUp, wordList])
 
   return (
     <ModalTemplate componentId={componentId} disabled={!isModal} text='cancel'>

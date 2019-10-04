@@ -53,6 +53,16 @@ function SettingsStackScreen() {
         name={ScreenName.SettingsSearchEngineScreen}
         component={Settings.SearchEngineScreen}
       />
+
+      <SettingsStack.Screen
+        name={ScreenName.SettingsBackupScreen}
+        component={Settings.BackupScreen}
+      />
+
+      <SettingsStack.Screen
+        name={ScreenName.SettingsBackupQuizScreen}
+        component={Settings.QuizScreen}
+      />
     </SettingsStack.Navigator>
   )
 }

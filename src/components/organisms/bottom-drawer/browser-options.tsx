@@ -15,14 +15,14 @@ export function BrowserOptions() {
   }, [setBottomDrawer])
 
   const onPressLinks = useCallback(() => {
-    showLinks()
+    navigation.navigate(ScreenName.SettingsBackupScreen)
     setBottomDrawer()
-  }, [setBottomDrawer])
+  }, [navigation, setBottomDrawer])
 
   const onPressSettings = useCallback(() => {
     navigation.navigate(ScreenName.SettingsStackScreen)
     setBottomDrawer()
-  }, [setBottomDrawer])
+  }, [navigation, setBottomDrawer])
 
   return (
     <List onClose={onClose}>

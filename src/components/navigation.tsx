@@ -3,30 +3,71 @@ import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 
 import {Color, ScreenName} from 'src/const'
-import {Browser, Settings} from './screens'
+import {BrowserScreen, Settings} from './screens'
 
 export function Navigation() {
   return (
     <NavigationNativeContainer>
-      <Stack.Navigator
-        initialRouteName={ScreenName.Browser}
+      <RootStack.Navigator
+        initialRouteName={ScreenName.BrowserScreen}
         mode='modal'
         screenOptions={{
-          cardStyle: {backgroundColor: Color.WHITE},
-          headerLeft: () => null,
+          ...DEFAULT_SCREEN_OPTIONS,
+          header: null,
         }}>
-        <Stack.Screen
-          name={ScreenName.Browser}
-          component={Browser}
-          options={{header: null}}
+        <RootStack.Screen
+          name={ScreenName.BrowserScreen}
+          component={BrowserScreen}
         />
-        <Stack.Screen name={ScreenName.Settings} component={Settings} />
-      </Stack.Navigator>
+
+        <RootStack.Screen
+          name={ScreenName.SettingsStackScreen}
+          component={SettingsStackScreen}
+        />
+      </RootStack.Navigator>
     </NavigationNativeContainer>
   )
 }
 
-const Stack = createStackNavigator()
+function SettingsStackScreen() {
+  return (
+    <SettingsStack.Navigator
+      initialRouteName={ScreenName.SettingsScreen}
+      screenOptions={DEFAULT_SCREEN_OPTIONS}>
+      <SettingsStack.Screen
+        name={ScreenName.SettingsScreen}
+        component={Settings.SettingsScreen}
+      />
+
+      <SettingsStack.Screen
+        name={ScreenName.SettingsNetworkScreen}
+        component={Settings.NetworkScreen}
+      />
+
+      <SettingsStack.Screen
+        name={ScreenName.SettingsCurrencyScreen}
+        component={Settings.CurrencyScreen}
+      />
+
+      <SettingsStack.Screen
+        name={ScreenName.SettingsSearchEngineScreen}
+        component={Settings.SearchEngineScreen}
+      />
+    </SettingsStack.Navigator>
+  )
+}
+
+const RootStack = createStackNavigator()
+const SettingsStack = createStackNavigator()
+const DEFAULT_SCREEN_OPTIONS = {
+  cardStyle: {backgroundColor: Color.WHITE},
+  headerStyle: {
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  headerBackTitleVisible: false,
+  headerTintColor: Color.SECONDARY,
+}
 
 // export const initNavigation = async (): Promise<void> => {
 //   const backButtonIcon = await Ionicons.getImageSource('md-arrow-back', 24)

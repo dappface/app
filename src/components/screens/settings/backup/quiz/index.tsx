@@ -17,7 +17,7 @@ interface IProps {
   isModal?: boolean
 }
 
-export function Quiz({componentId, isModal = false}: IProps) {
+export function QuizScreen({componentId, isModal = false}: IProps) {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const {setIsBackedUp} = accountHook.useAccountManager()
 

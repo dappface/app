@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux'
 import {Network as NetworkEnum, Networks} from 'src/const'
 import {settingHook, settingSelector} from 'src/redux/module/setting'
 
-export function Network() {
+export function NetworkScreen() {
   const activeItem = useSelector(settingSelector.getNetwork)
   const {setNetwork} = settingHook.useSettingManager()
 

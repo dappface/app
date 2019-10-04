@@ -20,7 +20,7 @@ export function BrowserOptions() {
   }, [setBottomDrawer])
 
   const onPressSettings = useCallback(() => {
-    navigation.navigate(ScreenName.Settings)
+    navigation.navigate(ScreenName.SettingsStackScreen)
     setBottomDrawer()
   }, [setBottomDrawer])
 

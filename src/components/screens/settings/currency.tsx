@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux'
 import {Currency as CurrencyEnum} from 'src/const'
 import {settingHook, settingSelector} from 'src/redux/module/setting'
 
-export function Currency() {
+export function CurrencyScreen() {
   const activeItem = useSelector(settingSelector.getCurrency)
   const {setCurrency} = settingHook.useSettingManager()
 

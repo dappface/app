@@ -23,7 +23,7 @@ interface IProps {
   componentId: string
 }
 
-export function Browser({componentId}: IProps) {
+export function BrowserScreen({componentId}: IProps) {
   const bottomAppBarHeight = useBottomAppBarHeight()
   const {scrollTo, tabListManager, webViewListRef} = useBrowserManager()
   const hasBezel = useHasBezel()

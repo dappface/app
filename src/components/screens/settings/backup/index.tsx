@@ -10,14 +10,14 @@ import {ModalTemplate} from 'src/components/templates'
 import {BiometryType, Screen, Size} from 'src/const'
 import {accountSelector} from 'src/redux/module/account'
 
-export {Quiz} from 'src/components/screens/settings/backup/quiz'
+export {QuizScreen} from 'src/components/screens/settings/backup/quiz'
 
 export interface IProps {
   componentId: string
   isModal?: boolean
 }
 
-export function Backup({componentId, isModal = false}: IProps) {
+export function BackupScreen({componentId, isModal = false}: IProps) {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const [mnemonicList, setMnemonicList] = useState<string[]>([])
 

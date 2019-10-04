@@ -1,6 +1,10 @@
 export enum ScreenName {
-  Browser = 'Browser',
-  Settings = 'Settings',
+  BrowserScreen = 'Browser',
+  SettingsStackScreen = 'SettingsStack',
+  SettingsScreen = 'Settings',
+  SettingsNetworkScreen = 'Network',
+  SettingsCurrencyScreen = 'Currency',
+  SettingsSearchEngineScreen = 'Search Engine',
 }
 
 export const Screen = {

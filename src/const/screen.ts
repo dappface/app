@@ -1,3 +1,8 @@
+export enum ScreenName {
+  Browser = 'Browser',
+  Settings = 'Settings',
+}
+
 export const Screen = {
   BROWSER: 'DappFace.Browser',
   LINKS: 'DappFace.Links',

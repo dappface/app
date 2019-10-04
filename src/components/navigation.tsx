@@ -1,21 +1,29 @@
-import {createStackNavigator} from 'react-navigation-stack'
-import {Browser} from './screens'
+import {NavigationNativeContainer} from '@react-navigation/native'
+import {createStackNavigator} from '@react-navigation/stack'
+import React from 'react'
 
-export function createAppNavigator() {
-  return createStackNavigator(
-    {
-      Browser: {
-        screen: Browser,
-        navigationOptions: {
-          header: null,
-        },
-      },
-    },
-    {
-      initialRouteName: 'Browser',
-    },
+import {ScreenName} from 'src/const'
+import {Browser, Settings} from './screens'
+
+export function Navigation() {
+  return (
+    <NavigationNativeContainer>
+      <Stack.Navigator
+        initialRouteName={ScreenName.Browser}
+        mode='modal'
+        screenOptions={{cardTransparent: true}}>
+        <Stack.Screen
+          name={ScreenName.Browser}
+          component={Browser}
+          options={{header: null}}
+        />
+        <Stack.Screen name={ScreenName.Settings} component={Settings} />
+      </Stack.Navigator>
+    </NavigationNativeContainer>
   )
 }
+
+const Stack = createStackNavigator()
 
 // export const initNavigation = async (): Promise<void> => {
 //   const backButtonIcon = await Ionicons.getImageSource('md-arrow-back', 24)

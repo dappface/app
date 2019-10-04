@@ -1,5 +1,7 @@
 import {Colors, DefaultTheme} from 'react-native-paper'
-import {Color, Size} from 'src/const'
+
+import {Color} from './color'
+import {Size} from './size'
 
 export const PaperTheme = {
   ...DefaultTheme,

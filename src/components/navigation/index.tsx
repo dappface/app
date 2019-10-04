@@ -3,10 +3,11 @@ import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 
 import {ScreenName} from 'src/const'
-import {BrowserScreen} from '../screens'
-import {LinksTabNavigation} from './links-tab'
-import {SettingsStackNavigation} from './settings-stack'
+import {BrowserScreen, Wallet} from '../screens'
+import {LinksTabNavigation} from './links'
+import {SettingsStackNavigation} from './settings'
 import {defaultScreenOptions} from './shared'
+import {WalletImportStackNavigation} from './wallet'
 
 export function Navigation() {
   return (
@@ -21,6 +22,16 @@ export function Navigation() {
         <RootStack.Screen
           name={ScreenName.BrowserScreen}
           component={BrowserScreen}
+        />
+
+        <RootStack.Screen
+          name={ScreenName.WalletImportStackNavigation}
+          component={WalletImportStackNavigation}
+        />
+
+        <RootStack.Screen
+          name={ScreenName.WalletReceive}
+          component={Wallet.Receive}
         />
 
         <RootStack.Screen

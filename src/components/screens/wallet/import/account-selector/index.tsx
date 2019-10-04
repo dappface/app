@@ -1,42 +1,40 @@
+import {useNavigation, useRoute} from '@react-navigation/core'
 import {Wallet} from 'ethers'
-import * as React from 'react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {FlatList, ScrollView, View} from 'react-native'
 import Ripple from 'react-native-material-ripple'
-import {Navigation} from 'react-native-navigation'
 import {Button, RadioButton, Text, Title} from 'react-native-paper'
+import styled from 'styled-components/native'
+
 import {HorizontalPadding, Padding, Row} from 'src/components/atoms'
 import {Item} from 'src/components/screens/wallet/import/account-selector/item'
 import {ModalTemplate} from 'src/components/templates'
-import {AccountPath, Size} from 'src/const'
+import {AccountPath, ScreenName, Size} from 'src/const'
 import {accountHook, accountType} from 'src/redux/module/account'
-import styled from 'styled-components/native'
 
-interface IProps {
-  componentId: string
-  mnemonic: string
-}
-
-export const AccountSelector = ({componentId, mnemonic}: IProps) => {
-  const [basePath, setBasePath] = React.useState(AccountPath[0])
-  const [candidates, setCandidates] = React.useState<
-    accountType.IAccountCandidate[]
-  >([])
+export function AccountSelector() {
+  const navigation = useNavigation()
+  const route = useRoute()
+  const [basePath, setBasePath] = useState(AccountPath[0])
+  const [candidates, setCandidates] = useState<accountType.IAccountCandidate[]>(
+    [],
+  )
 
   const {importAccountCandidates} = accountHook.useAccountManager()
 
-  const isSelectedExist = React.useMemo(
+  const isSelectedExist = useMemo(
     () => !!candidates.find(item => item.isSelected === true),
     [candidates],
   )
 
-  const onPressPathFactory = React.useCallback(
+  const onPressPathFactory = useCallback(
     (path: string) => () => {
       setBasePath(path)
     },
     [],
   )
 
-  const onPressItemFactory = React.useCallback(
+  const onPressItemFactory = useCallback(
     (a: accountType.IAccountCandidate) => () => {
       const c = candidates.map(item =>
         item.address === a.address ? {...a, isSelected: !a.isSelected} : item,
@@ -46,12 +44,20 @@ export const AccountSelector = ({componentId, mnemonic}: IProps) => {
     [candidates],
   )
 
-  const onPressRecover = React.useCallback((): void => {
-    importAccountCandidates(mnemonic, candidates)
-    Navigation.dismissModal(componentId)
-  }, [candidates, componentId, importAccountCandidates, mnemonic])
+  const mnemonic = useMemo<string>(() => {
+    if (!route.params) {
+      return
+    }
+    // @ts-ignore
+    return route.params.mnemonic
+  }, [route])
 
-  const deriveAccountByIndex = React.useCallback(
+  const onPressRecover = useCallback((): void => {
+    importAccountCandidates(mnemonic, candidates)
+    navigation.popToTop()
+  }, [candidates, importAccountCandidates, mnemonic, navigation])
+
+  const deriveAccountByIndex = useCallback(
     (i: number) => {
       const path = `${basePath}/${i}`
       const wallet = Wallet.fromMnemonic(mnemonic, path)
@@ -66,7 +72,7 @@ export const AccountSelector = ({componentId, mnemonic}: IProps) => {
     [basePath, mnemonic],
   )
 
-  const onPressMore = React.useCallback(() => {
+  const onPressMore = useCallback(() => {
     const {length} = candidates
     const additionals = Array.from({length: 5}).map((_, i) =>
       deriveAccountByIndex(length + i),
@@ -74,7 +80,7 @@ export const AccountSelector = ({componentId, mnemonic}: IProps) => {
     setCandidates([...candidates, ...additionals])
   }, [candidates, deriveAccountByIndex])
 
-  React.useEffect(() => {
+  useEffect(() => {
     const additionals = Array.from({length: 5}).map((_, i) =>
       deriveAccountByIndex(i),
     )
@@ -83,7 +89,7 @@ export const AccountSelector = ({componentId, mnemonic}: IProps) => {
   }, [basePath, deriveAccountByIndex])
 
   return (
-    <ModalTemplate componentId={componentId} text='cancel'>
+    <ModalTemplate text='cancel'>
       <View>
         <HorizontalPadding>
           <Title>Hd Derivation Path</Title>

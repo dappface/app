@@ -20,11 +20,7 @@ export {Scan} from 'src/components/screens/wallet/scan'
 export {Send} from 'src/components/screens/wallet/send'
 export {TokenSearch} from 'src/components/screens/wallet/token-search'
 
-interface IProps {
-  componentId: string
-}
-
-export function Wallet({componentId}: IProps) {
+export function Wallet() {
   const bottomAppBarHeight = useBottomAppBarHeight()
   const isAccountExist = useSelector(accountSelector.getIsAccountExist)
   const latestBlockNumber = useSelector(web3Selector.getLatestBlockNumber)
@@ -41,10 +37,10 @@ export function Wallet({componentId}: IProps) {
 
         {isAccountExist ? (
           <>
-            <AccountList componentId={componentId} />
+            <AccountList />
             <FailedTx />
             <RecentActivity />
-            <TokenList componentId={componentId} />
+            <TokenList />
           </>
         ) : (
           <Initialize />

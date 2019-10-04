@@ -22,7 +22,7 @@ export function ModalTemplate({children, disabled = false, text}: IProps) {
         <StyledFAB
           icon='close'
           label={text || 'close'}
-          onPress={navigation.goBack}
+          onPress={navigation.popToTop}
           theme={{colors: {accent: Colors.white}}}
         />
       ) : null}

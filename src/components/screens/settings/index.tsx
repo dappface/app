@@ -45,7 +45,7 @@ export function SettingsScreen({componentId}: IProps) {
 
   const onPressClearAll = useCallback((): void => {
     nukeRedux()
-    navigation.popToTop()
+    navigation.navigate(ScreenName.BrowserScreen)
   }, [navigation])
 
   return (

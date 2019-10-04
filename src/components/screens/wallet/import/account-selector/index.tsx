@@ -54,7 +54,7 @@ export function AccountSelector() {
 
   const onPressRecover = useCallback((): void => {
     importAccountCandidates(mnemonic, candidates)
-    navigation.popToTop()
+    navigation.navigate(ScreenName.BrowserScreen)
   }, [candidates, importAccountCandidates, mnemonic, navigation])
 
   const deriveAccountByIndex = useCallback(

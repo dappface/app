@@ -8,7 +8,7 @@ import shuffle from 'shuffle-array'
 import {CenteredColumn, Padding} from 'src/components/atoms'
 import {WordList} from 'src/components/organisms'
 import {ModalTemplate} from 'src/components/templates'
-import {Size} from 'src/const'
+import {ScreenName, Size} from 'src/const'
 import {accountHook, accountSelector} from 'src/redux/module/account'
 import {useWordListManager} from './hooks'
 import {WordPool} from './word-pool'
@@ -51,7 +51,7 @@ cannot be recovered without it.`,
           {
             onPress: () => {
               setIsBackedUp(true)
-              navigation.popToTop()
+              navigation.navigate(ScreenName.BrowserScreen)
             },
             text: 'Got it',
           },

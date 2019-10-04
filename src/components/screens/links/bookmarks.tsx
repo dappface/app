@@ -3,6 +3,7 @@ import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {ScreenName} from 'src/const'
 import {useBrowserManager} from 'src/hooks'
 import {bookmarkHook, bookmarkSelector} from 'src/redux/module/bookmark'
 import {Item} from './item'
@@ -17,7 +18,7 @@ export function BookmarksScreen() {
   const onPressFactory = useCallback(
     (url: string) => () => {
       openLink(url)
-      navigation.popToTop()
+      navigation.navigate(ScreenName.BrowserScreen)
     },
     [navigation, openLink],
   )

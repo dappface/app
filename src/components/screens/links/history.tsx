@@ -3,6 +3,7 @@ import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {ScreenName} from 'src/const'
 import {useBrowserManager} from 'src/hooks'
 import {historyHook, historySelector} from 'src/redux/module/history'
 import {Item} from './item'
@@ -17,7 +18,7 @@ export function HistoryScreen() {
   const onPressFactory = useCallback(
     (url: string) => () => {
       openLink(url)
-      navigation.popToTop()
+      navigation.navigate(ScreenName.BrowserScreen)
     },
     [navigation, openLink],
   )

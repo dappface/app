@@ -1,19 +1,23 @@
 import {useNavigation} from '@react-navigation/core'
-import React from 'react'
+import React, {useCallback} from 'react'
 import {Colors, FAB} from 'react-native-paper'
 import styled from 'styled-components/native'
 
 import {Expanded} from 'src/components/atoms'
 import {BottomDrawer} from 'src/components/organisms'
+import {ScreenName} from 'src/const'
 
 interface IProps {
-  children: React.ReactNode
+  children: JSX.Element | JSX.Element[]
   disabled?: boolean
   text?: string
 }
 
 export function ModalTemplate({children, disabled = false, text}: IProps) {
   const navigation = useNavigation()
+  const onPressClose = useCallback(() => {
+    navigation.navigate(ScreenName.BrowserScreen)
+  }, [navigation])
 
   return (
     <Expanded.View>
@@ -22,7 +26,7 @@ export function ModalTemplate({children, disabled = false, text}: IProps) {
         <StyledFAB
           icon='close'
           label={text || 'close'}
-          onPress={navigation.popToTop}
+          onPress={onPressClose}
           theme={{colors: {accent: Colors.white}}}
         />
       ) : null}

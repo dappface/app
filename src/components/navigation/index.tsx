@@ -37,7 +37,10 @@ export function Navigation() {
         <RootStack.Screen
           name={ScreenName.LinksTabNavigation}
           component={LinksTabNavigation}
-          options={navigation => ({header: navigation.navigation.header})}
+          options={navigation => ({
+            header: navigation.navigation.header,
+            headerLeft: () => null,
+          })}
         />
 
         <RootStack.Screen

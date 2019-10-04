@@ -1,26 +1,19 @@
-import * as React from 'react'
-import {Navigation} from 'react-native-navigation'
+import {useNavigation} from '@react-navigation/core'
+import React from 'react'
 import {Colors, FAB} from 'react-native-paper'
-import {Expanded} from 'src/components/atoms'
-import {BottomDrawer} from 'src/components/organisms'
 import styled from 'styled-components/native'
 
-export interface IProps {
+import {Expanded} from 'src/components/atoms'
+import {BottomDrawer} from 'src/components/organisms'
+
+interface IProps {
   children: React.ReactNode
-  componentId: string
   disabled?: boolean
   text?: string
 }
 
-export const ModalTemplate = ({
-  children,
-  componentId,
-  disabled = false,
-  text,
-}: IProps) => {
-  const onPressClose = React.useCallback((): void => {
-    Navigation.dismissModal(componentId)
-  }, [componentId])
+export function ModalTemplate({children, disabled = false, text}: IProps) {
+  const navigation = useNavigation()
 
   return (
     <Expanded.View>
@@ -29,7 +22,7 @@ export const ModalTemplate = ({
         <StyledFAB
           icon='close'
           label={text || 'close'}
-          onPress={onPressClose}
+          onPress={navigation.goBack}
           theme={{colors: {accent: Colors.white}}}
         />
       ) : null}

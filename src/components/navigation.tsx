@@ -2,7 +2,7 @@ import {NavigationNativeContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 
-import {ScreenName} from 'src/const'
+import {Color, ScreenName} from 'src/const'
 import {Browser, Settings} from './screens'
 
 export function Navigation() {
@@ -11,7 +11,10 @@ export function Navigation() {
       <Stack.Navigator
         initialRouteName={ScreenName.Browser}
         mode='modal'
-        screenOptions={{cardTransparent: true}}>
+        screenOptions={{
+          cardStyle: {backgroundColor: Color.WHITE},
+          headerLeft: () => null,
+        }}>
         <Stack.Screen
           name={ScreenName.Browser}
           component={Browser}

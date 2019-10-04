@@ -1,22 +1,26 @@
-import * as React from 'react'
-import {List} from 'src/components/organisms/bottom-drawer/list'
-import {Option} from 'src/components/organisms/bottom-drawer/option'
+import React, {useCallback} from 'react'
+import {useNavigation} from '@react-navigation/core'
+
+import {ScreenName} from 'src/const'
 import {uiHook} from 'src/redux/module/ui'
+import {List} from './list'
+import {Option} from './option'
 
-export const BrowserOptions = () => {
+export function BrowserOptions() {
   const setBottomDrawer = uiHook.useSetBottomDrawer()
+  const navigation = useNavigation()
 
-  const onClose = React.useCallback(() => {
+  const onClose = useCallback(() => {
     setBottomDrawer()
   }, [setBottomDrawer])
 
-  const onPressLinks = React.useCallback(() => {
+  const onPressLinks = useCallback(() => {
     showLinks()
     setBottomDrawer()
   }, [setBottomDrawer])
 
-  const onPressSettings = React.useCallback(() => {
-    showSettings()
+  const onPressSettings = useCallback(() => {
+    navigation.navigate(ScreenName.Settings)
     setBottomDrawer()
   }, [setBottomDrawer])
 

@@ -2,9 +2,19 @@ import {createStackNavigator} from 'react-navigation-stack'
 import {Browser} from './screens'
 
 export function createAppNavigator() {
-  return createStackNavigator({
-    Browser,
-  })
+  return createStackNavigator(
+    {
+      Browser: {
+        screen: Browser,
+        navigationOptions: {
+          header: null,
+        },
+      },
+    },
+    {
+      initialRouteName: 'Browser',
+    },
+  )
 }
 
 // export const initNavigation = async (): Promise<void> => {

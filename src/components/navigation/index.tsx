@@ -32,13 +32,17 @@ export function Navigation() {
         <RootStack.Screen
           name={ScreenName.WalletReceive}
           component={Wallet.Receive}
+          options={({navigation}) => ({
+            header: navigation.header,
+            headerLeft: () => null,
+          })}
         />
 
         <RootStack.Screen
           name={ScreenName.LinksTabNavigation}
           component={LinksTabNavigation}
-          options={navigation => ({
-            header: navigation.navigation.header,
+          options={({navigation}) => ({
+            header: navigation.header,
             headerLeft: () => null,
           })}
         />

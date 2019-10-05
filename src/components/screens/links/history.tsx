@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/core'
 import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
@@ -9,11 +8,10 @@ import {historyHook, historySelector} from 'src/redux/module/history'
 import {Item} from './item'
 import {NoItems} from './no-items'
 
-export function HistoryScreen() {
+export function HistoryScreen({navigation}) {
   const {openLink} = useBrowserManager()
   const histories = useSelector(historySelector.getHistories)
   const {removeHistory} = historyHook.useHistoryManager()
-  const navigation = useNavigation()
 
   const onPressFactory = useCallback(
     (url: string) => () => {

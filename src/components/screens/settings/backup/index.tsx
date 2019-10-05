@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/core'
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {Alert} from 'react-native'
 import {Button} from 'react-native-paper'
@@ -13,10 +12,9 @@ import {accountSelector} from 'src/redux/module/account'
 
 export {QuizScreen} from 'src/components/screens/settings/backup/quiz'
 
-export function BackupScreen() {
+export function BackupScreen({navigation}) {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const [mnemonicList, setMnemonicList] = useState<string[]>([])
-  const navigation = useNavigation()
 
   const onPressUnlock = useCallback(async () => {
     try {

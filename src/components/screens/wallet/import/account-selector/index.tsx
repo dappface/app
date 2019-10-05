@@ -1,4 +1,3 @@
-import {useNavigation, useRoute} from '@react-navigation/core'
 import {Wallet} from 'ethers'
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {FlatList, ScrollView, View} from 'react-native'
@@ -12,8 +11,7 @@ import {ModalTemplate} from 'src/components/templates'
 import {AccountPath, ScreenName, Size} from 'src/const'
 import {accountHook, accountType} from 'src/redux/module/account'
 
-export function AccountSelectorScreen() {
-  const navigation = useNavigation()
+export function AccountSelectorScreen({navigation}) {
   const route = useRoute()
   const [basePath, setBasePath] = useState(AccountPath[0])
   const [candidates, setCandidates] = useState<accountType.IAccountCandidate[]>(

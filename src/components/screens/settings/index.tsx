@@ -1,6 +1,5 @@
 import React, {useCallback} from 'react'
 import {Colors, List} from 'react-native-paper'
-import {useNavigation} from '@react-navigation/core'
 import {useSelector} from 'react-redux'
 
 import {ModalTemplate} from 'src/components/templates'
@@ -14,14 +13,13 @@ export {CurrencyScreen} from './currency'
 export {NetworkScreen} from './network'
 export {SearchEngineScreen} from './search-engine'
 
-export function SettingsScreen() {
+export function SettingsScreen({navigation}) {
   const currency = useSelector(settingSelector.getCurrency)
   const isBackedUp = useSelector(accountSelector.getIsBackedUp)
   const mnemonic = useSelector(accountSelector.getMnemonic)
   const network = useSelector(settingSelector.getNetworkName)
   const searchEngine = useSelector(settingSelector.getSearchEngine)
   const nukeRedux = useNukeRedux()
-  const navigation = useNavigation()
 
   const onPressNetwork = useCallback((): void => {
     navigation.navigate(ScreenName.SettingsNetworkScreen)

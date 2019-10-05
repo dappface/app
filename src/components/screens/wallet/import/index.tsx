@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/core'
 import {Formik} from 'formik'
 import React, {useCallback, useMemo} from 'react'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
@@ -13,9 +12,7 @@ import {validateMnemonic} from './validator'
 
 export * from './account-selector'
 
-export function ImportScreen() {
-  const navigation = useNavigation()
-
+export function ImportScreen({navigation}) {
   const initialValues = useMemo<IValues>(
     () => ({
       mnemonic: '',

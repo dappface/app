@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/core'
 import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
@@ -9,11 +8,10 @@ import {bookmarkHook, bookmarkSelector} from 'src/redux/module/bookmark'
 import {Item} from './item'
 import {NoItems} from './no-items'
 
-export function BookmarksScreen() {
+export function BookmarksScreen({navigation}) {
   const {openLink} = useBrowserManager()
   const bookmarks = useSelector(bookmarkSelector.getBookmarks)
   const {removeBookmark} = bookmarkHook.useBookmarkManager()
-  const navigation = useNavigation()
 
   const onPressFactory = useCallback(
     (url: string) => () => {

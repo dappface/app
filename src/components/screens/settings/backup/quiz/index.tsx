@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/core'
 import React, {useCallback, useMemo} from 'react'
 import {Alert, View} from 'react-native'
 import {Button, Subheading} from 'react-native-paper'
@@ -13,10 +12,9 @@ import {accountHook, accountSelector} from 'src/redux/module/account'
 import {useWordListManager} from './hooks'
 import {WordPool} from './word-pool'
 
-export function QuizScreen() {
+export function QuizScreen({navigation}) {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const {setIsBackedUp} = accountHook.useAccountManager()
-  const navigation = useNavigation()
 
   const mnemonicList = useMemo(
     () => shuffle(mnemonic.split(' '), {copy: true}),

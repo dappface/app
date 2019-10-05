@@ -19,11 +19,7 @@ import {
 import {browserSelector} from 'src/redux/module/browser'
 import styled from 'styled-components/native'
 
-interface IProps {
-  componentId: string
-}
-
-export function BrowserScreen({componentId}: IProps) {
+export function BrowserScreen() {
   const bottomAppBarHeight = useBottomAppBarHeight()
   const {scrollTo, tabListManager, webViewListRef} = useBrowserManager()
   const hasBezel = useHasBezel()
@@ -90,7 +86,7 @@ export function BrowserScreen({componentId}: IProps) {
           )}
         />
 
-        <BottomAppBar componentId={componentId} />
+        <BottomAppBar />
       </Container>
     </DefaultTemplate>
   )

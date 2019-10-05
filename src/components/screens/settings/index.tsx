@@ -14,11 +14,7 @@ export {CurrencyScreen} from './currency'
 export {NetworkScreen} from './network'
 export {SearchEngineScreen} from './search-engine'
 
-interface IProps {
-  componentId: string
-}
-
-export function SettingsScreen({componentId}: IProps) {
+export function SettingsScreen() {
   const currency = useSelector(settingSelector.getCurrency)
   const isBackedUp = useSelector(accountSelector.getIsBackedUp)
   const mnemonic = useSelector(accountSelector.getMnemonic)

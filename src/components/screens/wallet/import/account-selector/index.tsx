@@ -12,7 +12,7 @@ import {ModalTemplate} from 'src/components/templates'
 import {AccountPath, ScreenName, Size} from 'src/const'
 import {accountHook, accountType} from 'src/redux/module/account'
 
-export function AccountSelector() {
+export function AccountSelectorScreen() {
   const navigation = useNavigation()
   const route = useRoute()
   const [basePath, setBasePath] = useState(AccountPath[0])

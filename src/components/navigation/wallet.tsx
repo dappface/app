@@ -12,12 +12,12 @@ export function WalletImportStackNavigation() {
       screenOptions={defaultScreenOptions}>
       <WalletImportStack.Screen
         name={ScreenName.WalletImportScreen}
-        component={Wallet.Import}
+        component={Wallet.ImportScreen}
       />
 
       <WalletImportStack.Screen
         name={ScreenName.WalletImportAccountSelectorScreen}
-        component={Wallet.AccountSelector}
+        component={Wallet.AccountSelectorScreen}
       />
     </WalletImportStack.Navigator>
   )
@@ -30,16 +30,16 @@ export function WalletSendStackNavigation() {
       screenOptions={defaultScreenOptions}>
       <WalletSendStack.Screen
         name={ScreenName.WalletSendScreen}
-        component={Wallet.Send}
+        component={Wallet.SendScreen}
       />
       <WalletSendStack.Screen
         name={ScreenName.WalletScanScreen}
-        component={Wallet.Scan}
+        component={Wallet.ScanScreen}
         options={{header: null}}
       />
       <WalletSendStack.Screen
         name={ScreenName.WalletSendConfirmScreen}
-        component={Wallet.Confirm}
+        component={Wallet.ConfirmScreen}
       />
     </WalletSendStack.Navigator>
   )

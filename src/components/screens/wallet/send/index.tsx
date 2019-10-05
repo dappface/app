@@ -28,7 +28,7 @@ import {
   validateGasPrice,
 } from './validator'
 
-export function Send({navigation}) {
+export function SendScreen({navigation}) {
   const validateForm = useValidateForm()
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false)
   const [to, setTo] = useState('')

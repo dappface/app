@@ -1,14 +1,12 @@
-import * as React from 'react'
+import React from 'react'
 import {Searchbar} from 'react-native-paper'
-import {Padding} from 'src/components/atoms'
-import {Candidates} from 'src/components/screens/wallet/token-search/candidates'
-import {
-  TokenSearchContext,
-  useInitializedTokenSearchManager,
-} from 'src/components/screens/wallet/token-search/hooks'
-import {Size} from 'src/const'
 
-export const TokenSearch = () => {
+import {Padding} from 'src/components/atoms'
+import {Size} from 'src/const'
+import {Candidates} from './candidates'
+import {TokenSearchContext, useInitializedTokenSearchManager} from './hooks'
+
+export function TokenSearchScreen() {
   const tokenSearchManager = useInitializedTokenSearchManager()
 
   return (

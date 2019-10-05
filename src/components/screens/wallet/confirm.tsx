@@ -16,7 +16,7 @@ import {entityType} from 'src/redux/module/entity'
 import {settingSelector} from 'src/redux/module/setting'
 import {walletHelper as wHelper} from 'src/utils'
 
-export function Confirm({navigation, route}) {
+export function ConfirmScreen({navigation, route}) {
   const web3 = useWeb3()
   const currencyDetails = useSelector(settingSelector.getCurrencyDetails)
   const currentAccount = useSelector(

@@ -39,7 +39,7 @@ export function Navigation() {
 
         <RootStack.Screen
           name={ScreenName.WalletReceiveScreen}
-          component={Wallet.Receive}
+          component={Wallet.ReceiveScreen}
           options={({navigation}) => ({
             header: navigation.header,
             headerLeft: () => null,
@@ -53,7 +53,7 @@ export function Navigation() {
 
         <RootStack.Screen
           name={ScreenName.WalletTokenSearchScreen}
-          component={Wallet.TokenSearch}
+          component={Wallet.TokenSearchScreen}
           options={({navigation}) => ({header: navigation.header})}
         />
 

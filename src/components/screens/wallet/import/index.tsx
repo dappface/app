@@ -11,11 +11,9 @@ import {ScreenName} from 'src/const'
 import {Submit} from './submit'
 import {validateMnemonic} from './validator'
 
-export {
-  AccountSelector,
-} from 'src/components/screens/wallet/import/account-selector'
+export * from './account-selector'
 
-export function Import() {
+export function ImportScreen() {
   const navigation = useNavigation()
 
   const initialValues = useMemo<IValues>(
@@ -27,7 +25,7 @@ export function Import() {
 
   const onSubmit = useCallback(
     ({mnemonic}: IValues) => {
-      navigation.navigate(ScreenName.WalletImportAccountSelector, {
+      navigation.navigate(ScreenName.WalletImportAccountSelectorScreen, {
         mnemonic: mnemonic.trim(),
       })
     },

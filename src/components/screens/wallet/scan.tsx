@@ -1,13 +1,12 @@
 import React, {useCallback} from 'react'
 import {Alert} from 'react-native'
 import {RNCamera} from 'react-native-camera'
-import {Navigation} from 'react-native-navigation'
 import styled from 'styled-components/native'
 
 import {ModalTemplate} from 'src/components/templates'
 import {Color, ScreenName} from 'src/const'
 
-export function Scan({navigation, route}) {
+export function ScanScreen({navigation, route}) {
   const onScan = useCallback(
     (data: any) => {
       if (typeof data === 'object' && typeof data.data === 'string') {

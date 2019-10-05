@@ -3,7 +3,7 @@ name: Test
 on: push
 
 jobs:
-  test:
+  jest:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout source code

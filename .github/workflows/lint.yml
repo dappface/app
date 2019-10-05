@@ -3,7 +3,7 @@ name: Lint
 on: push
 
 jobs:
-  lintcheck-js:
+  javascript:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout source code
@@ -16,7 +16,7 @@ jobs:
         run: npm i
       - name: Check lint error
         run: npm run lint
-  lintcheck-ruby:
+  ruby:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout source code

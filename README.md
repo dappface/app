@@ -1,4 +1,5 @@
-[![Build Status][build-status-svg]][build-status-link]
+[![iOS Build Status][ios-build-status-svg]][ios-build-status-link]
+[![Lint Status][lint-status-svg]][lint-status-link]
 
 # DAPPFACE
 
@@ -48,5 +49,7 @@ $ npm run ios simulator:iPhone\ 11
 $ npm run ios device:true
 ```
 
-[build-status-svg]: https://github.com/dappface/app/workflows/Build/badge.svg
-[build-status-link]: https://github.com/dappface/app/actions
+[ios-build-status-svg]: https://github.com/dappface/app/workflows/iOS%20Build/badge.svg
+[ios-build-status-link]: https://github.com/dappface/app/actions?workflow=iOS%20Build
+[lint-status-svg]: https://github.com/dappface/app/workflows/Lint/badge.svg
+[lint-status-link]: https://github.com/dappface/app/actions?workflow=Lint

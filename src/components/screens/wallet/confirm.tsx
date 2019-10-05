@@ -53,7 +53,7 @@ export function ConfirmScreen({
         Alert.alert('Whoops!', error.message)
       }
     }
-  }, [navigation, route])
+  }, [navigation, route, currentAccount, signAndSendTx])
 
   const ether = useMemo(
     () => web3.utils.fromWei(route.params.txParams.value, 'ether'),

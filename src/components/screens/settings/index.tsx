@@ -8,6 +8,7 @@ import {ScreenName} from 'src/const'
 import {useNukeRedux} from 'src/redux'
 import {accountSelector} from 'src/redux/module/account'
 import {settingSelector} from 'src/redux/module/setting'
+
 export {BackupScreen, QuizScreen} from './backup'
 export {CurrencyScreen} from './currency'
 export {NetworkScreen} from './network'
@@ -40,7 +41,7 @@ export function SettingsScreen({navigation}: IScreenProps) {
   const onPressClearAll = useCallback((): void => {
     nukeRedux()
     navigation.navigate(ScreenName.BrowserScreen)
-  }, [navigation])
+  }, [navigation, nukeRedux])
 
   return (
     <ModalTemplate>

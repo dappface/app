@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {Alert} from 'react-native'
 import {Button} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'

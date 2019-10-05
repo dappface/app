@@ -6,17 +6,16 @@ import {Provider as PaperProvider} from 'react-native-paper'
 import {Provider} from 'react-redux'
 import {PersistGate} from 'redux-persist/integration/react'
 
-import {client, initClient} from 'src/apollo'
+import {client, initApolloClient} from 'src/apollo'
 import {PaperTheme} from 'src/const'
 import {configureStore, persistor, store} from 'src/redux/store'
-import {init as initFirebase} from 'src/utils/firebase'
 
 interface IProps {
   children: JSX.Element[] | JSX.Element
 }
 
 export function LibraryProvider({children}: IProps) {
-  const isInitialized = useInit()
+  const isInitialized = useInitializeLibraries()
   if (!isInitialized) {
     return null
   }
@@ -36,15 +35,14 @@ export function LibraryProvider({children}: IProps) {
   )
 }
 
-function useInit(): boolean {
+function useInitializeLibraries(): boolean {
   const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
     ;(async () => {
       Orientation.lockToPortrait()
-      await initFirebase()
       await configureStore()
-      initClient()
+      initApolloClient()
       setIsInitialized(true)
     })()
   }, [])

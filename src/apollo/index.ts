@@ -13,7 +13,7 @@ import Reactotron from 'reactotron-react-native'
 // eslint-disable-next-line import/no-mutable-exports
 export let client: ApolloClient<any>
 
-export const initClient = () => {
+export const initApolloClient = () => {
   Reactotron.log(`Connecting Apollo Client to ${API_URL}`)
 
   const fragmentMatcher = new IntrospectionFragmentMatcher({

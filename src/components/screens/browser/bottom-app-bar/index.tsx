@@ -20,11 +20,7 @@ import {accountHook, accountSelector} from 'src/redux/module/account'
 import {uiHook, uiType} from 'src/redux/module/ui'
 import styled from 'styled-components/native'
 
-export interface IProps {
-  componentId: string
-}
-
-export function BottomAppBar({componentId}: IProps) {
+export function BottomAppBar() {
   const bottomAppBarInitialTop = useBottomAppBarInitialTop()
   const {bottomAppBarRef, closeBottomAppBar} = useBottomAppBarManager()
   const {respondData} = useBrowserManager()
@@ -118,7 +114,7 @@ export function BottomAppBar({componentId}: IProps) {
         <BottomSheet elevation={8} screenDimensions={screenDimensions}>
           <NavigationBar isOpen={isOpen} onMore={onMore} position={position} />
           <PullBar />
-          {signRequest ? <SignPrompt /> : <Wallet componentId={componentId} />}
+          {signRequest ? <SignPrompt /> : <Wallet />}
         </BottomSheet>
       </StyledInteractableView>
     </>

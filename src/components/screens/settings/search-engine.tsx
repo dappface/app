@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux'
 import {SearchEngine as SearchEngineEnum, SearchEngines} from 'src/const'
 import {settingHook, settingSelector} from 'src/redux/module/setting'
 
-export function SearchEngine() {
+export function SearchEngineScreen() {
   const activeSearchEngine = useSelector(settingSelector.getSearchEngine)
   const {setSearchEngine} = settingHook.useSettingManager()
 

@@ -1,17 +1,19 @@
-import * as React from 'react'
+import {useNavigation} from '@react-navigation/core'
+import React, {useCallback} from 'react'
 import {Alert} from 'react-native'
 import {Button, Headline} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
-import {CenteredColumn, HorizontalPadding} from 'src/components/atoms'
-import {BiometryType, Size} from 'src/const'
-import {showImportAccounts} from 'src/navigation'
-import {accountHook} from 'src/redux/module/account'
 import styled from 'styled-components/native'
 
-export const Initialize = () => {
-  const {createAccount} = accountHook.useAccountManager()
+import {CenteredColumn, HorizontalPadding} from 'src/components/atoms'
+import {BiometryType, ScreenName, Size} from 'src/const'
+import {accountHook} from 'src/redux/module/account'
 
-  const onPressCreate = React.useCallback(async () => {
+export function Initialize() {
+  const {createAccount} = accountHook.useAccountManager()
+  const navigation = useNavigation()
+
+  const onPressCreate = useCallback(async () => {
     try {
       const biometryType = await TouchID.isSupported()
       if (
@@ -37,9 +39,9 @@ export const Initialize = () => {
     }
   }, [createAccount])
 
-  const onPressImport = React.useCallback(() => {
-    showImportAccounts()
-  }, [])
+  const onPressImport = useCallback(() => {
+    navigation.navigate(ScreenName.WalletImportStackNavigation)
+  }, [navigation])
 
   return (
     <Container>

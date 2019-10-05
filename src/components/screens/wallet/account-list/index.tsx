@@ -1,20 +1,17 @@
+import {useNavigation} from '@react-navigation/core'
 import React, {useCallback, useEffect, useRef} from 'react'
 import {FlatList, NativeScrollEvent, NativeSyntheticEvent} from 'react-native'
 import {useSelector} from 'react-redux'
+import styled from 'styled-components/native'
+
 import {Item} from 'src/components/screens/wallet/account-list/item'
-import {Size} from 'src/const'
+import {ScreenName, Size} from 'src/const'
 import {useDimensions} from 'src/hooks'
-import {pushReceive, pushSend, showBackup} from 'src/navigation'
 import {accountHook, accountSelector} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {uiHook, uiType} from 'src/redux/module/ui'
-import styled from 'styled-components/native'
 
-export interface IProps {
-  componentId: string
-}
-
-export function AccountList({componentId}: IProps) {
+export function AccountList() {
   const listRef = useRef<FlatList<entityType.IAccount> | null>(null)
 
   const {
@@ -27,10 +24,13 @@ export function AccountList({componentId}: IProps) {
   const isBackedUp = useSelector(accountSelector.getIsBackedUp)
   const {setCurrentAccountAddressByIndex} = accountHook.useAccountManager()
   const setBottomDrawer = uiHook.useSetBottomDrawer()
+  const navigation = useNavigation()
 
   const onPressBackup = useCallback(() => {
-    showBackup()
-  }, [])
+    navigation.navigate(ScreenName.SettingsBackupStackNavigation, {
+      isModal: true,
+    })
+  }, [navigation])
 
   const onPressOption = useCallback(() => {
     setBottomDrawer({
@@ -39,12 +39,12 @@ export function AccountList({componentId}: IProps) {
   }, [setBottomDrawer])
 
   const onPressReceive = useCallback(() => {
-    pushReceive(componentId)
-  }, [componentId])
+    navigation.navigate(ScreenName.WalletReceiveScreen)
+  }, [navigation])
 
   const onPressSend = useCallback(() => {
-    pushSend(componentId)
-  }, [componentId])
+    navigation.navigate(ScreenName.WalletSendStackNavigation)
+  }, [navigation])
 
   const onMomentumScrollEnd = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {

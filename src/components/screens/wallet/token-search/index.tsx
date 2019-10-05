@@ -1,19 +1,13 @@
-import * as React from 'react'
+import React from 'react'
 import {Searchbar} from 'react-native-paper'
+
 import {Padding} from 'src/components/atoms'
-import {Candidates} from 'src/components/screens/wallet/token-search/candidates'
-import {
-  TokenSearchContext,
-  useInitializedTokenSearchManager,
-} from 'src/components/screens/wallet/token-search/hooks'
 import {Size} from 'src/const'
+import {Candidates} from './candidates'
+import {TokenSearchContext, useInitializedTokenSearchManager} from './hooks'
 
-interface IProps {
-  componentId: string
-}
-
-export const TokenSearch = ({componentId}: IProps) => {
-  const tokenSearchManager = useInitializedTokenSearchManager(componentId)
+export function TokenSearchScreen() {
+  const tokenSearchManager = useInitializedTokenSearchManager()
 
   return (
     <TokenSearchContext.Provider value={tokenSearchManager}>

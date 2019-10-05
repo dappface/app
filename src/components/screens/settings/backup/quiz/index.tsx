@@ -1,23 +1,19 @@
 import React, {useCallback, useMemo} from 'react'
 import {Alert, View} from 'react-native'
-import {Navigation} from 'react-native-navigation'
 import {Button, Subheading} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import shuffle from 'shuffle-array'
+
 import {CenteredColumn, Padding} from 'src/components/atoms'
 import {WordList} from 'src/components/organisms'
-import {useWordListManager} from 'src/components/screens/settings/backup/quiz/hooks'
-import {WordPool} from 'src/components/screens/settings/backup/quiz/word-pool'
 import {ModalTemplate} from 'src/components/templates'
-import {Size} from 'src/const'
+import {IScreenProps} from 'src/components/screens/shared'
+import {ScreenName, Size} from 'src/const'
 import {accountHook, accountSelector} from 'src/redux/module/account'
+import {useWordListManager} from './hooks'
+import {WordPool} from './word-pool'
 
-interface IProps {
-  componentId: string
-  isModal?: boolean
-}
-
-export function Quiz({componentId, isModal = false}: IProps) {
+export function QuizScreen({navigation}: IScreenProps) {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const {setIsBackedUp} = accountHook.useAccountManager()
 
@@ -49,7 +45,7 @@ cannot be recovered without it.`,
           {
             onPress: () => {
               setIsBackedUp(true)
-              Navigation.popToRoot(componentId)
+              navigation.navigate(ScreenName.BrowserScreen)
             },
             text: 'Got it',
           },
@@ -65,10 +61,10 @@ Please review your backup and try again. `,
         [{text: 'OK', onPress: clear}],
       )
     }
-  }, [clear, componentId, mnemonic, setIsBackedUp, wordList])
+  }, [clear, mnemonic, navigation, setIsBackedUp, wordList])
 
   return (
-    <ModalTemplate componentId={componentId} disabled={!isModal} text='cancel'>
+    <ModalTemplate text='cancel'>
       <View>
         <Padding verticalSize={Size.MARGIN_8}>
           <CenteredColumn>

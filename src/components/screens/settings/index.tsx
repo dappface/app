@@ -1,23 +1,20 @@
 import React, {useCallback} from 'react'
-import {Navigation} from 'react-native-navigation'
 import {Colors, List} from 'react-native-paper'
 import {useSelector} from 'react-redux'
+
 import {ModalTemplate} from 'src/components/templates'
-import * as Navigator from 'src/navigation'
+import {IScreenProps} from 'src/components/screens/shared'
+import {ScreenName} from 'src/const'
 import {useNukeRedux} from 'src/redux'
 import {accountSelector} from 'src/redux/module/account'
 import {settingSelector} from 'src/redux/module/setting'
 
-export {Backup, Quiz} from 'src/components/screens/settings/backup'
-export {Currency} from 'src/components/screens/settings/currency'
-export {Network} from 'src/components/screens/settings/network'
-export {SearchEngine} from 'src/components/screens/settings/search-engine'
+export {BackupScreen, QuizScreen} from './backup'
+export {CurrencyScreen} from './currency'
+export {NetworkScreen} from './network'
+export {SearchEngineScreen} from './search-engine'
 
-export interface IProps {
-  componentId: string
-}
-
-export function Settings({componentId}: IProps) {
+export function SettingsScreen({navigation}: IScreenProps) {
   const currency = useSelector(settingSelector.getCurrency)
   const isBackedUp = useSelector(accountSelector.getIsBackedUp)
   const mnemonic = useSelector(accountSelector.getMnemonic)
@@ -25,30 +22,29 @@ export function Settings({componentId}: IProps) {
   const searchEngine = useSelector(settingSelector.getSearchEngine)
   const nukeRedux = useNukeRedux()
 
-  const onPressClearAll = useCallback(async (): Promise<void> => {
-    await Navigation.dismissAllModals()
-    await Navigator.goToBrowser()
-    nukeRedux()
-  }, [nukeRedux])
+  const onPressNetwork = useCallback((): void => {
+    navigation.navigate(ScreenName.SettingsNetworkScreen)
+  }, [navigation])
 
   const onPressCurrency = useCallback((): void => {
-    Navigator.pushCurrencySetting(componentId)
-  }, [componentId])
-
-  const onPressNetwork = useCallback((): void => {
-    Navigator.pushNetworkSetting(componentId)
-  }, [componentId])
-
-  const onPressRecoveryPhrase = useCallback((): void => {
-    Navigator.pushBackup(componentId)
-  }, [componentId])
+    navigation.navigate(ScreenName.SettingsCurrencyScreen)
+  }, [navigation])
 
   const onPressSearchEngine = useCallback((): void => {
-    Navigator.pushSearchEngineSetting(componentId)
-  }, [componentId])
+    navigation.navigate(ScreenName.SettingsSearchEngineScreen)
+  }, [navigation])
+
+  const onPressRecoveryPhrase = useCallback((): void => {
+    navigation.navigate(ScreenName.SettingsBackupStackNavigation)
+  }, [navigation])
+
+  const onPressClearAll = useCallback((): void => {
+    nukeRedux()
+    navigation.navigate(ScreenName.BrowserScreen)
+  }, [navigation, nukeRedux])
 
   return (
-    <ModalTemplate componentId={componentId}>
+    <ModalTemplate>
       <List.Section>
         <List.Item
           description={network}

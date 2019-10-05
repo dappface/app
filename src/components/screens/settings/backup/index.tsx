@@ -1,24 +1,19 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import {Alert} from 'react-native'
-import {Navigation} from 'react-native-navigation'
 import {Button} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
 import {useSelector} from 'react-redux'
+
 import {Padding} from 'src/components/atoms'
 import {WordList} from 'src/components/organisms'
 import {ModalTemplate} from 'src/components/templates'
-import {BiometryType, Screen, Size} from 'src/const'
-import {pushQuiz} from 'src/navigation'
+import {IScreenProps} from 'src/components/screens/shared'
+import {BiometryType, ScreenName, Size} from 'src/const'
 import {accountSelector} from 'src/redux/module/account'
 
-export {Quiz} from 'src/components/screens/settings/backup/quiz'
+export {QuizScreen} from 'src/components/screens/settings/backup/quiz'
 
-export interface IProps {
-  componentId: string
-  isModal?: boolean
-}
-
-export function Backup({componentId, isModal = false}: IProps) {
+export function BackupScreen({navigation}: IScreenProps) {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const [mnemonicList, setMnemonicList] = useState<string[]>([])
 
@@ -43,22 +38,8 @@ export function Backup({componentId, isModal = false}: IProps) {
   }, [mnemonic])
 
   const onPressWrittenDown = useCallback(() => {
-    pushQuiz(componentId, {isModal})
-  }, [componentId, isModal])
-
-  useEffect(() => {
-    const listener = Navigation.events().registerComponentDidDisappearListener(
-      ({componentName}) => {
-        if (componentName !== Screen.SETTINGS.BACKUP.BASE) {
-          return
-        }
-        setMnemonicList([])
-      },
-    )
-    return () => {
-      listener.remove()
-    }
-  }, [])
+    navigation.navigate(ScreenName.SettingsBackupQuizScreen)
+  }, [navigation])
 
   useEffect(() => {
     setTimeout(() => {
@@ -73,7 +54,7 @@ You can make a safe backup with physical paper and a pen.`,
   }, [])
 
   return (
-    <ModalTemplate componentId={componentId} disabled={!isModal} text='cancel'>
+    <ModalTemplate text='cancel'>
       <Padding verticalSize={Size.MARGIN_8}>
         <WordList words={mnemonicList} />
       </Padding>

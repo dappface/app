@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux'
 import {Network as NetworkEnum, Networks} from 'src/const'
 import {settingHook, settingSelector} from 'src/redux/module/setting'
 
-export function Network() {
+export function NetworkScreen() {
   const activeItem = useSelector(settingSelector.getNetwork)
   const {setNetwork} = settingHook.useSettingManager()
 
@@ -29,6 +29,7 @@ export function Network() {
     <FlatList
       data={candidates}
       keyExtractor={item => item.toString()}
+      extraData={activeItem}
       renderItem={({item}) => (
         <Ripple onPress={onSelectFactory(item)}>
           <List.Item

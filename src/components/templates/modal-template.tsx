@@ -1,26 +1,29 @@
-import * as React from 'react'
-import {Navigation} from 'react-native-navigation'
+import {useNavigation} from '@react-navigation/core'
+import React, {useCallback} from 'react'
 import {Colors, FAB} from 'react-native-paper'
-import {Expanded} from 'src/components/atoms'
-import {BottomDrawer} from 'src/components/organisms'
 import styled from 'styled-components/native'
 
-export interface IProps {
-  children: React.ReactNode
-  componentId: string
+import {Expanded} from 'src/components/atoms'
+import {BottomDrawer} from 'src/components/organisms'
+import {ScreenName} from 'src/const'
+
+interface IProps {
+  children: JSX.Element | JSX.Element[]
   disabled?: boolean
+  onClose?: () => void
   text?: string
 }
 
-export const ModalTemplate = ({
+export function ModalTemplate({
   children,
-  componentId,
   disabled = false,
+  onClose,
   text,
-}: IProps) => {
-  const onPressClose = React.useCallback((): void => {
-    Navigation.dismissModal(componentId)
-  }, [componentId])
+}: IProps) {
+  const navigation = useNavigation()
+  const onPressClose = useCallback(() => {
+    navigation.navigate(ScreenName.BrowserScreen)
+  }, [navigation])
 
   return (
     <Expanded.View>
@@ -29,7 +32,7 @@ export const ModalTemplate = ({
         <StyledFAB
           icon='close'
           label={text || 'close'}
-          onPress={onPressClose}
+          onPress={onClose || onPressClose}
           theme={{colors: {accent: Colors.white}}}
         />
       ) : null}

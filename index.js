@@ -1,6 +1,9 @@
 import './shim'
 import './global'
 import './reactotron-config'
-import {app} from 'src/app'
 
-app()
+import {AppRegistry} from 'react-native'
+import {name as appName} from './app.json'
+import {App} from './src'
+
+AppRegistry.registerComponent(appName, () => App)

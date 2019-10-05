@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/core'
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {Alert} from 'react-native'
 import {Button} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
@@ -13,12 +13,7 @@ import {accountSelector} from 'src/redux/module/account'
 
 export {QuizScreen} from 'src/components/screens/settings/backup/quiz'
 
-export interface IProps {
-  componentId: string
-  isModal?: boolean
-}
-
-export function BackupScreen({componentId, isModal = false}: IProps) {
+export function BackupScreen() {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const [mnemonicList, setMnemonicList] = useState<string[]>([])
   const navigation = useNavigation()
@@ -45,7 +40,7 @@ export function BackupScreen({componentId, isModal = false}: IProps) {
 
   const onPressWrittenDown = useCallback(() => {
     navigation.navigate(ScreenName.SettingsBackupQuizScreen)
-  }, [navigation, isModal])
+  }, [navigation])
 
   useEffect(() => {
     setTimeout(() => {
@@ -60,7 +55,7 @@ You can make a safe backup with physical paper and a pen.`,
   }, [])
 
   return (
-    <ModalTemplate disabled={!isModal} text='cancel'>
+    <ModalTemplate text='cancel'>
       <Padding verticalSize={Size.MARGIN_8}>
         <WordList words={mnemonicList} />
       </Padding>

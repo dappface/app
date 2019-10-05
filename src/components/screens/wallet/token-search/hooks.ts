@@ -1,8 +1,10 @@
+import {useNavigation} from '@react-navigation/core'
 import Fuse from 'fuse.js'
 import {ITokenCandidate} from 'lib/token-list.json'
 import {createContext, useCallback, useContext, useMemo, useState} from 'react'
-import {Navigation} from 'react-native-navigation'
 import {useSelector} from 'react-redux'
+
+import {ScreenName} from 'src/const'
 import {tokenHook, tokenSelector} from 'src/redux/module/token'
 
 export const useTokenSearchManager = () =>
@@ -15,11 +17,10 @@ export interface ITokenSearchManager {
   searchInput: string
 }
 
-export function useInitializedTokenSearchManager(
-  componentId: string,
-): ITokenSearchManager {
+export function useInitializedTokenSearchManager(): ITokenSearchManager {
   const initialCandidates = useSelector(tokenSelector.getTokenCandidates)
   const {addToken} = tokenHook.useTokenManager()
+  const navigation = useNavigation()
 
   const fuse = useMemo(
     () =>
@@ -43,9 +44,9 @@ export function useInitializedTokenSearchManager(
   const onSelectFactory: ITokenSearchManager['onSelectFactory'] = useCallback(
     t => () => {
       addToken(t)
-      Navigation.pop(componentId)
+      navigation.navigate(ScreenName.BrowserScreen)
     },
-    [addToken, componentId],
+    [addToken, navigation],
   )
 
   return {

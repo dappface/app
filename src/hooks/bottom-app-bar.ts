@@ -1,4 +1,4 @@
-import {createContext, RefObject, useContext, useRef} from 'react'
+import {createContext, RefObject, useCallback, useContext, useRef} from 'react'
 
 export const useBottomAppBarManager = () =>
   useContext(BottomAppBarManagerContext) as IBottomAppBarManager
@@ -17,19 +17,19 @@ interface IBottomAppBarManager {
 export const useInitializedBottomAppBarManager = (): IBottomAppBarManager => {
   const bottomAppBarRef = useRef<any>(null)
 
-  const closeBottomAppBar = (): void => {
+  const closeBottomAppBar = useCallback((): void => {
     if (!bottomAppBarRef.current) {
       return
     }
     bottomAppBarRef.current.snapTo({index: 0})
-  }
+  }, [])
 
-  const openBottomAppBar = (): void => {
+  const openBottomAppBar = useCallback((): void => {
     if (!bottomAppBarRef.current) {
       return
     }
     bottomAppBarRef.current.snapTo({index: 2})
-  }
+  }, [])
 
   return {
     bottomAppBarRef,

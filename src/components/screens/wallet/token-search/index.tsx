@@ -8,12 +8,8 @@ import {
 } from 'src/components/screens/wallet/token-search/hooks'
 import {Size} from 'src/const'
 
-interface IProps {
-  componentId: string
-}
-
-export const TokenSearch = ({componentId}: IProps) => {
-  const tokenSearchManager = useInitializedTokenSearchManager(componentId)
+export const TokenSearch = () => {
+  const tokenSearchManager = useInitializedTokenSearchManager()
 
   return (
     <TokenSearchContext.Provider value={tokenSearchManager}>

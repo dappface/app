@@ -27,7 +27,9 @@ export function AccountList() {
   const navigation = useNavigation()
 
   const onPressBackup = useCallback(() => {
-    showBackup()
+    navigation.navigate(ScreenName.SettingsBackupStackNavigation, {
+      isModal: true,
+    })
   }, [navigation])
 
   const onPressOption = useCallback(() => {

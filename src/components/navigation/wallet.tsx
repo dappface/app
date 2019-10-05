@@ -8,15 +8,15 @@ import {defaultScreenOptions} from './shared'
 export function WalletImportStackNavigation() {
   return (
     <WalletImportStack.Navigator
-      initialRouteName={ScreenName.WalletImport}
+      initialRouteName={ScreenName.WalletImportScreen}
       screenOptions={defaultScreenOptions}>
       <WalletImportStack.Screen
-        name={ScreenName.WalletImport}
+        name={ScreenName.WalletImportScreen}
         component={Wallet.Import}
       />
 
       <WalletImportStack.Screen
-        name={ScreenName.WalletImportAccountSelector}
+        name={ScreenName.WalletImportAccountSelectorScreen}
         component={Wallet.AccountSelector}
       />
     </WalletImportStack.Navigator>

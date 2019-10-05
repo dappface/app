@@ -31,16 +31,30 @@ export function SettingsStackNavigation() {
       />
 
       <SettingsStack.Screen
-        name={ScreenName.SettingsBackupScreen}
-        component={Settings.BackupScreen}
-      />
-
-      <SettingsStack.Screen
-        name={ScreenName.SettingsBackupQuizScreen}
-        component={Settings.QuizScreen}
+        name={ScreenName.SettingsBackupStackNavigation}
+        component={SettingsBackupStackNavigation}
+        options={{header: null}}
       />
     </SettingsStack.Navigator>
   )
 }
 
+export function SettingsBackupStackNavigation() {
+  return (
+    <SettingsBackupStack.Navigator
+      initialRouteName={ScreenName.SettingsBackupScreen}
+      screenOptions={defaultScreenOptions}>
+      <SettingsBackupStack.Screen
+        name={ScreenName.SettingsBackupScreen}
+        component={Settings.BackupScreen}
+      />
+      <SettingsBackupStack.Screen
+        name={ScreenName.SettingsBackupQuizScreen}
+        component={Settings.QuizScreen}
+      />
+    </SettingsBackupStack.Navigator>
+  )
+}
+
 const SettingsStack = createStackNavigator()
+const SettingsBackupStack = createStackNavigator()

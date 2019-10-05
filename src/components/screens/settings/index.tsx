@@ -40,8 +40,8 @@ export function SettingsScreen({componentId}: IProps) {
   }, [navigation])
 
   const onPressRecoveryPhrase = useCallback((): void => {
-    navigation.navigate(ScreenName.SettingsBackupScreen)
-  }, [componentId])
+    navigation.navigate(ScreenName.SettingsBackupStackNavigation)
+  }, [navigation])
 
   const onPressClearAll = useCallback((): void => {
     nukeRedux()

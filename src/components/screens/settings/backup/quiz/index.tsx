@@ -13,12 +13,7 @@ import {accountHook, accountSelector} from 'src/redux/module/account'
 import {useWordListManager} from './hooks'
 import {WordPool} from './word-pool'
 
-interface IProps {
-  componentId: string
-  isModal?: boolean
-}
-
-export function QuizScreen({componentId, isModal = false}: IProps) {
+export function QuizScreen() {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const {setIsBackedUp} = accountHook.useAccountManager()
   const navigation = useNavigation()
@@ -67,10 +62,10 @@ Please review your backup and try again. `,
         [{text: 'OK', onPress: clear}],
       )
     }
-  }, [clear, componentId, mnemonic, navigation, setIsBackedUp, wordList])
+  }, [clear, mnemonic, navigation, setIsBackedUp, wordList])
 
   return (
-    <ModalTemplate componentId={componentId} disabled={!isModal} text='cancel'>
+    <ModalTemplate text='cancel'>
       <View>
         <Padding verticalSize={Size.MARGIN_8}>
           <CenteredColumn>

@@ -1,27 +1,24 @@
+import {useNavigation} from '@react-navigation/core'
 import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
 import {Button, Caption, Card} from 'react-native-paper'
 import {useSelector} from 'react-redux'
-import {Expanded, Padding} from 'src/components/atoms'
-import {
-  IProps as IItemProps,
-  Item,
-} from 'src/components/screens/wallet/token-list/item'
-import {tokenSelector} from 'src/redux/module/token'
-import {uiHook, uiType} from 'src/redux/module/ui'
 import styled from 'styled-components/native'
 
-export interface IProps {
-  componentId: string
-}
+import {Expanded, Padding} from 'src/components/atoms'
+import {ScreenName} from 'src/const'
+import {tokenSelector} from 'src/redux/module/token'
+import {uiHook, uiType} from 'src/redux/module/ui'
+import {IProps as IItemProps, Item} from './item'
 
-export function TokenList({componentId}: IProps) {
+export function TokenList() {
   const tokens = useSelector(tokenSelector.getCurrentAccountTokens)
   const setBottomDrawer = uiHook.useSetBottomDrawer()
+  const navigation = useNavigation()
 
   const onPressAdd = useCallback(() => {
-    pushTokenSearch(componentId)
-  }, [componentId])
+    navigation.navigate(ScreenName.WalletTokenSearchScreen)
+  }, [navigation])
 
   const onPressMoreFactory: IItemProps['onPressMoreFactory'] = useCallback(
     t => () => {

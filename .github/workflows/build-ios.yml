@@ -1,0 +1,42 @@
+name: Build iOS
+
+on:
+  push:
+    paths:
+      - "ios/**"
+      - "fastlane/**"
+
+jobs:
+  build:
+    runs-on: macOS-10.14
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+      - name: Switch node version
+        uses: actions/setup-node@v1
+        with:
+          node-version: "10.16.3"
+      - name: Switch ruby version
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.6.x"
+      - name: Setup mac dependencies
+        env:
+          GOOGLE_CLOUD_SDK_VERSION: "264.0.0"
+          GOOGLE_CLOUD_KEY: ${{ secrets.GOOGLE_CLOUD_KEY }}
+        run: |
+          brew install imagemagick
+          sudo xcode-select -s /Applications/Xcode_11.app
+
+          curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
+          tar -xzf "./google-cloud-sdk-$GOOGLE_CLOUD_SDK_VERSION-darwin-x86_64.tar.gz"
+          CLOUDSDK_CORE_DISABLE_PROMPTS=1 ./google-cloud-sdk/install.sh
+
+          echo "$GOOGLE_CLOUD_KEY" | base64 --decode > "$HOME"/google-cloud-key.json
+          ./google-cloud-sdk/bin/gcloud auth activate-service-account --key-file="$HOME"/google-cloud-key.json
+
+          echo ::add-path::./google-cloud-sdk/bin
+      - name: Install dependencies
+        run: npm run install:all
+      - name: Build ios app
+        run: npm run ios:build

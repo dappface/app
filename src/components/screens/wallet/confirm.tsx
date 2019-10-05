@@ -8,6 +8,7 @@ import styled from 'styled-components/native'
 import {useSelector} from 'react-redux'
 
 import {Blockie} from 'src/components/atoms'
+import {ModalTemplate} from 'src/components/templates'
 import {BiometryType, ScreenName, Size} from 'src/const'
 import {useWeb3} from 'src/hooks'
 import {accountHook, accountSelector} from 'src/redux/module/account'
@@ -77,61 +78,63 @@ export function Confirm({navigation, route}) {
   )
 
   return (
-    <Container>
-      <Header>
-        <Title>
-          <Text>Send Transaction</Text>
-        </Title>
+    <ModalTemplate text='cancel'>
+      <Container>
+        <Header>
+          <Title>
+            <Text>Send Transaction</Text>
+          </Title>
 
-        <FromTo>
-          <AccountInfo>
-            <Blockie address={currentAccount.address} />
-            <Text>{wHelper.omitAddress(currentAccount.address)}</Text>
-          </AccountInfo>
+          <FromTo>
+            <AccountInfo>
+              <Blockie address={currentAccount.address} />
+              <Text>{wHelper.omitAddress(currentAccount.address)}</Text>
+            </AccountInfo>
 
-          <Relation>
-            <Text>{ether} ETH</Text>
+            <Relation>
+              <Text>{ether} ETH</Text>
+              <Text>
+                {fiat} {currencyDetails.code}
+              </Text>
+              <Ionicons name='ios-arrow-round-forward' size={24} />
+            </Relation>
+
+            <AccountInfo>
+              <Blockie address={route.params.txParams.to} />
+              <Text>{wHelper.omitAddress(route.params.txParams.to)}</Text>
+            </AccountInfo>
+          </FromTo>
+        </Header>
+
+        <Detail>
+          <DetailItem>
+            <Text>Gas Price</Text>
             <Text>
-              {fiat} {currencyDetails.code}
+              {web3.utils.fromWei(route.params.txParams.gasPrice, 'Gwei')} GWEI
             </Text>
-            <Ionicons name='ios-arrow-round-forward' size={24} />
-          </Relation>
+          </DetailItem>
 
-          <AccountInfo>
-            <Blockie address={route.params.txParams.to} />
-            <Text>{wHelper.omitAddress(route.params.txParams.to)}</Text>
-          </AccountInfo>
-        </FromTo>
-      </Header>
+          <DetailItem>
+            <Text>Gas Limit</Text>
+            <Text>{route.params.txParams.gasLimit} UNITS</Text>
+          </DetailItem>
 
-      <Detail>
-        <DetailItem>
-          <Text>Gas Price</Text>
-          <Text>
-            {web3.utils.fromWei(route.params.txParams.gasPrice, 'Gwei')} GWEI
-          </Text>
-        </DetailItem>
+          <DetailItem>
+            <Text>Max Transaction Fee</Text>
+            <Text>{web3.utils.fromWei(maxGas.toString(), 'ether')} ETH</Text>
+          </DetailItem>
 
-        <DetailItem>
-          <Text>Gas Limit</Text>
-          <Text>{route.params.txParams.gasLimit} UNITS</Text>
-        </DetailItem>
+          <DetailItem>
+            <Text>Max Total</Text>
+            <Text>{maxTotal} ETH</Text>
+          </DetailItem>
+        </Detail>
 
-        <DetailItem>
-          <Text>Max Transaction Fee</Text>
-          <Text>{web3.utils.fromWei(maxGas.toString(), 'ether')} ETH</Text>
-        </DetailItem>
-
-        <DetailItem>
-          <Text>Max Total</Text>
-          <Text>{maxTotal} ETH</Text>
-        </DetailItem>
-      </Detail>
-
-      <Button mode='contained' onPress={onPressSend}>
-        send
-      </Button>
-    </Container>
+        <Button mode='contained' onPress={onPressSend}>
+          send
+        </Button>
+      </Container>
+    </ModalTemplate>
   )
 }
 

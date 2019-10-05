@@ -35,6 +35,7 @@ export function WalletSendStackNavigation() {
       <WalletSendStack.Screen
         name={ScreenName.WalletScanScreen}
         component={Wallet.Scan}
+        options={{header: null}}
       />
       <WalletSendStack.Screen
         name={ScreenName.WalletSendConfirmScreen}

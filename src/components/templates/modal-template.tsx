@@ -10,10 +10,16 @@ import {ScreenName} from 'src/const'
 interface IProps {
   children: JSX.Element | JSX.Element[]
   disabled?: boolean
+  onClose?: () => void
   text?: string
 }
 
-export function ModalTemplate({children, disabled = false, text}: IProps) {
+export function ModalTemplate({
+  children,
+  disabled = false,
+  onClose,
+  text,
+}: IProps) {
   const navigation = useNavigation()
   const onPressClose = useCallback(() => {
     navigation.navigate(ScreenName.BrowserScreen)
@@ -26,7 +32,7 @@ export function ModalTemplate({children, disabled = false, text}: IProps) {
         <StyledFAB
           icon='close'
           label={text || 'close'}
-          onPress={onPressClose}
+          onPress={onClose || onPressClose}
           theme={{colors: {accent: Colors.white}}}
         />
       ) : null}

@@ -12,6 +12,7 @@ import {
 
 import {Expanded, HorizontalPadding, Padding, Row} from 'src/components/atoms'
 import {FormField} from 'src/components/molecules'
+import {ModalTemplate} from 'src/components/templates'
 import {ScreenName} from 'src/const'
 import {accountType} from 'src/redux/module/account'
 import {useGasPriceInfo} from './hooks'
@@ -69,7 +70,7 @@ export function Send({navigation}) {
   }, [])
 
   const handlePressScan = useCallback((): void => {
-    navigation.navigate(ScreenName.WalletScanScreen)
+    navigation.navigate(ScreenName.WalletScanScreen, {setTo})
   }, [navigation])
 
   const onSubmit = useCallback(
@@ -91,92 +92,94 @@ export function Send({navigation}) {
       initialValues={initialValues}
       onSubmit={onSubmit}
       validate={validateForm}>
-      <KeyboardAwareScrollView>
-        <List.Section>
-          <AlignTopRow>
-            <RecipientBlockie />
-            <FormField
-              autoFocus
-              helperText='Required'
-              label='Recipient address'
-              mode='outlined'
-              name='to'
-              onSubmitEditing={focusAmount}
-              placeholder='0x1234...'
-              returnKeyType='next'
-              validate={validateTo}
-            />
-            <SubInfoContainer>
-              <IconButton
-                icon='crop-free'
-                onPress={handlePressScan}
-                size={24}
+      <ModalTemplate text='cancel'>
+        <KeyboardAwareScrollView>
+          <List.Section>
+            <AlignTopRow>
+              <RecipientBlockie />
+              <FormField
+                autoFocus
+                helperText='Required'
+                label='Recipient address'
+                mode='outlined'
+                name='to'
+                onSubmitEditing={focusAmount}
+                placeholder='0x1234...'
+                returnKeyType='next'
+                validate={validateTo}
               />
-            </SubInfoContainer>
-          </AlignTopRow>
+              <SubInfoContainer>
+                <IconButton
+                  icon='crop-free'
+                  onPress={handlePressScan}
+                  size={24}
+                />
+              </SubInfoContainer>
+            </AlignTopRow>
 
-          <RowWithUnit>
-            <AmountFormField
-              focusGasLimit={focusGasLimit}
-              ref={amountInputRef as React.RefObject<TextInput>}
-              showAdvancedOptions={showAdvancedOptions}
-            />
-            <SubInfoContainer>
-              <Subheading>ETH</Subheading>
-            </SubInfoContainer>
-          </RowWithUnit>
-        </List.Section>
-
-        <List.Section>
-          <Row>
-            <Expanded.View>
-              <List.Subheader>Advanced Options</List.Subheader>
-            </Expanded.View>
-            <HorizontalPadding>
-              <Switch
-                onValueChange={setShowAdvancedOptions}
-                value={showAdvancedOptions}
+            <RowWithUnit>
+              <AmountFormField
+                focusGasLimit={focusGasLimit}
+                ref={amountInputRef as React.RefObject<TextInput>}
+                showAdvancedOptions={showAdvancedOptions}
               />
-            </HorizontalPadding>
-          </Row>
+              <SubInfoContainer>
+                <Subheading>ETH</Subheading>
+              </SubInfoContainer>
+            </RowWithUnit>
+          </List.Section>
 
-          {showAdvancedOptions && (
-            <>
+          <List.Section>
+            <Row>
+              <Expanded.View>
+                <List.Subheader>Advanced Options</List.Subheader>
+              </Expanded.View>
               <HorizontalPadding>
-                <FormField
-                  helperText='Required'
-                  keyboardType='numeric'
-                  label='Gas Limit'
-                  name='gasLimit'
-                  onSubmitEditing={focusGasPrice}
-                  placeholder='21000'
-                  ref={gasLimitInputRef}
-                  returnKeyType='next'
-                  validate={validateGasLimit}
+                <Switch
+                  onValueChange={setShowAdvancedOptions}
+                  value={showAdvancedOptions}
                 />
               </HorizontalPadding>
-              <RowWithUnit>
-                <FormField
-                  helperText={gasPriceHelperText}
-                  keyboardType='numeric'
-                  label='Gas Price'
-                  name='gasPrice'
-                  placeholder={recommendedGasPrice}
-                  ref={gasPriceInputRef}
-                  validate={validateGasPrice}
-                />
-                <SubInfoContainer>
-                  <Subheading>Gwei</Subheading>
-                </SubInfoContainer>
-              </RowWithUnit>
-            </>
-          )}
-        </List.Section>
+            </Row>
 
-        <Padding>
-          <Submit />
-        </Padding>
-      </KeyboardAwareScrollView>
+            {showAdvancedOptions && (
+              <>
+                <HorizontalPadding>
+                  <FormField
+                    helperText='Required'
+                    keyboardType='numeric'
+                    label='Gas Limit'
+                    name='gasLimit'
+                    onSubmitEditing={focusGasPrice}
+                    placeholder='21000'
+                    ref={gasLimitInputRef}
+                    returnKeyType='next'
+                    validate={validateGasLimit}
+                  />
+                </HorizontalPadding>
+                <RowWithUnit>
+                  <FormField
+                    helperText={gasPriceHelperText}
+                    keyboardType='numeric'
+                    label='Gas Price'
+                    name='gasPrice'
+                    placeholder={recommendedGasPrice}
+                    ref={gasPriceInputRef}
+                    validate={validateGasPrice}
+                  />
+                  <SubInfoContainer>
+                    <Subheading>Gwei</Subheading>
+                  </SubInfoContainer>
+                </RowWithUnit>
+              </>
+            )}
+          </List.Section>
+
+          <Padding>
+            <Submit />
+          </Padding>
+        </KeyboardAwareScrollView>
+      </ModalTemplate>
     </Formik>
   )
 }

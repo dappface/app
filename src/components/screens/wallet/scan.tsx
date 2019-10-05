@@ -1,30 +1,29 @@
-import * as React from 'react'
+import React, {useCallback} from 'react'
 import {Alert} from 'react-native'
 import {RNCamera} from 'react-native-camera'
 import {Navigation} from 'react-native-navigation'
-import {ModalTemplate} from 'src/components/templates'
-import {Color} from 'src/const'
 import styled from 'styled-components/native'
 
-export interface IProps {
-  componentId: string
-  setTo: (to: string) => void
-}
+import {ModalTemplate} from 'src/components/templates'
+import {Color, ScreenName} from 'src/const'
 
-export const Scan = ({componentId, setTo}: IProps) => {
-  const onScan = (data: any) => {
-    if (typeof data === 'object' && typeof data.data === 'string') {
-      setTo(data.data)
-    } else if (typeof data === 'string') {
-      setTo(data)
-    } else {
-      Alert.alert('Whoops!', 'Scanning failed.')
-    }
-    Navigation.dismissModal(componentId)
-  }
+export function Scan({navigation, route}) {
+  const onScan = useCallback(
+    (data: any) => {
+      if (typeof data === 'object' && typeof data.data === 'string') {
+        route.params.setTo(data.data)
+      } else if (typeof data === 'string') {
+        route.params.setTo(data)
+      } else {
+        Alert.alert('Whoops!', 'Scanning failed.')
+      }
+      navigation.navigate(ScreenName.WalletSendScreen)
+    },
+    [navigation, route],
+  )
 
   return (
-    <ModalTemplate componentId={componentId}>
+    <ModalTemplate onClose={navigation.goBack} text='cancel'>
       <Container>
         <QrCodeScanner
           barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}

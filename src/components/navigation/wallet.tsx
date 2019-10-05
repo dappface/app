@@ -23,4 +23,26 @@ export function WalletImportStackNavigation() {
   )
 }
 
+export function WalletSendStackNavigation() {
+  return (
+    <WalletSendStack.Navigator
+      initialRouteName={ScreenName.WalletSendScreen}
+      screenOptions={defaultScreenOptions}>
+      <WalletSendStack.Screen
+        name={ScreenName.WalletSendScreen}
+        component={Wallet.Send}
+      />
+      <WalletSendStack.Screen
+        name={ScreenName.WalletScanScreen}
+        component={Wallet.Scan}
+      />
+      <WalletSendStack.Screen
+        name={ScreenName.WalletSendConfirmScreen}
+        component={Wallet.Confirm}
+      />
+    </WalletSendStack.Navigator>
+  )
+}
+
 const WalletImportStack = createStackNavigator()
+const WalletSendStack = createStackNavigator()

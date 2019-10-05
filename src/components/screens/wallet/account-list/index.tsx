@@ -37,11 +37,11 @@ export function AccountList() {
   }, [setBottomDrawer])
 
   const onPressReceive = useCallback(() => {
-    navigation.navigate(ScreenName.WalletReceive)
+    navigation.navigate(ScreenName.WalletReceiveScreen)
   }, [navigation])
 
   const onPressSend = useCallback(() => {
-    pushSend(componentId)
+    navigation.navigate(ScreenName.WalletSendStackNavigation)
   }, [navigation])
 
   const onMomentumScrollEnd = useCallback(

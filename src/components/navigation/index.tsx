@@ -7,7 +7,7 @@ import {BrowserScreen, Wallet} from '../screens'
 import {LinksTabNavigation} from './links'
 import {SettingsStackNavigation} from './settings'
 import {defaultScreenOptions} from './shared'
-import {WalletImportStackNavigation} from './wallet'
+import {WalletImportStackNavigation, WalletSendStackNavigation} from './wallet'
 
 export function Navigation() {
   return (
@@ -30,12 +30,17 @@ export function Navigation() {
         />
 
         <RootStack.Screen
-          name={ScreenName.WalletReceive}
+          name={ScreenName.WalletReceiveScreen}
           component={Wallet.Receive}
           options={({navigation}) => ({
             header: navigation.header,
             headerLeft: () => null,
           })}
+        />
+
+        <RootStack.Screen
+          name={ScreenName.WalletSendStackNavigation}
+          component={WalletSendStackNavigation}
         />
 
         <RootStack.Screen

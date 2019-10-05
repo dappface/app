@@ -1,30 +1,21 @@
 import BN from 'bignumber.js'
-import React, {useMemo} from 'react'
+import React, {useCallback, useMemo} from 'react'
 import {Alert} from 'react-native'
-import {Navigation} from 'react-native-navigation'
 import {Button, Text} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import styled from 'styled-components/native'
 import {useSelector} from 'react-redux'
+
 import {Blockie} from 'src/components/atoms'
-import {BiometryType, Size} from 'src/const'
+import {BiometryType, ScreenName, Size} from 'src/const'
 import {useWeb3} from 'src/hooks'
-import {
-  accountHook,
-  accountSelector,
-  accountType,
-} from 'src/redux/module/account'
+import {accountHook, accountSelector} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {settingSelector} from 'src/redux/module/setting'
 import {walletHelper as wHelper} from 'src/utils'
-import styled from 'styled-components/native'
 
-export interface IProps {
-  componentId: string
-  txParams: accountType.ITransactionParams
-}
-
-export function Confirm({componentId, txParams}: IProps) {
+export function Confirm({navigation, route}) {
   const web3 = useWeb3()
   const currencyDetails = useSelector(settingSelector.getCurrencyDetails)
   const currentAccount = useSelector(
@@ -33,7 +24,7 @@ export function Confirm({componentId, txParams}: IProps) {
   const fiatRate = useSelector(accountSelector.getFiatRate)
   const signAndSendTx = accountHook.useSignAndSendTransaction()
 
-  async function onPressSend() {
+  const onPressSend = useCallback(async () => {
     try {
       const biometryType = await TouchID.isSupported()
       if (
@@ -43,8 +34,8 @@ export function Confirm({componentId, txParams}: IProps) {
         throw new Error('TouchID/FaceID does not supported')
       }
       await TouchID.authenticate('')
-      await signAndSendTx(currentAccount, txParams)
-      await Navigation.popToRoot(componentId)
+      await signAndSendTx(currentAccount, route.params.txParams)
+      navigation.navigate(ScreenName.BrowserScreen)
       Alert.alert('Transaction has been successfully broadcasted!')
     } catch (error) {
       if (error.name === 'LAErrorUserCancel') {
@@ -53,25 +44,28 @@ export function Confirm({componentId, txParams}: IProps) {
         Alert.alert('Whoops!', error.message)
       }
     }
-  }
+  }, [navigation, route])
 
-  const ether = useMemo(() => web3.utils.fromWei(txParams.value, 'ether'), [
-    txParams.value,
-    web3.utils,
-  ])
+  const ether = useMemo(
+    () => web3.utils.fromWei(route.params.txParams.value, 'ether'),
+    [route, web3.utils],
+  )
 
   const maxGas = useMemo(
-    () => new BN(txParams.gasLimit).multipliedBy(txParams.gasLimit),
-    [txParams],
+    () =>
+      new BN(route.params.txParams.gasLimit).multipliedBy(
+        route.params.txParams.gasLimit,
+      ),
+    [route],
   )
 
   const maxTotal = useMemo(
     () =>
       web3.utils.fromWei(
-        new BN(txParams.value).plus(maxGas).toString(),
+        new BN(route.params.txParams.value).plus(maxGas).toString(),
         'ether',
       ),
-    [maxGas, txParams.value, web3.utils],
+    [maxGas, route, web3.utils],
   )
 
   const fiat = useMemo(
@@ -104,8 +98,8 @@ export function Confirm({componentId, txParams}: IProps) {
           </Relation>
 
           <AccountInfo>
-            <Blockie address={txParams.to} />
-            <Text>{wHelper.omitAddress(txParams.to)}</Text>
+            <Blockie address={route.params.txParams.to} />
+            <Text>{wHelper.omitAddress(route.params.txParams.to)}</Text>
           </AccountInfo>
         </FromTo>
       </Header>
@@ -113,12 +107,14 @@ export function Confirm({componentId, txParams}: IProps) {
       <Detail>
         <DetailItem>
           <Text>Gas Price</Text>
-          <Text>{web3.utils.fromWei(txParams.gasPrice, 'Gwei')} GWEI</Text>
+          <Text>
+            {web3.utils.fromWei(route.params.txParams.gasPrice, 'Gwei')} GWEI
+          </Text>
         </DetailItem>
 
         <DetailItem>
           <Text>Gas Limit</Text>
-          <Text>{txParams.gasLimit} UNITS</Text>
+          <Text>{route.params.txParams.gasLimit} UNITS</Text>
         </DetailItem>
 
         <DetailItem>

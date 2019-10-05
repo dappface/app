@@ -12,6 +12,7 @@ import {
 
 import {Expanded, HorizontalPadding, Padding, Row} from 'src/components/atoms'
 import {FormField} from 'src/components/molecules'
+import {ScreenName} from 'src/const'
 import {accountType} from 'src/redux/module/account'
 import {useGasPriceInfo} from './hooks'
 import {RecipientBlockie} from './receipient-blockie'
@@ -26,11 +27,7 @@ import {
   validateGasPrice,
 } from './validator'
 
-interface IProps {
-  componentId: string
-}
-
-export function Send({componentId}: IProps) {
+export function Send({navigation}) {
   const validateForm = useValidateForm()
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false)
   const [to, setTo] = useState('')
@@ -72,8 +69,8 @@ export function Send({componentId}: IProps) {
   }, [])
 
   const handlePressScan = useCallback((): void => {
-    showWalletScan({setTo})
-  }, [])
+    navigation.navigate(ScreenName.WalletScanScreen)
+  }, [navigation])
 
   const onSubmit = useCallback(
     (values: IValues): void => {
@@ -84,9 +81,9 @@ export function Send({componentId}: IProps) {
         value: ethersUtils.parseEther(values.amount).toString(),
       }
 
-      pushComfirmSend(componentId, {txParams})
+      navigation.navigate(ScreenName.WalletSendConfirmScreen, {txParams})
     },
-    [componentId],
+    [navigation],
   )
 
   return (

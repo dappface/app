@@ -7,12 +7,13 @@ import {useSelector} from 'react-redux'
 import {Padding} from 'src/components/atoms'
 import {WordList} from 'src/components/organisms'
 import {ModalTemplate} from 'src/components/templates'
+import {IScreenProps} from 'src/components/screens/shared'
 import {BiometryType, ScreenName, Size} from 'src/const'
 import {accountSelector} from 'src/redux/module/account'
 
 export {QuizScreen} from 'src/components/screens/settings/backup/quiz'
 
-export function BackupScreen({navigation}) {
+export function BackupScreen({navigation}: IScreenProps) {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const [mnemonicList, setMnemonicList] = useState<string[]>([])
 

@@ -2,13 +2,14 @@ import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {IScreenProps} from 'src/components/screens/shared'
 import {ScreenName} from 'src/const'
 import {useBrowserManager} from 'src/hooks'
 import {bookmarkHook, bookmarkSelector} from 'src/redux/module/bookmark'
 import {Item} from './item'
 import {NoItems} from './no-items'
 
-export function BookmarksScreen({navigation}) {
+export function BookmarksScreen({navigation}: IScreenProps) {
   const {openLink} = useBrowserManager()
   const bookmarks = useSelector(bookmarkSelector.getBookmarks)
   const {removeBookmark} = bookmarkHook.useBookmarkManager()

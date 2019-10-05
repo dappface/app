@@ -9,14 +9,22 @@ import {useSelector} from 'react-redux'
 
 import {Blockie} from 'src/components/atoms'
 import {ModalTemplate} from 'src/components/templates'
+import {IScreenProps} from 'src/components/screens/shared'
 import {BiometryType, ScreenName, Size} from 'src/const'
 import {useWeb3} from 'src/hooks'
-import {accountHook, accountSelector} from 'src/redux/module/account'
+import {
+  accountHook,
+  accountSelector,
+  accountType,
+} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {settingSelector} from 'src/redux/module/setting'
 import {walletHelper as wHelper} from 'src/utils'
 
-export function ConfirmScreen({navigation, route}) {
+export function ConfirmScreen({
+  navigation,
+  route,
+}: IScreenProps<{txParams: accountType.ITransactionParams}>) {
   const web3 = useWeb3()
   const currencyDetails = useSelector(settingSelector.getCurrencyDetails)
   const currentAccount = useSelector(

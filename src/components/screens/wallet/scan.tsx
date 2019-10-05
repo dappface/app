@@ -3,10 +3,15 @@ import {Alert} from 'react-native'
 import {RNCamera} from 'react-native-camera'
 import styled from 'styled-components/native'
 
+import {IScreenProps} from 'src/components/screens/shared'
 import {ModalTemplate} from 'src/components/templates'
 import {Color, ScreenName} from 'src/const'
 
-export function ScanScreen({navigation, route}) {
+interface IParams {
+  setTo: (address: string) => void
+}
+
+export function ScanScreen({navigation, route}: IScreenProps<IParams>) {
   const onScan = useCallback(
     (data: any) => {
       if (typeof data === 'object' && typeof data.data === 'string') {

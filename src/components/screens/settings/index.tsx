@@ -3,17 +3,17 @@ import {Colors, List} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 
 import {ModalTemplate} from 'src/components/templates'
+import {IScreenProps} from 'src/components/screens/shared'
 import {ScreenName} from 'src/const'
 import {useNukeRedux} from 'src/redux'
 import {accountSelector} from 'src/redux/module/account'
 import {settingSelector} from 'src/redux/module/setting'
-
 export {BackupScreen, QuizScreen} from './backup'
 export {CurrencyScreen} from './currency'
 export {NetworkScreen} from './network'
 export {SearchEngineScreen} from './search-engine'
 
-export function SettingsScreen({navigation}) {
+export function SettingsScreen({navigation}: IScreenProps) {
   const currency = useSelector(settingSelector.getCurrency)
   const isBackedUp = useSelector(accountSelector.getIsBackedUp)
   const mnemonic = useSelector(accountSelector.getMnemonic)

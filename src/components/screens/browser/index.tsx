@@ -2,10 +2,8 @@ import React, {useEffect} from 'react'
 import {FlatList, ScaledSize} from 'react-native'
 import Orientation from 'react-native-orientation'
 import {useSelector} from 'react-redux'
-import {AddressBar} from 'src/components/screens/browser/address-bar'
-import {BottomAppBar} from 'src/components/screens/browser/bottom-app-bar'
-import {TabList} from 'src/components/screens/browser/tab-list'
-import {WebView} from 'src/components/screens/browser/web-view'
+import styled from 'styled-components/native'
+
 import {DefaultTemplate} from 'src/components/templates'
 import {
   ISafeAreaPosition,
@@ -17,7 +15,10 @@ import {
   useSafeAreaPosition,
 } from 'src/hooks'
 import {browserSelector} from 'src/redux/module/browser'
-import styled from 'styled-components/native'
+import {AddressBar} from './address-bar'
+import {BottomAppBar} from './bottom-app-bar'
+import {TabList} from './tab-list'
+import {WebView} from './web-view'
 
 export function BrowserScreen() {
   const bottomAppBarHeight = useBottomAppBarHeight()

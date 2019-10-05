@@ -13,6 +13,7 @@ import {
 import {Expanded, HorizontalPadding, Padding, Row} from 'src/components/atoms'
 import {FormField} from 'src/components/molecules'
 import {ModalTemplate} from 'src/components/templates'
+import {IScreenProps} from 'src/components/screens/shared'
 import {ScreenName} from 'src/const'
 import {accountType} from 'src/redux/module/account'
 import {useGasPriceInfo} from './hooks'
@@ -28,7 +29,7 @@ import {
   validateGasPrice,
 } from './validator'
 
-export function SendScreen({navigation}) {
+export function SendScreen({navigation}: IScreenProps) {
   const validateForm = useValidateForm()
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false)
   const [to, setTo] = useState('')

@@ -7,12 +7,13 @@ import shuffle from 'shuffle-array'
 import {CenteredColumn, Padding} from 'src/components/atoms'
 import {WordList} from 'src/components/organisms'
 import {ModalTemplate} from 'src/components/templates'
+import {IScreenProps} from 'src/components/screens/shared'
 import {ScreenName, Size} from 'src/const'
 import {accountHook, accountSelector} from 'src/redux/module/account'
 import {useWordListManager} from './hooks'
 import {WordPool} from './word-pool'
 
-export function QuizScreen({navigation}) {
+export function QuizScreen({navigation}: IScreenProps) {
   const mnemonic = useSelector(accountSelector.getMnemonic) as string
   const {setIsBackedUp} = accountHook.useAccountManager()
 

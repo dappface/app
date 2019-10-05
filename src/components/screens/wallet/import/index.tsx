@@ -6,13 +6,14 @@ import {Caption, Title} from 'react-native-paper'
 import {HorizontalPadding, Padding, VerticalPadding} from 'src/components/atoms'
 import {FormField} from 'src/components/molecules'
 import {ModalTemplate} from 'src/components/templates'
+import {IScreenProps} from 'src/components/screens/shared'
 import {ScreenName} from 'src/const'
 import {Submit} from './submit'
 import {validateMnemonic} from './validator'
 
 export * from './account-selector'
 
-export function ImportScreen({navigation}) {
+export function ImportScreen({navigation}: IScreenProps) {
   const initialValues = useMemo<IValues>(
     () => ({
       mnemonic: '',

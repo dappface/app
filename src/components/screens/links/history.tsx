@@ -2,13 +2,14 @@ import React, {useCallback} from 'react'
 import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {IScreenProps} from 'src/components/screens/shared'
 import {ScreenName} from 'src/const'
 import {useBrowserManager} from 'src/hooks'
 import {historyHook, historySelector} from 'src/redux/module/history'
 import {Item} from './item'
 import {NoItems} from './no-items'
 
-export function HistoryScreen({navigation}) {
+export function HistoryScreen({navigation}: IScreenProps) {
   const {openLink} = useBrowserManager()
   const histories = useSelector(historySelector.getHistories)
   const {removeHistory} = historyHook.useHistoryManager()

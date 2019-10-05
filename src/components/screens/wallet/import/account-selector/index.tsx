@@ -6,13 +6,20 @@ import {Button, RadioButton, Text, Title} from 'react-native-paper'
 import styled from 'styled-components/native'
 
 import {HorizontalPadding, Padding, Row} from 'src/components/atoms'
-import {Item} from 'src/components/screens/wallet/import/account-selector/item'
 import {ModalTemplate} from 'src/components/templates'
+import {IScreenProps} from 'src/components/screens/shared'
 import {AccountPath, ScreenName, Size} from 'src/const'
 import {accountHook, accountType} from 'src/redux/module/account'
+import {Item} from './item'
 
-export function AccountSelectorScreen({navigation}) {
-  const route = useRoute()
+interface IParams {
+  mnemonic: string
+}
+
+export function AccountSelectorScreen({
+  navigation,
+  route,
+}: IScreenProps<IParams>) {
   const [basePath, setBasePath] = useState(AccountPath[0])
   const [candidates, setCandidates] = useState<accountType.IAccountCandidate[]>(
     [],
@@ -42,23 +49,15 @@ export function AccountSelectorScreen({navigation}) {
     [candidates],
   )
 
-  const mnemonic = useMemo<string>(() => {
-    if (!route.params) {
-      return
-    }
-    // @ts-ignore
-    return route.params.mnemonic
-  }, [route])
-
   const onPressRecover = useCallback((): void => {
-    importAccountCandidates(mnemonic, candidates)
+    importAccountCandidates(route.params.mnemonic, candidates)
     navigation.navigate(ScreenName.BrowserScreen)
-  }, [candidates, importAccountCandidates, mnemonic, navigation])
+  }, [candidates, importAccountCandidates, route, navigation])
 
   const deriveAccountByIndex = useCallback(
     (i: number) => {
       const path = `${basePath}/${i}`
-      const wallet = Wallet.fromMnemonic(mnemonic, path)
+      const wallet = Wallet.fromMnemonic(route.params.mnemonic, path)
 
       return {
         address: wallet.address,
@@ -67,7 +66,7 @@ export function AccountSelectorScreen({navigation}) {
         privKey: wallet.privateKey,
       }
     },
-    [basePath, mnemonic],
+    [basePath, route],
   )
 
   const onPressMore = useCallback(() => {

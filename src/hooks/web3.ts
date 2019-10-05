@@ -123,14 +123,8 @@ export function useInitializedWeb3(): Web3 | undefined {
       return
     }
     tokens.map(item => fetchTokenBalance(item, web3))
-  }, [
-    fetchTokenBalance,
-    latestBlockNumber,
-    remoteNodeUrl,
-    tokens,
-    tokens.length,
-    web3,
-  ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchTokenBalance, latestBlockNumber, remoteNodeUrl, tokens.length, web3])
 
   return web3
 }

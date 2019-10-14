@@ -20,7 +20,8 @@
     "start:fresh": "npm run reinstall && npm start -- --reset-cache",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "upgrade-interactive": "npx npm-check --update"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.0",
@@ -128,7 +129,6 @@
     "@typescript-eslint/eslint-plugin": "^2.2.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.7.1",
-    "codecov": "^3.3.0",
     "eslint": "^6.3.0",
     "eslint-config-airbnb-typescript": "^4.0.1",
     "eslint-config-prettier": "^6.3.0",

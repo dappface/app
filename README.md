@@ -49,7 +49,7 @@ $ npm run ios simulator:iPhone\ 11
 $ npm run ios device:true
 ```
 
-[ios-build-status-svg]: https://github.com/dappface/app/workflows/iOS%20Build/badge.svg
-[ios-build-status-link]: https://github.com/dappface/app/actions?workflow=iOS%20Build
+[ios-build-status-svg]: https://github.com/dappface/app/workflows/Build%20iOS/badge.svg
+[ios-build-status-link]: https://github.com/dappface/app/actions?workflow=Build%20iOS
 [lint-status-svg]: https://github.com/dappface/app/workflows/Lint/badge.svg
 [lint-status-link]: https://github.com/dappface/app/actions?workflow=Lint

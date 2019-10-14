@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import {View} from 'react-native'
 import {Row} from 'src/components/atoms'
 import {Item} from 'src/components/organisms/word-list/item'
@@ -11,23 +11,41 @@ interface IProps {
   words: string[]
 }
 
-export const WordList = (props: IProps) => (
-  <Container>
-    <View>
-      {Array.from({length: 6}).map((_, i) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <Item key={i} {...props} i={i} />
-      ))}
-    </View>
+export function WordList({index, onPressItem, remove, words}: IProps) {
+  return (
+    <Container>
+      <View>
+        {Array.from({length: 6}).map((_, i) => (
+          <Item
+            // eslint-disable-next-line react/no-array-index-key
+            key={i}
+            i={i}
+            index={index}
+            onPressItem={onPressItem}
+            remove={remove}
+            words={words}
+          />
+        ))}
+      </View>
 
-    <View>
-      {Array.from({length: 6}).map((_, ii) => {
-        const i = ii + 6
-        return <Item key={i} {...props} i={i} />
-      })}
-    </View>
-  </Container>
-)
+      <View>
+        {Array.from({length: 6}).map((_, ii) => {
+          const i = ii + 6
+          return (
+            <Item
+              key={i}
+              i={i}
+              index={index}
+              onPressItem={onPressItem}
+              remove={remove}
+              words={words}
+            />
+          )
+        })}
+      </View>
+    </Container>
+  )
+}
 
 const Container = styled(Row)`
   justify-content: space-evenly;

@@ -53,7 +53,7 @@ export function Item({item}: IProps) {
       <HorizontalPadding>
         <List.Item
           description={`${balance} ${item.symbol}`}
-          left={props =>
+          left={() =>
             imageSource ? (
               <Avatar.Image
                 source={{uri: imageSource}}
@@ -61,14 +61,13 @@ export function Item({item}: IProps) {
               />
             ) : (
               <StyledAvatarIcon
-                {...props}
                 color={Colors.white}
                 icon='image'
                 size={Size.LIST_ITEM_HEIGHT}
               />
             )
           }
-          right={props => <List.Icon {...props} icon='add' />}
+          right={({color}) => <List.Icon color={color} icon='add' />}
           title={item.name}
         />
       </HorizontalPadding>

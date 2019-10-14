@@ -19,6 +19,7 @@ export const FormField = React.forwardRef(
     return (
       <Expanded.View>
         <TextInput
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...textInputProps}
           autoCapitalize='none'
           autoCorrect={false}

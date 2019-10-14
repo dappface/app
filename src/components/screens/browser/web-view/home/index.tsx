@@ -1,14 +1,15 @@
 import {useQuery} from '@apollo/react-hooks'
 import React, {useState} from 'react'
 import {FlatList, ViewStyle} from 'react-native'
-import {feed} from 'src/apollo/modules'
-import {Post} from 'src/components/screens/browser/web-view/feed/post'
-import {Error} from 'src/components/screens/browser/web-view/home/error'
-import {Loading} from 'src/components/screens/browser/web-view/home/loading'
-import {Search} from 'src/components/screens/browser/web-view/home/search'
-import {useBrowserManager} from 'src/hooks'
 
-export interface IProps {
+import {feed} from 'src/apollo/modules'
+import {useBrowserManager} from 'src/hooks'
+import {Post} from '../feed/post'
+import {Error} from './error'
+import {Loading} from './loading'
+import {Search} from './search'
+
+interface IProps {
   style?: ViewStyle
 }
 
@@ -64,7 +65,7 @@ export function Home({style}: IProps) {
     setLoadingMore(false)
   }
 
-  const renderListFooterComponent = () => {
+  function renderListFooterComponent() {
     if (loading) {
       return <Loading />
     }
@@ -92,7 +93,13 @@ export function Home({style}: IProps) {
       onEndReachedThreshold={0.01}
       onRefresh={onRefresh}
       refreshing={refreshing}
-      renderItem={({item}) => <Post {...item.node} onPress={onPressPost} />}
+      renderItem={({item}) => (
+        <Post
+          onPress={onPressPost}
+          postData={item.node.postData}
+          postType={item.node.postType}
+        />
+      )}
     />
   )
 }

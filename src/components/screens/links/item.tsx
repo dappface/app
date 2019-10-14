@@ -1,5 +1,5 @@
 import moment from 'moment'
-import * as React from 'react'
+import React, {useMemo} from 'react'
 import {IconButton, List} from 'react-native-paper'
 import {entityType} from 'src/redux/module/entity'
 import styled from 'styled-components/native'
@@ -10,8 +10,8 @@ interface IItemProps {
   onRemove: () => void
 }
 
-export const Item = ({item, onPress, onRemove}: IItemProps) => {
-  const description = React.useMemo(() => {
+export function Item({item, onPress, onRemove}: IItemProps) {
+  const description = useMemo(() => {
     const url = item.url
       .split('/')
       .slice(0, 3)
@@ -24,8 +24,8 @@ export const Item = ({item, onPress, onRemove}: IItemProps) => {
     <StyledListItem
       title={item.title || item.url}
       description={description}
-      right={props => (
-        <IconButton {...props} icon='close' size={24} onPress={onRemove} />
+      right={({color}) => (
+        <IconButton color={color} icon='close' size={24} onPress={onRemove} />
       )}
       onPress={onPress}
     />

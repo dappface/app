@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import Ripple from 'react-native-material-ripple'
 import {IconButton, Text} from 'react-native-paper'
 import {Color, Size} from 'src/const'
@@ -12,24 +12,26 @@ interface IProps {
   words: string[]
 }
 
-export const Item = ({i, index, onPressItem, remove, words}: IProps) => (
-  <Container
-    key={i}
-    disabled={!onPressItem}
-    onPress={() => onPressItem && onPressItem(i)}>
-    <Index>
-      <Text>{i + 1}</Text>
-    </Index>
+export function Item({i, index, onPressItem, remove, words}: IProps) {
+  return (
+    <Container
+      key={i}
+      disabled={!onPressItem}
+      onPress={() => onPressItem && onPressItem(i)}>
+      <Index>
+        <Text>{i + 1}</Text>
+      </Index>
 
-    <Word selected={i === index}>
-      <Text>{words.length !== 0 ? words[i] : ''}</Text>
-    </Word>
+      <Word selected={i === index}>
+        <Text>{words.length !== 0 ? words[i] : ''}</Text>
+      </Word>
 
-    {words[i] !== '' && remove && (
-      <IconButton icon='close' onPress={() => remove(i)} size={20} />
-    )}
-  </Container>
-)
+      {words[i] !== '' && remove && (
+        <IconButton icon='close' onPress={() => remove(i)} size={20} />
+      )}
+    </Container>
+  )
+}
 
 enum ItemSize {
   IndexWidth = 16,

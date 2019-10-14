@@ -8,6 +8,7 @@ module.exports = {
     'prettier/react',
   ],
   rules: {
+    '@typescript-eslint/no-use-before-define': 'off',
     'consistent-return': 'off',
     'import/no-extraneous-dependencies': [
       'error',

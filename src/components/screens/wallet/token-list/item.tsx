@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {useEffect, useState} from 'react'
 import {Avatar, Colors, IconButton, List} from 'react-native-paper'
 import Reactotron from 'reactotron-react-native'
 import {HorizontalPadding} from 'src/components/atoms'
@@ -12,10 +12,10 @@ export interface IProps {
   onPressMoreFactory: (token: entityType.IToken) => () => void
 }
 
-export const Item = ({item, onPressMoreFactory}: IProps) => {
-  const [imageSource, setImageSource] = React.useState('')
+export function Item({item, onPressMoreFactory}: IProps) {
+  const [imageSource, setImageSource] = useState('')
 
-  React.useEffect(() => {
+  useEffect(() => {
     ;(async () => {
       try {
         const url = `https://raw.githubusercontent.com/TrustWallet/tokens/master/tokens/${item.address}.png`
@@ -31,7 +31,7 @@ export const Item = ({item, onPressMoreFactory}: IProps) => {
     <HorizontalPadding>
       <List.Item
         description={item.name}
-        left={props =>
+        left={() =>
           imageSource ? (
             <Avatar.Image
               source={{uri: imageSource}}
@@ -39,16 +39,15 @@ export const Item = ({item, onPressMoreFactory}: IProps) => {
             />
           ) : (
             <StyledAvatarIcon
-              {...props}
               color={Colors.white}
               icon='image'
               size={Size.LIST_ITEM_HEIGHT}
             />
           )
         }
-        right={props => (
+        right={({color}) => (
           <IconButton
-            {...props}
+            color={color}
             icon='more-vert'
             onPress={onPressMoreFactory(item)}
           />

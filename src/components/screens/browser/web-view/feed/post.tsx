@@ -1,16 +1,20 @@
-import * as React from 'react'
+import React from 'react'
+
 import {feed} from 'src/apollo/modules'
-import {OnPress} from 'src/components/screens/browser/web-view/feed/common'
-import {RSSEntry} from 'src/components/screens/browser/web-view/feed/rss-entry'
-import {Tweet} from 'src/components/screens/browser/web-view/feed/tweet'
+import {OnPress} from './common'
+import {RSSEntry} from './rss-entry'
+import {Tweet} from './tweet'
 
 interface IProps extends feed.IPost {
   onPress: OnPress
 }
 
-export const Post = ({postType, postData, onPress}: IProps) =>
-  postType === 'rssEntry' ? (
+export function Post({postType, postData, onPress}: IProps) {
+  return postType === 'rssEntry' ? (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <RSSEntry {...(postData as feed.IRSSEntry)} onPress={onPress} />
   ) : (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <Tweet {...(postData as feed.ITweet)} onPress={onPress} />
   )
+}

@@ -1,6 +1,6 @@
 import * as etherscanHooks from './etherscan'
-export {etherscanHooks}
 
+export {etherscanHooks}
 export * from './bottom-app-bar'
 export * from './bottom-sheet'
 export * from './browser'

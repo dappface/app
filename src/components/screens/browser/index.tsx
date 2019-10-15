@@ -17,6 +17,7 @@ import {
 import {browserSelector} from 'src/redux/module/browser'
 import {AddressBar} from './address-bar'
 import {BottomAppBar} from './bottom-app-bar'
+import {StatusBar} from './status-bar'
 import {TabList} from './tab-list'
 import {WebView} from './web-view'
 
@@ -62,6 +63,7 @@ export function BrowserScreen() {
   return (
     <DefaultTemplate>
       <Container hasBezel={hasBezel} orientation={orientation}>
+        <StatusBar />
         <TabList />
 
         {showAddressBar ? <AddressBar /> : null}

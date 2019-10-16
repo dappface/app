@@ -19,11 +19,13 @@ interface IProps {
 }
 
 export function ApplicationProvider({children}: IProps) {
-  const initializedBrowserManager = useInitializedBrowserManager()
-  const initialBottomSheetContext = useInitialBottomSheetContext()
-  const initializedBottomAppBarManager = useInitializedBottomAppBarManager()
   const initialStatusBarContext = useInitialStatusBarContext()
   const initializedWeb3 = useInitializedWeb3()
+  const initializedBrowserManager = useInitializedBrowserManager()
+  const initialBottomSheetContext = useInitialBottomSheetContext(
+    initialStatusBarContext,
+  )
+  const initializedBottomAppBarManager = useInitializedBottomAppBarManager()
 
   if (!initializedWeb3) {
     return null

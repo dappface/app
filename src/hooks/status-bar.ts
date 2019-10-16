@@ -10,7 +10,7 @@ export const StatusBarContext = createContext<IStatusBarContext | undefined>(
   undefined,
 )
 
-interface IStatusBarContext {
+export interface IStatusBarContext {
   statusBarStyle: StatusBarStyle
   setStatusBarStyle: (style: StatusBarStyle) => void
 }

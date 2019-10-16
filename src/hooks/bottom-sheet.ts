@@ -9,7 +9,13 @@ import {
 import {State} from 'react-native-gesture-handler'
 import Animated from 'react-native-reanimated'
 
-import {useBottomAppBarInitialTop, useDimensions} from './dimensions'
+import {StatusBarStyle} from 'src/const'
+import {
+  useBottomAppBarInitialTop,
+  useDimensions,
+  useSafeAreaPosition,
+} from './dimensions'
+import {IStatusBarContext} from './status-bar'
 
 const {
   abs,
@@ -49,10 +55,14 @@ interface IBottomSheetContext {
   translateY: Animated.Node<number>
 }
 
-export function useInitialBottomSheetContext(): IBottomSheetContext {
+export function useInitialBottomSheetContext({
+  setStatusBarStyle,
+}: IStatusBarContext): IBottomSheetContext {
   const initialPositionY = useBottomAppBarInitialTop()
   const {screen} = useDimensions()
-  const snapPoints = [initialPositionY, screen.height / 2, 0]
+  const safeArea = useSafeAreaPosition()
+
+  const snapPoints = [initialPositionY, screen.height / 2, safeArea.top]
 
   const positionY = useRef(new Value(initialPositionY))
   const manualSnapPoint = useRef(new Value<number>(-1))
@@ -125,17 +135,16 @@ export function useInitialBottomSheetContext(): IBottomSheetContext {
   const [isOpen, setIsOpen] = useState(false)
   const isOpenNode = lessThan(translateY, initialPositionY - 4)
   const isOpenValue = new Value(0)
-
   Animated.useCode(
     cond(
       isOpenNode,
-      cond(eq(isOpenValue, 0), [
+      cond(not(isOpenValue), [
         set(isOpenValue, 1),
         call([], () => {
           setIsOpen(true)
         }),
       ]),
-      cond(eq(isOpenValue, 1), [
+      cond(isOpenValue, [
         set(isOpenValue, 0),
         call([], () => {
           setIsOpen(false)
@@ -143,6 +152,28 @@ export function useInitialBottomSheetContext(): IBottomSheetContext {
       ]),
     ),
     [isOpenNode],
+  )
+
+  const isOnTopValue = new Value(0)
+  Animated.useCode(
+    block([
+      cond(
+        lessThan(translateY, safeArea.top + 4),
+        cond(eq(isOnTopValue, 0), [
+          set(isOnTopValue, 1),
+          call([], () => {
+            setStatusBarStyle(StatusBarStyle.LIGHT_CONTENT)
+          }),
+        ]),
+        cond(isOnTopValue, [
+          set(isOnTopValue, 0),
+          call([], () => {
+            setStatusBarStyle(StatusBarStyle.DARK_CONTENT)
+          }),
+        ]),
+      ),
+    ]),
+    [translateY],
   )
 
   const snapTo = useCallback(

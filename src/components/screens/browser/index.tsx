@@ -16,7 +16,6 @@ import {
 } from 'src/hooks'
 import {browserSelector} from 'src/redux/module/browser'
 import {AddressBar} from './address-bar'
-import {BottomAppBar} from './bottom-app-bar'
 import {BottomSheet} from './bottom-sheet'
 import {StatusBar} from './status-bar'
 import {TabList} from './tab-list'
@@ -90,7 +89,6 @@ export function BrowserScreen() {
           )}
         />
 
-        {/* <BottomAppBar /> */}
         <BottomSheet />
       </Container>
     </DefaultTemplate>

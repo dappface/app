@@ -54,26 +54,21 @@ export function useInitialBottomSheetContext(): IBottomSheetContext {
   const {screen} = useDimensions()
   const snapPoints = [initialPositionY, screen.height / 2, 0]
 
-  const {
-    afterDragClock,
-    manualSnapClock,
-    dragY,
-    dragVY,
-    gestureState,
-    manualSnapPoint,
-    positionY,
-  } = useRef({
-    afterDragClock: new Clock(),
-    manualSnapClock: new Clock(),
-    dragY: new Value(-1),
-    dragVY: new Value(-1),
-    gestureState: new Value(-2),
-    manualSnapPoint: new Value<number>(-1),
-    positionY: new Value(initialPositionY),
-  }).current
+  const positionY = useRef(new Value(initialPositionY))
+  const manualSnapPoint = useRef(new Value<number>(-1))
+
+  const {afterDragClock, manualSnapClock, dragY, dragVY, gestureState} = useRef(
+    {
+      afterDragClock: new Clock(),
+      manualSnapClock: new Clock(),
+      dragY: new Value(-1),
+      dragVY: new Value(-1),
+      gestureState: new Value(-2),
+    },
+  ).current
 
   useEffect(() => {
-    positionY.setValue(initialPositionY)
+    positionY.current.setValue(initialPositionY)
   }, [initialPositionY])
 
   const [isOpen, setIsOpen] = useState(false)
@@ -90,33 +85,41 @@ export function useInitialBottomSheetContext(): IBottomSheetContext {
     ]),
   ).current
 
-  const newPositionY = add(positionY, dragY)
+  const newPositionY = useRef(add(positionY.current, dragY)).current
   const translateY = useRef(
     cond(
-      lessThan(manualSnapPoint, 0),
+      lessThan(manualSnapPoint.current, 0),
       cond(
         eq(gestureState, State.ACTIVE),
         [stopClock(afterDragClock), stopClock(manualSnapClock), newPositionY],
         cond(
           eq(gestureState, State.END),
           [
-            set(positionY, newPositionY),
+            set(positionY.current, newPositionY),
             runSpring(
               afterDragClock,
-              positionY,
-              snapPoint(positionY, dragVY, snapPoints),
+              positionY.current,
+              snapPoint(positionY.current, dragVY, snapPoints),
               dragVY,
             ),
-            positionY,
+            positionY.current,
           ],
-          positionY,
+          positionY.current,
         ),
       ),
       [
         stopClock(afterDragClock),
-        runSpring(manualSnapClock, positionY, manualSnapPoint, dragVY),
-        cond(eq(positionY, manualSnapPoint), set(manualSnapPoint, -1)),
-        positionY,
+        runSpring(
+          manualSnapClock,
+          positionY.current,
+          manualSnapPoint.current,
+          dragVY,
+        ),
+        cond(
+          eq(positionY.current, manualSnapPoint.current),
+          set(manualSnapPoint.current, -1),
+        ),
+        positionY.current,
       ],
     ),
   ).current
@@ -145,7 +148,7 @@ export function useInitialBottomSheetContext(): IBottomSheetContext {
 
   const snapTo = useCallback(
     (index: number) => {
-      manualSnapPoint.setValue(snapPoints[index])
+      manualSnapPoint.current.setValue(snapPoints[index])
     },
     [snapPoints],
   )

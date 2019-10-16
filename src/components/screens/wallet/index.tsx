@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux'
 import styled from 'styled-components/native'
 
 import {Color, Size} from 'src/const'
-import {useBottomAppBarHeight} from 'src/hooks'
+import {useBrowserNavigationHeight} from 'src/hooks'
 import {accountSelector} from 'src/redux/module/account'
 import {settingSelector} from 'src/redux/module/setting'
 import {web3Selector} from 'src/redux/module/web3'
@@ -22,7 +22,7 @@ export * from './send'
 export * from './token-search'
 
 export function Wallet() {
-  const bottomAppBarHeight = useBottomAppBarHeight()
+  const bottomAppBarHeight = useBrowserNavigationHeight()
   const isAccountExist = useSelector(accountSelector.getIsAccountExist)
   const latestBlockNumber = useSelector(web3Selector.getLatestBlockNumber)
   const networkName = useSelector(settingSelector.getNetworkName)

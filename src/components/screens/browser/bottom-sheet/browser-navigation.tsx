@@ -5,10 +5,10 @@ import {IconButton} from 'react-native-paper'
 import Animated from 'react-native-reanimated'
 
 import {
-  useBottomAppBarHeight,
-  useBottomAppBarInitialTop,
   useBottomSheetContext,
+  useBottomSheetInitialTop,
   useBrowserManager,
+  useBrowserNavigationHeight,
   useDimensions,
 } from 'src/hooks'
 import {bookmarkHook} from 'src/redux/module/bookmark'
@@ -19,8 +19,8 @@ const {interpolate} = Animated
 
 export function BrowserNavigation() {
   const {screen} = useDimensions()
-  const initialPositionY = useBottomAppBarInitialTop()
-  const height = useBottomAppBarHeight()
+  const initialPositionY = useBottomSheetInitialTop()
+  const height = useBrowserNavigationHeight()
   const {isOpen, translateY} = useBottomSheetContext()
   const {
     goBack,

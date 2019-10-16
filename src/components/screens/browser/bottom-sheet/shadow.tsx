@@ -8,13 +8,13 @@ import {
   IDimensions,
   useDimensions,
   useBottomSheetContext,
-  useBottomAppBarInitialTop,
+  useBottomSheetInitialTop,
 } from 'src/hooks'
 
 const {interpolate} = Animated
 
 export function Shadow() {
-  const initialPositionY = useBottomAppBarInitialTop()
+  const initialPositionY = useBottomSheetInitialTop()
   const {screen: screenDimensions} = useDimensions()
   const {isOpen, translateY, closeBottomSheet} = useBottomSheetContext()
 

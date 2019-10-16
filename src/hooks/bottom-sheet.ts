@@ -11,7 +11,7 @@ import Animated from 'react-native-reanimated'
 
 import {StatusBarStyle} from 'src/const'
 import {
-  useBottomAppBarInitialTop,
+  useBottomSheetInitialTop,
   useDimensions,
   useSafeAreaPosition,
 } from './dimensions'
@@ -58,7 +58,7 @@ interface IBottomSheetContext {
 export function useInitialBottomSheetContext({
   setStatusBarStyle,
 }: IStatusBarContext): IBottomSheetContext {
-  const initialPositionY = useBottomAppBarInitialTop()
+  const initialPositionY = useBottomSheetInitialTop()
   const {screen} = useDimensions()
   const safeArea = useSafeAreaPosition()
 

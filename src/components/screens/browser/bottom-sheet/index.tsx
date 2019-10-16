@@ -5,6 +5,7 @@ import {Card} from 'react-native-paper'
 import Animated from 'react-native-reanimated'
 
 import {useBottomSheetContext, useDimensions} from 'src/hooks'
+import {BrowserNavigation} from './browser-navigation'
 import {PullBar} from './pull-bar'
 import {Shadow} from './shadow'
 
@@ -31,6 +32,7 @@ export function BottomSheet() {
               {height: screen.height, width: screen.width},
             ]}>
             <PullBar />
+            <BrowserNavigation />
           </Card>
         </Animated.View>
       </PanGestureHandler>

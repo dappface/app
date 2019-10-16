@@ -71,8 +71,6 @@ export function useInitialBottomSheetContext(): IBottomSheetContext {
     positionY.current.setValue(initialPositionY)
   }, [initialPositionY])
 
-  const [isOpen, setIsOpen] = useState(false)
-
   const handleGesture = useRef(
     event([
       {
@@ -124,6 +122,7 @@ export function useInitialBottomSheetContext(): IBottomSheetContext {
     ),
   ).current
 
+  const [isOpen, setIsOpen] = useState(false)
   const isOpenNode = lessThan(translateY, initialPositionY - 4)
   const isOpenValue = new Value(0)
 

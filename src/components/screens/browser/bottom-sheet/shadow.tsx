@@ -4,11 +4,17 @@ import Animated from 'react-native-reanimated'
 import styled from 'styled-components/native'
 
 import {Color} from 'src/const'
-import {IDimensions, useDimensions, useBottomSheetContext} from 'src/hooks'
+import {
+  IDimensions,
+  useDimensions,
+  useBottomSheetContext,
+  useBottomAppBarInitialTop,
+} from 'src/hooks'
 
 const {interpolate} = Animated
 
 export function Shadow() {
+  const initialPositionY = useBottomAppBarInitialTop()
   const {screen: screenDimensions} = useDimensions()
   const {isOpen, translateY, closeBottomSheet} = useBottomSheetContext()
 
@@ -17,8 +23,8 @@ export function Shadow() {
   }, [closeBottomSheet])
 
   const opacity = interpolate(translateY, {
-    inputRange: [0, screenDimensions.height],
-    outputRange: [1, 0.1],
+    inputRange: [0, initialPositionY],
+    outputRange: [1, 0],
   })
 
   if (!isOpen) {

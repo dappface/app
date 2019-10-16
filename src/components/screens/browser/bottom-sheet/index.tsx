@@ -1,6 +1,7 @@
 import React from 'react'
-import {StyleSheet} from 'react-native'
+import {StyleSheet, Text} from 'react-native'
 import {PanGestureHandler} from 'react-native-gesture-handler'
+import {Card} from 'react-native-paper'
 import Animated from 'react-native-reanimated'
 
 import {useBottomSheetContext, useDimensions} from 'src/hooks'
@@ -21,8 +22,16 @@ export function BottomSheet() {
             styles.bottomSheet,
             {height: screen.height, width: screen.width},
             {transform: [{translateY}]},
-          ]}
-        />
+          ]}>
+          <Card
+            elevation={8}
+            style={[
+              styles.bottomSheet,
+              {height: screen.height, width: screen.width},
+            ]}>
+            <Text>dummy</Text>
+          </Card>
+        </Animated.View>
       </PanGestureHandler>
     </>
   )
@@ -31,7 +40,6 @@ export function BottomSheet() {
 const styles = StyleSheet.create({
   bottomSheet: {
     position: 'absolute',
-    backgroundColor: 'white',
     borderRadius: 16,
   },
 })

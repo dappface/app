@@ -77,10 +77,6 @@ export function useInitialBottomSheetContext({
     },
   ).current
 
-  useEffect(() => {
-    positionY.current.setValue(initialPositionY)
-  }, [initialPositionY])
-
   const handleGesture = useRef(
     event([
       {
@@ -190,6 +186,10 @@ export function useInitialBottomSheetContext({
   const openBottomSheet = useCallback(() => {
     snapTo(2)
   }, [snapTo])
+
+  useEffect(() => {
+    positionY.current.setValue(initialPositionY)
+  }, [initialPositionY])
 
   return {
     closeBottomSheet,

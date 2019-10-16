@@ -10,13 +10,13 @@ const {interpolate} = Animated
 
 export function Shadow() {
   const {screen: screenDimensions} = useDimensions()
-  const {isOpen, positionY, closeBottomSheet} = useBottomSheetContext()
+  const {isOpen, translateY, closeBottomSheet} = useBottomSheetContext()
 
   const onPress = useCallback(() => {
     closeBottomSheet()
   }, [closeBottomSheet])
 
-  const opacity = interpolate(positionY, {
+  const opacity = interpolate(translateY, {
     inputRange: [0, screenDimensions.height],
     outputRange: [1, 0.1],
   })

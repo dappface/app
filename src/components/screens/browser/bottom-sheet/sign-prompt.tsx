@@ -14,12 +14,7 @@ import {
   VerticalPadding,
 } from 'src/components/atoms'
 import {BiometryType, Size} from 'src/const'
-import {
-  useBottomAppBarManager,
-  useBottomSheetContext,
-  useBrowserManager,
-  useWeb3,
-} from 'src/hooks'
+import {useBottomSheetContext, useBrowserManager, useWeb3} from 'src/hooks'
 import {
   accountHook,
   accountSelector,
@@ -34,7 +29,7 @@ export function SignPrompt() {
   const setSignRerquest = accountHook.useSetSignRequest()
   const web3 = useWeb3()
   const {respondData} = useBrowserManager()
-  const {closeBottomAppBar} = useBottomAppBarManager()
+  const {closeBottomSheet, isOpen} = useBottomSheetContext()
 
   const gasFeeInWei = (
     parseInt(web3.utils.toWei('1', 'gwei'), 10) * 21000
@@ -58,7 +53,7 @@ export function SignPrompt() {
       await TouchID.authenticate('')
       respondData(signRequest.tabId, signRequest.callbackId, true)
       setSignRerquest()
-      closeBottomAppBar()
+      closeBottomSheet()
     } catch (error) {
       if (error.name === 'LAErrorUserCancel') {
         Alert.alert('Whoops!', 'Authentication failed. Try again!')
@@ -67,14 +62,13 @@ export function SignPrompt() {
       }
     }
   }, [
-    closeBottomAppBar,
+    closeBottomSheet,
     respondData,
     setSignRerquest,
     signRequest.callbackId,
     signRequest.tabId,
   ])
 
-  const {isOpen} = useBottomSheetContext()
   useEffect(() => {
     if (isOpen || !signRequest) {
       return
@@ -129,7 +123,7 @@ export function SignPrompt() {
 
       <VerticalPadding>
         <SpaceEvenlyRow>
-          <Action mode='text' onPress={closeBottomAppBar}>
+          <Action mode='text' onPress={closeBottomSheet}>
             cancel
           </Action>
           <Action mode='contained' onPress={sign}>

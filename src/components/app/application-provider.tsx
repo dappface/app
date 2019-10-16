@@ -2,11 +2,9 @@ import React from 'react'
 
 import {Snackbar} from 'src/components/atoms'
 import {
-  BottomAppBarManagerContext,
   BottomSheetContext,
   BrowserManagerContext,
   StatusBarContext,
-  useInitializedBottomAppBarManager,
   useInitialBottomSheetContext,
   useInitializedBrowserManager,
   useInitialStatusBarContext,
@@ -25,7 +23,6 @@ export function ApplicationProvider({children}: IProps) {
   const initialBottomSheetContext = useInitialBottomSheetContext(
     initialStatusBarContext,
   )
-  const initializedBottomAppBarManager = useInitializedBottomAppBarManager()
 
   if (!initializedWeb3) {
     return null
@@ -35,13 +32,10 @@ export function ApplicationProvider({children}: IProps) {
     <StatusBarContext.Provider value={initialStatusBarContext}>
       <Web3Context.Provider value={initializedWeb3}>
         <BrowserManagerContext.Provider value={initializedBrowserManager}>
-          <BottomAppBarManagerContext.Provider
-            value={initializedBottomAppBarManager}>
-            <BottomSheetContext.Provider value={initialBottomSheetContext}>
-              {children}
-            </BottomSheetContext.Provider>
-            <Snackbar />
-          </BottomAppBarManagerContext.Provider>
+          <BottomSheetContext.Provider value={initialBottomSheetContext}>
+            {children}
+          </BottomSheetContext.Provider>
+          <Snackbar />
         </BrowserManagerContext.Provider>
       </Web3Context.Provider>
     </StatusBarContext.Provider>

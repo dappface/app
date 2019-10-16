@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import {useSelector} from 'react-redux'
 import {Blockie, Padding} from 'src/components/atoms'
 import {Color} from 'src/const'
-import {useBottomAppBarManager, useBrowserManager, useWeb3} from 'src/hooks'
+import {useBottomSheetContext, useBrowserManager, useWeb3} from 'src/hooks'
 import {accountSelector, accountType} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {settingSelector} from 'src/redux/module/setting'
@@ -24,13 +24,13 @@ export function TxItem({tx}: IProps) {
   const etherscanUrl = useSelector(settingSelector.getEtherscanUrl)
   const web3 = useWeb3()
   const {openLink} = useBrowserManager()
-  const {closeBottomAppBar} = useBottomAppBarManager()
+  const {closeBottomSheet} = useBottomSheetContext()
 
   const onPress = React.useCallback(() => {
-    closeBottomAppBar()
+    closeBottomSheet()
     const url = `${etherscanUrl}/tx/${tx.hash}`
     openLink(url, true)
-  }, [closeBottomAppBar, etherscanUrl, openLink, tx.hash])
+  }, [closeBottomSheet, etherscanUrl, openLink, tx.hash])
 
   return (
     <Ripple onPress={onPress}>

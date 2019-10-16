@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import {Alert, View} from 'react-native'
 import {Button, Caption, Headline, Text} from 'react-native-paper'
 import TouchID from 'react-native-touch-id'
@@ -14,7 +14,12 @@ import {
   VerticalPadding,
 } from 'src/components/atoms'
 import {BiometryType, Size} from 'src/const'
-import {useBottomAppBarManager, useBrowserManager, useWeb3} from 'src/hooks'
+import {
+  useBottomAppBarManager,
+  useBottomSheetContext,
+  useBrowserManager,
+  useWeb3,
+} from 'src/hooks'
 import {
   accountHook,
   accountSelector,
@@ -72,6 +77,14 @@ export function SignPrompt() {
     signRequest.callbackId,
     signRequest.tabId,
   ])
+
+  const {isOpen} = useBottomSheetContext()
+  useEffect(() => {
+    if (isOpen || !signRequest) {
+      return
+    }
+    setSignRerquest()
+  }, [isOpen])
 
   return (
     <Container>

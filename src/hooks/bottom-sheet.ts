@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -60,20 +61,23 @@ export function useInitialBottomSheetContext({
 }: IStatusBarContext): IBottomSheetContext {
   const initialPositionY = useBottomSheetInitialTop()
   const {screen} = useDimensions()
-  const safeArea = useSafeAreaPosition()
+  const {top: safeAreaTop} = useSafeAreaPosition()
 
-  const snapPoints = [initialPositionY, screen.height / 2, safeArea.top]
+  const snapPoints = useMemo(
+    () => [initialPositionY, screen.height / 2, safeAreaTop],
+    [initialPositionY, screen, safeAreaTop],
+  )
 
   const positionY = useRef(new Value(initialPositionY))
   const manualSnapPoint = useRef(new Value<number>(-1))
 
-  const {afterDragClock, manualSnapClock, dragY, dragVY, gestureState} = useRef(
+  const {afterDragClock, gestureState, manualSnapClock, dragY, dragVY} = useRef(
     {
       afterDragClock: new Clock(),
+      gestureState: new Value<number>(-1),
       manualSnapClock: new Clock(),
       dragY: new Value(-1),
       dragVY: new Value(-1),
-      gestureState: new Value(-2),
     },
   ).current
 
@@ -91,41 +95,43 @@ export function useInitialBottomSheetContext({
 
   const newPositionY = useRef(add(positionY.current, dragY)).current
   const translateY = useRef(
-    cond(
-      lessThan(manualSnapPoint.current, 0),
+    block([
       cond(
-        eq(gestureState, State.ACTIVE),
-        [stopClock(afterDragClock), stopClock(manualSnapClock), newPositionY],
+        lessThan(manualSnapPoint.current, 0),
         cond(
-          eq(gestureState, State.END),
-          [
-            set(positionY.current, newPositionY),
-            runSpring(
-              afterDragClock,
+          eq(gestureState, State.ACTIVE),
+          [stopClock(afterDragClock), stopClock(manualSnapClock), newPositionY],
+          cond(
+            eq(gestureState, State.END),
+            [
+              set(positionY.current, newPositionY),
+              runSpring(
+                afterDragClock,
+                positionY.current,
+                snapPoint(positionY.current, dragVY, snapPoints),
+                dragVY,
+              ),
               positionY.current,
-              snapPoint(positionY.current, dragVY, snapPoints),
-              dragVY,
-            ),
+            ],
             positionY.current,
-          ],
-          positionY.current,
+          ),
         ),
+        [
+          stopClock(afterDragClock),
+          runSpring(
+            manualSnapClock,
+            positionY.current,
+            manualSnapPoint.current,
+            dragVY,
+          ),
+          cond(
+            eq(positionY.current, manualSnapPoint.current),
+            set(manualSnapPoint.current, -1),
+          ),
+          positionY.current,
+        ],
       ),
-      [
-        stopClock(afterDragClock),
-        runSpring(
-          manualSnapClock,
-          positionY.current,
-          manualSnapPoint.current,
-          dragVY,
-        ),
-        cond(
-          eq(positionY.current, manualSnapPoint.current),
-          set(manualSnapPoint.current, -1),
-        ),
-        positionY.current,
-      ],
-    ),
+    ]),
   ).current
 
   const [isOpen, setIsOpen] = useState(false)
@@ -154,7 +160,7 @@ export function useInitialBottomSheetContext({
   Animated.useCode(
     block([
       cond(
-        lessThan(translateY, safeArea.top + 4),
+        lessThan(translateY, safeAreaTop + 4),
         cond(eq(isOnTopValue, 0), [
           set(isOnTopValue, 1),
           call([], () => {
@@ -190,6 +196,12 @@ export function useInitialBottomSheetContext({
   useEffect(() => {
     positionY.current.setValue(initialPositionY)
   }, [initialPositionY])
+
+  useEffect(() => {
+    dragY.setValue(0)
+    dragVY.setValue(0)
+    gestureState.setValue(-1)
+  })
 
   return {
     closeBottomSheet,

@@ -12,7 +12,7 @@ export function useHasBezel(): boolean {
       const result = !bezeLesslModels.includes(model)
       setHasBezel(result)
     })()
-  })
+  }, [])
 
   return hasBezel
 }

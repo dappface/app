@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import {FlatList, ScaledSize} from 'react-native'
 import Orientation from 'react-native-orientation'
 import {useSelector} from 'react-redux'
@@ -33,16 +33,19 @@ export function BrowserScreen() {
   const showAddressBar = useSelector(browserSelector.getShowAddressBar)
   const tabs = useSelector(browserSelector.getTabs)
 
-  function getItemLayout(
-    _: any,
-    index: number,
-  ): {length: number; offset: number; index: number} {
-    return {
-      index,
-      length: window.width,
-      offset: window.width * index,
-    }
-  }
+  const getItemLayout = useCallback(
+    (
+      _: any,
+      index: number,
+    ): {length: number; offset: number; index: number} => {
+      return {
+        index,
+        length: window.width,
+        offset: window.width * index,
+      }
+    },
+    [window],
+  )
 
   useEffect(() => {
     if (tabs.length > 0) {

@@ -76,8 +76,8 @@ export function useInitialBottomSheetContext({
       afterDragClock: new Clock(),
       gestureState: new Value<number>(-1),
       manualSnapClock: new Clock(),
-      dragY: new Value(-1),
-      dragVY: new Value(-1),
+      dragY: new Value(0),
+      dragVY: new Value(0),
     },
   ).current
 

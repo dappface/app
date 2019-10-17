@@ -2,10 +2,12 @@ import React from 'react'
 
 import {Snackbar} from 'src/components/atoms'
 import {
-  BottomAppBarManagerContext,
+  BottomSheetContext,
   BrowserManagerContext,
-  useInitializedBottomAppBarManager,
+  StatusBarContext,
+  useInitialBottomSheetContext,
   useInitializedBrowserManager,
+  useInitialStatusBarContext,
   useInitializedWeb3,
   Web3Context,
 } from 'src/hooks'
@@ -15,23 +17,27 @@ interface IProps {
 }
 
 export function ApplicationProvider({children}: IProps) {
-  const initializedBrowserManager = useInitializedBrowserManager()
-  const initializedBottomAppBarManager = useInitializedBottomAppBarManager()
+  const initialStatusBarContext = useInitialStatusBarContext()
   const initializedWeb3 = useInitializedWeb3()
+  const initializedBrowserManager = useInitializedBrowserManager()
+  const initialBottomSheetContext = useInitialBottomSheetContext(
+    initialStatusBarContext,
+  )
 
   if (!initializedWeb3) {
     return null
   }
 
   return (
-    <Web3Context.Provider value={initializedWeb3}>
-      <BrowserManagerContext.Provider value={initializedBrowserManager}>
-        <BottomAppBarManagerContext.Provider
-          value={initializedBottomAppBarManager}>
-          {children}
+    <StatusBarContext.Provider value={initialStatusBarContext}>
+      <Web3Context.Provider value={initializedWeb3}>
+        <BrowserManagerContext.Provider value={initializedBrowserManager}>
+          <BottomSheetContext.Provider value={initialBottomSheetContext}>
+            {children}
+          </BottomSheetContext.Provider>
           <Snackbar />
-        </BottomAppBarManagerContext.Provider>
-      </BrowserManagerContext.Provider>
-    </Web3Context.Provider>
+        </BrowserManagerContext.Provider>
+      </Web3Context.Provider>
+    </StatusBarContext.Provider>
   )
 }

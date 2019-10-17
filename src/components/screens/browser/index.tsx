@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import {FlatList, ScaledSize} from 'react-native'
 import Orientation from 'react-native-orientation'
 import {useSelector} from 'react-redux'
@@ -7,8 +7,8 @@ import styled from 'styled-components/native'
 import {DefaultTemplate} from 'src/components/templates'
 import {
   ISafeAreaPosition,
-  useBottomAppBarHeight,
   useBrowserManager,
+  useBrowserNavigationHeight,
   useDimensions,
   useHasBezel,
   useOrientation,
@@ -16,12 +16,13 @@ import {
 } from 'src/hooks'
 import {browserSelector} from 'src/redux/module/browser'
 import {AddressBar} from './address-bar'
-import {BottomAppBar} from './bottom-app-bar'
+import {BottomSheet} from './bottom-sheet'
+import {StatusBar} from './status-bar'
 import {TabList} from './tab-list'
 import {WebView} from './web-view'
 
 export function BrowserScreen() {
-  const bottomAppBarHeight = useBottomAppBarHeight()
+  const browserNavigationHeight = useBrowserNavigationHeight()
   const {scrollTo, tabListManager, webViewListRef} = useBrowserManager()
   const hasBezel = useHasBezel()
   const orientation = useOrientation()
@@ -32,16 +33,19 @@ export function BrowserScreen() {
   const showAddressBar = useSelector(browserSelector.getShowAddressBar)
   const tabs = useSelector(browserSelector.getTabs)
 
-  function getItemLayout(
-    _: any,
-    index: number,
-  ): {length: number; offset: number; index: number} {
-    return {
-      index,
-      length: window.width,
-      offset: window.width * index,
-    }
-  }
+  const getItemLayout = useCallback(
+    (
+      _: any,
+      index: number,
+    ): {length: number; offset: number; index: number} => {
+      return {
+        index,
+        length: window.width,
+        offset: window.width * index,
+      }
+    },
+    [window],
+  )
 
   useEffect(() => {
     if (tabs.length > 0) {
@@ -62,6 +66,7 @@ export function BrowserScreen() {
   return (
     <DefaultTemplate>
       <Container hasBezel={hasBezel} orientation={orientation}>
+        <StatusBar />
         <TabList />
 
         {showAddressBar ? <AddressBar /> : null}
@@ -77,7 +82,7 @@ export function BrowserScreen() {
           getItemLayout={getItemLayout}
           renderItem={({item}) => (
             <StyledWebView
-              bottomAppBarHeight={bottomAppBarHeight}
+              browserNavigationHeight={browserNavigationHeight}
               hasBezel={hasBezel}
               orientation={orientation}
               safeAreaPosition={safeAreaPosition}
@@ -87,7 +92,7 @@ export function BrowserScreen() {
           )}
         />
 
-        <BottomAppBar />
+        <BottomSheet />
       </Container>
     </DefaultTemplate>
   )
@@ -112,7 +117,7 @@ const Container = styled.View<IContainerProps>`
 `
 
 interface IStyledWebViewProps {
-  bottomAppBarHeight: number
+  browserNavigationHeight: number
   hasBezel: boolean
   orientation: Orientation.orientation
   safeAreaPosition: ISafeAreaPosition
@@ -120,8 +125,8 @@ interface IStyledWebViewProps {
 }
 
 const StyledWebView = styled(WebView)<IStyledWebViewProps>`
-  ${({bottomAppBarHeight}) => `
-    padding-bottom: ${bottomAppBarHeight};
+  ${({browserNavigationHeight}) => `
+    padding-bottom: ${browserNavigationHeight};
   `}
 
   ${({window}) => `

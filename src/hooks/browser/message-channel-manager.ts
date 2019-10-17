@@ -7,14 +7,15 @@ import {Wallet} from 'ethers'
 import {Alert} from 'react-native'
 import {WebViewSharedProps} from 'react-native-webview/lib/WebViewTypes'
 import {useSelector} from 'react-redux'
-import {useBottomAppBarManager} from 'src/hooks/bottom-app-bar'
-import {useBrowserManager} from 'src/hooks/browser/browser-manager'
-import {useWeb3} from 'src/hooks/web3'
+
 import {accountHook, accountSelector} from 'src/redux/module/account'
 import {entityType} from 'src/redux/module/entity'
 import {historyHook} from 'src/redux/module/history'
 import {settingSelector} from 'src/redux/module/setting'
 import {httpClient} from 'src/utils'
+import {useBottomSheetContext} from '../bottom-sheet'
+import {useWeb3} from '../web3'
+import {useBrowserManager} from './browser-manager'
 
 interface IMessageChannelManager {
   onMessage: WebViewSharedProps['onMessage']
@@ -29,7 +30,7 @@ export function useMessageChannelManager(
   const {openLink, respondData} = useBrowserManager()
   const {addHistory} = historyHook.useHistoryManager()
   const setSignRequest = accountHook.useSetSignRequest()
-  const {openBottomAppBar} = useBottomAppBarManager()
+  const {openBottomSheet} = useBottomSheetContext()
   const web3 = useWeb3()
 
   const onMessage: IMessageChannelManager['onMessage'] = async ({
@@ -76,7 +77,7 @@ export function useMessageChannelManager(
           to: data.payload.txParams.to,
           value: data.payload.txParams.value,
         })
-        openBottomAppBar()
+        openBottomSheet()
         break
       case PostMessageActionType.GetAccounts:
         respondData(tabId, data.payload.callbackId, addresses)

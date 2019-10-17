@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {Dimensions, ScaledSize} from 'react-native'
 import {useHasBezel} from './device-info'
 
@@ -25,22 +25,24 @@ export function useDimensions(): IDimensions {
 
 export function useSafeAreaPosition(): ISafeAreaPosition {
   const hasBezel = useHasBezel()
+  const bottom = useMemo(() => (hasBezel ? 0 : 34), [hasBezel])
 
   return {
     top: 44,
-    bottom: hasBezel ? 0 : 34,
+    bottom,
   }
 }
 
-export function useBottomAppBarHeight(): number {
-  const safeAreaPosition = useSafeAreaPosition()
-  return safeAreaPosition.bottom + 48
+export function useBrowserNavigationHeight(): number {
+  const {bottom} = useSafeAreaPosition()
+  const value = useMemo(() => bottom + 48, [bottom])
+  return value
 }
 
-export function useBottomAppBarInitialTop(): number {
-  const bottomAppBarHeight = useBottomAppBarHeight()
+export function useBottomSheetInitialTop(): number {
+  const browserNavigationHeight = useBrowserNavigationHeight()
   const {screen: screenDimensions} = useDimensions()
-  return screenDimensions.height - bottomAppBarHeight
+  return screenDimensions.height - browserNavigationHeight
 }
 
 export interface IDimensions {

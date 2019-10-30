@@ -1,25 +1,30 @@
-import * as React from 'react'
+import React, {useCallback} from 'react'
 import {TextInputProps, TouchableWithoutFeedback} from 'react-native'
+import {DAPPFACE_DOMAIN} from 'react-native-dotenv'
 import {Searchbar, Text} from 'react-native-paper'
 import {Padding} from 'src/components/atoms'
 import {Color, Size} from 'src/const'
 import {useBrowserManager} from 'src/hooks'
 import styled from 'styled-components/native'
 
-export const Search = () => {
+export function Search() {
   const {openLink, onSearch} = useBrowserManager()
   const [query, setQuery] = React.useState('')
 
-  const onPressDoodle = (): void => {
-    openLink('https://www.dappface.com/doodle-challenge')
-  }
+  const onPressLogo = useCallback((): void => {
+    openLink(`https://www.${DAPPFACE_DOMAIN}`)
+  }, [openLink])
 
-  const onSubmitEditing: TextInputProps['onSubmitEditing'] = e => {
-    onSearch(e.nativeEvent.text)
-  }
+  const onSubmitEditing: TextInputProps['onSubmitEditing'] = useCallback(
+    e => {
+      onSearch(e.nativeEvent.text)
+    },
+    [onSearch],
+  )
+
   return (
     <>
-      <TouchableWithoutFeedback onPress={onPressDoodle}>
+      <TouchableWithoutFeedback onPress={onPressLogo}>
         <StyledText>DAPPFACE</StyledText>
       </TouchableWithoutFeedback>
 

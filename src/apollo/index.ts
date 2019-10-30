@@ -7,14 +7,15 @@ import {ApolloLink} from 'apollo-link'
 import {onError} from 'apollo-link-error'
 import {HttpLink} from 'apollo-link-http'
 import introspectionQueryResultData from 'lib/fragment-types.json'
-import {API_URL} from 'react-native-dotenv'
+import {DAPPFACE_DOMAIN} from 'react-native-dotenv'
 import Reactotron from 'reactotron-react-native'
 
 // eslint-disable-next-line import/no-mutable-exports
 export let client: ApolloClient<any>
 
 export const initApolloClient = () => {
-  Reactotron.log(`Connecting Apollo Client to ${API_URL}`)
+  const uri = `https://api.${DAPPFACE_DOMAIN}/query`
+  Reactotron.log(`Connecting Apollo Client to ${uri}`)
 
   const fragmentMatcher = new IntrospectionFragmentMatcher({
     introspectionQueryResultData,
@@ -35,7 +36,7 @@ export const initApolloClient = () => {
   })
 
   const httpLink = new HttpLink({
-    uri: `${API_URL}/query`,
+    uri,
   })
 
   const link = ApolloLink.from([errorLink, httpLink])

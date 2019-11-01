@@ -78,5 +78,6 @@ env/**/.env
 ios/GoogleService-Info.plist
 env/**/GoogleService-Info.plist
 
-# [TODO]
-.circleci
+# injectable
+lib/index.json
+lib/injectable.js

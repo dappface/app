@@ -48,6 +48,12 @@ export const getAccounts = createSelector(
       .sort(item => (item.address === defaultAccountAddress ? -1 : 0)),
 )
 
+export const getAddresses = createSelector(
+  getAccounts,
+  (accounts: entityType.IAccount[]): string[] =>
+    accounts.map(({address}) => address),
+)
+
 export const getCurrentAccount = createSelector(
   getCurrentAccountAddress,
   entitySelector.getAccounts,

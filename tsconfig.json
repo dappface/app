@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "esModuleInterop": true,
     "jsx": "react",
-    "lib": ["es2017"],
+    "lib": ["es2017", "dom"],
     "moduleResolution": "node",
     "noEmit": true,
     "resolveJsonModule": true,

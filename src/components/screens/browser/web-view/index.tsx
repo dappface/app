@@ -1,4 +1,4 @@
-import {initInjectedJavaScript} from 'dappface-inpage-provider'
+import Injectable from 'lib/index.json'
 import React, {useCallback} from 'react'
 import {View} from 'react-native'
 import {WebView as NativeWebView} from 'react-native-webview'
@@ -9,7 +9,7 @@ import {
 import {useSelector} from 'react-redux'
 import {Error} from 'src/components/screens/browser/web-view/error'
 import {Home} from 'src/components/screens/browser/web-view/home'
-import {useBrowserManager, useMessageChannelManager} from 'src/hooks'
+import {useBrowserManager, useMessageManager} from 'src/hooks'
 import {browserHook} from 'src/redux/module/browser'
 import {historyHook} from 'src/redux/module/history'
 import {settingSelector} from 'src/redux/module/setting'
@@ -28,7 +28,7 @@ export function WebView({style, tab}: IProps) {
   const {addHistory} = historyHook.useHistoryManager()
   const setOpenRequest = browserHook.useSetOpenRequest()
   const {setLoadingProgress, setNavigatables} = tabHook.useTabManager()
-  const {onMessage} = useMessageChannelManager(tab.id)
+  const {onMessage} = useMessageManager(tab.id)
 
   const onLoadEnd: WebViewSharedProps['onLoadEnd'] = async ({nativeEvent}) => {
     if ((nativeEvent as WebViewError).code) {
@@ -65,13 +65,15 @@ export function WebView({style, tab}: IProps) {
     <View style={style}>
       <NativeWebView
         allowFileAccess
-        injectedJavaScript={initInjectedJavaScript(remoteNodeUrl)}
+        injectedJavaScript={Injectable['injectable.js']}
         mediaPlaybackRequiresUserAction
         onLoadEnd={onLoadEnd}
         onLoadProgress={onLoadProgress}
         onMessage={onMessage}
         onNavigationStateChange={onNavigationStateChange}
-        ref={(webViewRefs.current as any)[tab.id]}
+        ref={ref => {
+          webViewRefs.set(tab.id, ref)
+        }}
         renderError={error => <Error error={error} />}
         source={{uri: tab.url}}
         sharedCookiesEnabled

@@ -46,15 +46,16 @@ export function useInitializedBrowserManager(): IBrowserManager {
   const setOpenRequest = browserHook.useSetOpenRequest()
 
   const webViewListRef: IBrowserManager['webViewListRef'] = useRef(null)
-  const webViewRefs: IBrowserManager['webViewRefs'] = useRef(
-    tabs.reduce(
-      (res, tab) => ({
-        ...res,
-        [tab.id]: createRef(),
-      }),
-      {},
-    ),
-  )
+  const webViewRefs = useRef(new Map()).current
+  // const webViewRefs: IBrowserManager['webViewRefs'] = useRef(
+  //   tabs.reduce(
+  //     (res, tab) => ({
+  //       ...res,
+  //       [tab.id]: createRef(),
+  //     }),
+  //     {},
+  //   ),
+  // )
 
   const goBack = useCallback<IBrowserManager['goBack']>(() => {
     if (!activeTabId || !webViewRefs.current) {
@@ -162,6 +163,26 @@ export function useInitializedBrowserManager(): IBrowserManager {
     r.stopLoading()
   }, [activeTabId, setLoadingProgress])
 
+  const postMessageData = useCallback<IBrowserManager['postMessageData']>(
+    (tabId, data) => {
+      const ref = webViewRefs.get(tabId)
+      if (!ref) {
+        return
+      }
+
+      const message = JSON.stringify(data)
+      console.log(message)
+
+      ref.injectJavaScript(`
+        if (window.ethereum) {
+          window.ethereum.postMessage('${message}');
+        }
+        true;
+      `)
+    },
+    [],
+  )
+
   const respondData = useCallback<IBrowserManager['respondData']>(
     (tabId, callbackId, data) => {
       if (!webViewRefs.current) {
@@ -199,6 +220,7 @@ export function useInitializedBrowserManager(): IBrowserManager {
     onSearch,
     onStopLoading,
     openLink,
+    postMessageData,
     respondData,
     scrollTo,
     tabListManager,

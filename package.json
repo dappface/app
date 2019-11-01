@@ -5,6 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "create-token-list": "node bin/token-list.js",
+    "injectable:build": "cross-env TS_NODE_PROJECT=src/injectable/tsconfig.json webpack --config=src/injectable/webpack.config.ts",
     "install:all": "bin/install.sh",
     "install:all:clean": "bin/install.sh --clean",
     "install:pod": "(cd ios && bundle exec pod install)",
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.2",
+    "@dappface/ethereum-provider": "file:../ethereum-provider",
     "@react-native-community/masked-view": "^0.1.1",
     "@react-native-firebase/analytics": "^6.0.1",
     "@react-native-firebase/app": "^6.0.1",
@@ -124,10 +126,13 @@
     "@types/uuid": "^3.4.4",
     "@types/validator": "^10.11.0",
     "@types/web3": "^1.0.20",
+    "@types/webpack": "^4.39.7",
     "@types/ws": "^6.0.1",
     "@typescript-eslint/eslint-plugin": "^2.4.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.7.1",
+    "babel-loader": "^8.0.6",
+    "cross-env": "^6.0.3",
     "eslint": "^6.5.1",
     "eslint-config-airbnb-typescript": "^5.0.0",
     "eslint-config-prettier": "^6.4.0",
@@ -137,6 +142,7 @@
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.1.2",
     "jest": "^24.7.1",
+    "jsonify-webpack-plugin": "0.0.5",
     "metro-react-native-babel-preset": "^0.56.0",
     "prettier": "^1.17.0",
     "react-native-dotenv": "^0.2.0",
@@ -146,7 +152,10 @@
     "reactotron-redux": "^3.1.2",
     "rn-nodeify": "^10.2.0",
     "ts-jest": "^24.1.0",
-    "typescript": "^3.6.4"
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "react-native": {
     "crypto": "react-native-crypto",

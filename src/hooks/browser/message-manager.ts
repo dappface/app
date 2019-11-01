@@ -24,6 +24,9 @@ interface IMessageManager {
 }
 
 export function useMessageManager(tabId: string): IMessageManager {
+  const defaultAccountAddress = useSelector(
+    accountSelector.getDefaultAccountAddress,
+  )
   const addresses = useSelector(accountSelector.getAddresses)
   const {postMessageData} = useBrowserManager()
 
@@ -38,12 +41,25 @@ export function useMessageManager(tabId: string): IMessageManager {
             jsonrpc: message.jsonrpc,
             result: addresses,
           })
+        case JsonRpcMethod.EthCoinbase:
+          postMessageData(tabId, {
+            id: message.id,
+            jsonrpc: message.jsonrpc,
+            result: defaultAccountAddress,
+          })
+        case JsonRpcMethod.EthSign:
+        case JsonRpcMethod.PersonalSign:
+        case JsonRpcMethod.EthSendTransaction:
+        case JsonRpcMethod.EthSignTypedData:
+        case JsonRpcMethod.EthSignTypedDataV0:
+        case JsonRpcMethod.EthSignTypedDataV3:
+        case JsonRpcMethod.PersonalEcRecover:
         default:
           // proxy to remote node via websocket
           break
       }
     },
-    [addresses],
+    [addresses, defaultAccountAddress],
   )
 
   return {onMessage}

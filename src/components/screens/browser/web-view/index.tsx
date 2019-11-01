@@ -72,7 +72,7 @@ export function WebView({style, tab}: IProps) {
         onMessage={onMessage}
         onNavigationStateChange={onNavigationStateChange}
         ref={ref => {
-          webViewRefs.set(tab.id, ref)
+          webViewRefs.set(tab.id, ref as NativeWebView)
         }}
         renderError={error => <Error error={error} />}
         source={{uri: tab.url}}

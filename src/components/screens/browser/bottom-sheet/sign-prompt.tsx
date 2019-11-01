@@ -28,7 +28,7 @@ export function SignPrompt() {
   ) as accountType.ISignRequest
   const setSignRerquest = accountHook.useSetSignRequest()
   const web3 = useWeb3()
-  const {respondData} = useBrowserManager()
+  // const {respondData} = useBrowserManager()
   const {closeBottomSheet, isOpen} = useBottomSheetContext()
 
   const gasFeeInWei = (
@@ -51,7 +51,8 @@ export function SignPrompt() {
         throw new Error('TouchID/FaceID does not supported')
       }
       await TouchID.authenticate('')
-      respondData(signRequest.tabId, signRequest.callbackId, true)
+      // [TODO] replace responseData with postMessageData
+      // respondData(signRequest.tabId, signRequest.callbackId, true)
       setSignRerquest()
       closeBottomSheet()
     } catch (error) {
@@ -63,7 +64,6 @@ export function SignPrompt() {
     }
   }, [
     closeBottomSheet,
-    respondData,
     setSignRerquest,
     signRequest.callbackId,
     signRequest.tabId,
@@ -73,9 +73,10 @@ export function SignPrompt() {
     if (isOpen || !signRequest) {
       return
     }
-    respondData(signRequest.tabId, signRequest.callbackId, false)
+    // [TODO] replace responseData with postMessageData
+    // respondData(signRequest.tabId, signRequest.callbackId, false)
     setSignRerquest()
-  }, [isOpen, signRequest, respondData, setSignRerquest])
+  }, [isOpen, signRequest, setSignRerquest])
 
   return (
     <Container>

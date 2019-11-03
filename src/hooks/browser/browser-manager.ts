@@ -1,3 +1,4 @@
+import {Error as ErrorObject} from '@dappface/ethereum-provider'
 import {
   createContext,
   createRef,
@@ -31,7 +32,7 @@ export interface IBrowserManager {
   openLink: (uri: string, openWithNewTab?: boolean) => void
   postMessageData: (
     tabId: string,
-    data: {id: string; jsonrpc: '2.0'; result: any},
+    data: {id: string; jsonrpc: '2.0'; result?: any; error?: ErrorObject},
   ) => void
   scrollTo: (i: number) => void
   tabListManager: tabType.ITabListManager
@@ -163,7 +164,8 @@ export function useInitializedBrowserManager(): IBrowserManager {
       }
 
       const message = JSON.stringify(data)
-      console.log(message)
+      // [TODO] delete console.log
+      console.log('postMessage', message)
 
       ref.injectJavaScript(`
         if (window.ethereum) {

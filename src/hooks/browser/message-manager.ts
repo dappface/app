@@ -1,4 +1,4 @@
-import {JsonRpcMethod} from '@dappface/ethereum-provider'
+import {JsonRpcMethod, ErrorCode} from '@dappface/ethereum-provider'
 import {
   PostMessageActions,
   PostMessageActionType,
@@ -32,22 +32,36 @@ export function useMessageManager(tabId: string): IMessageManager {
 
   const onMessage = useCallback(
     async ({nativeEvent}) => {
-      const message = JSON.parse(nativeEvent.data)
-      console.log(message)
-      switch (message.method) {
+      const data = JSON.parse(nativeEvent.data)
+      // [TODO] remove console.log
+      console.log('postMessage', data)
+      switch (data.method) {
         case JsonRpcMethod.EthAccounts:
           postMessageData(tabId, {
-            id: message.id,
-            jsonrpc: message.jsonrpc,
+            id: data.id,
+            jsonrpc: data.jsonrpc,
             result: addresses,
           })
+          break
         case JsonRpcMethod.EthCoinbase:
           postMessageData(tabId, {
-            id: message.id,
-            jsonrpc: message.jsonrpc,
+            id: data.id,
+            jsonrpc: data.jsonrpc,
             result: defaultAccountAddress,
           })
-        case JsonRpcMethod.EthSign:
+          break
+        case JsonRpcMethod.EthSign: {
+          postMessageData(tabId, {
+            id: data.id,
+            jsonrpc: data.jsonrpc,
+            error: {
+              code: ErrorCode.UnsupportedMethod,
+              message:
+                'dappface: eth_sign has dangerous side effect and is not supported by DAPPFACE.',
+            },
+          })
+          break
+        }
         case JsonRpcMethod.PersonalSign:
         case JsonRpcMethod.EthSendTransaction:
         case JsonRpcMethod.EthSignTypedData:

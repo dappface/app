@@ -163,13 +163,14 @@ export function useInitializedBrowserManager(): IBrowserManager {
         return
       }
 
-      const message = JSON.stringify(data)
+      // stringify twice to escape quotes
+      const message = JSON.stringify(JSON.stringify(data))
       // [TODO] delete console.log
       console.log('postMessage', message)
 
       ref.injectJavaScript(`
         if (window.ethereum) {
-          window.ethereum.postMessage('${message}');
+          window.ethereum.postMessage(${message});
         }
         true;
       `)

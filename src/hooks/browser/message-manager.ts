@@ -24,6 +24,7 @@ interface IMessageManager {
 }
 
 export function useMessageManager(tabId: string): IMessageManager {
+  const accounts = useSelector(accountSelector.getAccounts)
   const defaultAccountAddress = useSelector(
     accountSelector.getDefaultAccountAddress,
   )
@@ -50,19 +51,41 @@ export function useMessageManager(tabId: string): IMessageManager {
             result: defaultAccountAddress,
           })
           break
-        case JsonRpcMethod.EthSign: {
+        case JsonRpcMethod.EthSign:
           postMessageData(tabId, {
             id: data.id,
             jsonrpc: data.jsonrpc,
             error: {
               code: ErrorCode.UnsupportedMethod,
               message:
-                'dappface: eth_sign has dangerous side effect and is not supported by DAPPFACE.',
+                'dappface: eth_sign has dangerous side effect and we are/will not support this method.',
             },
           })
           break
+        case JsonRpcMethod.PersonalSign: {
+          // [TODO] prompt user
+          const [message, from] = data.params
+          const a = accounts.find(item => item.address === from)
+          if (!a) {
+            postMessageData(tabId, {
+              id: data.id,
+              jsonrpc: data.jsonrpc,
+              error: {
+                code: ErrorCode.Unauthorized,
+                message: 'dappface: provided "from" address is not authorized',
+              },
+            })
+            break
+          }
+          const privateKey = Buffer.from(a.privKey.slice(2), 'hex')
+          const sign = sigUtil.personalSign(privateKey, message)
+          postMessageData(tabId, {
+            id: data.id,
+            jsonrpc: data.jsonrpc,
+            result: sign,
+          })
+          break
         }
-        case JsonRpcMethod.PersonalSign:
         case JsonRpcMethod.EthSendTransaction:
         case JsonRpcMethod.EthSignTypedData:
         case JsonRpcMethod.EthSignTypedDataV0:

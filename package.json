@@ -96,7 +96,7 @@
     "stream-browserify": "^2.0.2",
     "styled-components": "^4.4.0",
     "uuid": "^3.3.2",
-    "validator": "^11.1.0",
+    "validator": "^13.7.0",
     "vm-browserify": "^1.1.0",
     "web3": "^2.0.0-alpha.1"
   },
